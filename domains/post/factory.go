@@ -26,24 +26,29 @@ type NewConfig struct {
 	Meta          map[Locale]Meta
 	CategoryUUIDs []string
 	Features      []Feature
-	Prices        []Price
+	Prices        []PostPriceValidationDto
 	Location      Location
 	Boosts        []Boost
 	People        People
 	Type          Type
-	Order         int
+	Count         *int
+	Order         *int
 	ForCreate     bool
 }
 
 func (f Factory) New(cnf NewConfig) *Entity {
 	t := time.Now()
+	prices := make([]Price, len(cnf.Prices))
+	for i, p := range cnf.Prices {
+		prices[i] = p.ToEntity()
+	}
 	e := &Entity{
 		Owner:         cnf.Owner,
 		Images:        cnf.Images,
 		Meta:          cnf.Meta,
 		CategoryUUIDs: cnf.CategoryUUIDs,
 		Features:      cnf.Features,
-		Prices:        cnf.Prices,
+		Prices:        prices,
 		People:        cnf.People,
 		Location:      cnf.Location,
 		Boosts:        cnf.Boosts,
@@ -53,6 +58,7 @@ func (f Factory) New(cnf NewConfig) *Entity {
 		IsDeleted:     false,
 		IsValid:       false,
 		UpdatedAt:     t,
+		Count:         cnf.Count,
 	}
 	if cnf.ForCreate {
 		e.CreatedAt = t
@@ -68,6 +74,7 @@ func (f Factory) Validate(entity Entity) *i18np.Error {
 		f.validateType,
 		f.validatePrices,
 		f.validatePeople,
+		f.validateMeta,
 	}
 	for _, v := range validators {
 		if err := v(entity); err != nil {
@@ -91,10 +98,10 @@ func (f Factory) validateOwner(e Entity) *i18np.Error {
 }
 
 func (f Factory) validatePeople(e Entity) *i18np.Error {
-	if e.People.MinAdult == 0 && e.People.MaxAdult == 0 && e.People.MinKid == 0 && e.People.MaxKid == 0 && e.People.MinBaby == 0 && e.People.MaxBaby == 0 {
+	if *e.People.MinAdult == 0 && *e.People.MaxAdult == 0 && *e.People.MinKid == 0 && *e.People.MaxKid == 0 && *e.People.MinBaby == 0 && *e.People.MaxBaby == 0 {
 		return f.Errors.InvalidPeople()
 	}
-	if e.People.MinAdult == 0 {
+	if *e.People.MinAdult == 0 {
 		return f.Errors.MinAdult()
 	}
 	return nil
@@ -129,6 +136,16 @@ func (f Factory) validatePrices(e Entity) *i18np.Error {
 				return f.Errors.PriceDateConflict(p2.StartDate, p2.EndDate)
 			}
 		}
+	}
+	return nil
+}
+
+func (f Factory) validateMeta(e Entity) *i18np.Error {
+	if _, ok := e.Meta[LocaleEN]; !ok {
+		return f.Errors.InvalidMeta()
+	}
+	if _, ok := e.Meta[LocaleTR]; !ok {
+		return f.Errors.InvalidMeta()
 	}
 	return nil
 }
