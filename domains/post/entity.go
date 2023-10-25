@@ -14,7 +14,7 @@ type Entity struct {
 	Boosts        []Boost         `json:"boosts" bson:"boosts" validate:"required,min=0,max=30,dive,required"`
 	People        People          `json:"people" bson:"people" validate:"required,dive,required"`
 	Type          Type            `json:"type" bson:"type" validate:"required,oneof=estate car boat motorcycle other"`
-	Count         *int             `json:"count" bson:"count" validate:"required,min=1,max=1000"`
+	Count         *int            `json:"count" bson:"count" validate:"required,min=1,max=1000"`
 	Order         *int            `json:"order" bson:"order" validate:"required,min=0,max=1000"`
 	IsActive      bool            `json:"isActive" bson:"is_active"`
 	IsDeleted     bool            `json:"isDeleted" bson:"is_deleted"`
@@ -58,6 +58,7 @@ type Price struct {
 	StartDate time.Time `json:"startDate" bson:"start_date"`
 	EndDate   time.Time `json:"endDate" bson:"end_date"`
 	Price     float64   `json:"price" bson:"price"`
+	Currency  Currency  `json:"currency" bson:"currency"`
 }
 
 type Location struct {
@@ -79,6 +80,8 @@ type Type string
 
 type Locale string
 
+type Currency string
+
 const (
 	LocaleEN Locale = "en"
 	LocaleTR Locale = "tr"
@@ -92,10 +95,20 @@ const (
 	TypeOther      Type = "other"
 )
 
+const (
+	CurrencyTRY Currency = "TRY"
+	CurrencyUSD Currency = "USD"
+	CurrencyEUR Currency = "EUR"
+)
+
 func (t Type) String() string {
 	return string(t)
 }
 
 func (l Locale) String() string {
 	return string(l)
+}
+
+func (c Currency) String() string {
+	return string(c)
 }
