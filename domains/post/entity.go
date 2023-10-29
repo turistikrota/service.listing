@@ -51,14 +51,14 @@ type Meta struct {
 type Feature struct {
 	CategoryInputUUID string      `json:"categoryInputUUID" bson:"category_input_uuid" validate:"required,uuid"`
 	Value             interface{} `json:"value" bson:"value" validate:"required"`
-	IsPayed           bool        `json:"isPayed" bson:"is_payed"`
+	IsPayed           *bool       `json:"isPayed" bson:"is_payed" validate:"required"`
+	Price             float64     `json:"price" bson:"price" validate:"omitempty,gt=0"`
 }
 
 type Price struct {
 	StartDate time.Time `json:"startDate" bson:"start_date"`
 	EndDate   time.Time `json:"endDate" bson:"end_date"`
 	Price     float64   `json:"price" bson:"price"`
-	Currency  Currency  `json:"currency" bson:"currency"`
 }
 
 type Location struct {
@@ -80,8 +80,6 @@ type Type string
 
 type Locale string
 
-type Currency string
-
 const (
 	LocaleEN Locale = "en"
 	LocaleTR Locale = "tr"
@@ -95,20 +93,10 @@ const (
 	TypeOther      Type = "other"
 )
 
-const (
-	CurrencyTRY Currency = "TRY"
-	CurrencyUSD Currency = "USD"
-	CurrencyEUR Currency = "EUR"
-)
-
 func (t Type) String() string {
 	return string(t)
 }
 
 func (l Locale) String() string {
 	return string(l)
-}
-
-func (c Currency) String() string {
-	return string(c)
 }

@@ -17,35 +17,35 @@ type Events interface {
 
 type (
 	CreatedEvent struct {
-		Entity *Entity   `json:"entity"`
-		User   UserEvent `json:"user"`
+		Entity  *Entity      `json:"entity"`
+		Account AccountEvent `json:"account"`
 	}
 	UpdatedEvent struct {
-		Old    *Entity   `json:"old"`
-		Entity *Entity   `json:"entity"`
-		User   UserEvent `json:"user"`
+		Old     *Entity      `json:"old"`
+		Entity  *Entity      `json:"entity"`
+		Account AccountEvent `json:"account"`
 	}
 	DeletedEvent struct {
-		UUID string    `json:"uuid"`
-		User UserEvent `json:"user"`
+		UUID    string       `json:"uuid"`
+		Account AccountEvent `json:"account"`
 	}
 	DisabledEvent struct {
-		UUID string    `json:"uuid"`
-		User UserEvent `json:"user"`
+		UUID    string       `json:"uuid"`
+		Account AccountEvent `json:"account"`
 	}
 	EnabledEvent struct {
-		UUID string    `json:"uuid"`
-		User UserEvent `json:"user"`
+		UUID    string       `json:"uuid"`
+		Account AccountEvent `json:"account"`
 	}
 	ReOrderEvent struct {
-		UUID string    `json:"uuid"`
-		User UserEvent `json:"user"`
+		UUID    string       `json:"uuid"`
+		Account AccountEvent `json:"account"`
 	}
 	RestoreEvent struct {
-		UUID string    `json:"uuid"`
-		User UserEvent `json:"user"`
+		UUID    string       `json:"uuid"`
+		Account AccountEvent `json:"account"`
 	}
-	UserEvent struct {
+	AccountEvent struct {
 		UUID string `json:"uuid"`
 		Name string `json:"name"`
 	}

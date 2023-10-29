@@ -7,10 +7,9 @@ import (
 )
 
 type PostPriceValidationDto struct {
-	Price     float64 `json:"price" validate:"required,min=0"`
+	Price     float64 `json:"price" validate:"required,gt=0"`
 	StartDate string  `json:"startDate" validate:"required,datetime=2006-01-02"`
 	EndDate   string  `json:"endDate" validate:"required,datetime=2006-01-02"`
-	Currency  string  `json:"currency" validate:"required,oneof=TRY USD EUR"`
 }
 
 func (d *PostPriceValidationDto) ToEntity() Price {
@@ -20,6 +19,5 @@ func (d *PostPriceValidationDto) ToEntity() Price {
 		Price:     d.Price,
 		StartDate: start,
 		EndDate:   end,
-		Currency: Currency(d.Currency),
 	}
 }
