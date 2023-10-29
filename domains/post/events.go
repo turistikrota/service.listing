@@ -38,8 +38,9 @@ type (
 		Account AccountEvent `json:"account"`
 	}
 	ReOrderEvent struct {
-		UUID    string       `json:"uuid"`
-		Account AccountEvent `json:"account"`
+		UUID     string       `json:"uuid"`
+		Account  AccountEvent `json:"account"`
+		NewOrder int          `json:"new_order"`
 	}
 	RestoreEvent struct {
 		UUID    string       `json:"uuid"`
