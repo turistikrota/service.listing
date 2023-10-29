@@ -360,6 +360,7 @@ func (r *repo) viewOptions() *options.FindOneOptions {
 		fields.Prices:        1,
 		fields.Location:      1,
 		fields.Boosts:        1,
+		fields.Count:         1,
 		fields.Type:          1,
 		fields.UpdatedAt:     1,
 		fields.CreatedAt:     1,

@@ -22,6 +22,7 @@ type PostCreateCommand struct {
 	Type          post.Type                     `json:"type" validate:"required"`
 	People        post.People                   `json:"people" validate:"required"`
 	Count         *int                          `json:"count" validate:"required,min=1,max=100,numeric"`
+	Order         *int                          `json:"order" validate:"required,min=1,max=1000,numeric"`
 }
 
 type PostCreateRes struct {
@@ -44,6 +45,7 @@ func NewPostCreateHandler(factory post.Factory, repo post.Repository, events pos
 			People:        cmd.People,
 			Type:          cmd.Type,
 			Count:         cmd.Count,
+			Order:         cmd.Order,
 			ForCreate:     true,
 		})
 		err := factory.Validate(*e)
