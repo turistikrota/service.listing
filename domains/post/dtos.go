@@ -44,7 +44,9 @@ type DetailDto struct {
 	UpdatedAt     time.Time       `json:"updatedAt" bson:"updated_at"`
 }
 
-type AdminDetailDto struct{}
+type AdminDetailDto struct {
+	*Entity
+}
 
 type AdminListDto struct {
 	UUID          string          `json:"uuid" bson:"_id,omitempty"`
@@ -74,5 +76,70 @@ func (d *PostPriceValidationDto) ToEntity() Price {
 		Price:     d.Price,
 		StartDate: start,
 		EndDate:   end,
+	}
+}
+
+func (e *Entity) ToList() *ListDto {
+	return &ListDto{
+		UUID:          e.UUID,
+		Owner:         e.Owner,
+		Images:        e.Images,
+		Meta:          e.Meta,
+		CategoryUUIDs: e.CategoryUUIDs,
+		Features:      e.Features,
+		Prices:        e.Prices,
+		Location:      e.Location,
+		Boosts:        e.Boosts,
+		People:        e.People,
+		Type:          e.Type,
+		Count:         e.Count,
+	}
+}
+
+func (e *Entity) ToDetail() *DetailDto {
+	return &DetailDto{
+		UUID:          e.UUID,
+		Owner:         e.Owner,
+		Images:        e.Images,
+		Meta:          e.Meta,
+		CategoryUUIDs: e.CategoryUUIDs,
+		Features:      e.Features,
+		Prices:        e.Prices,
+		Location:      e.Location,
+		Boosts:        e.Boosts,
+		People:        e.People,
+		Type:          e.Type,
+		Count:         e.Count,
+		CreatedAt:     e.CreatedAt,
+		UpdatedAt:     e.UpdatedAt,
+	}
+}
+
+func (e *Entity) ToAdminDetail() *AdminDetailDto {
+	return &AdminDetailDto{
+		Entity: e,
+	}
+}
+
+func (e *Entity) ToAdminList() *AdminListDto {
+	return &AdminListDto{
+		UUID:          e.UUID,
+		Owner:         e.Owner,
+		Images:        e.Images,
+		Meta:          e.Meta,
+		CategoryUUIDs: e.CategoryUUIDs,
+		Features:      e.Features,
+		Prices:        e.Prices,
+		Location:      e.Location,
+		Boosts:        e.Boosts,
+		People:        e.People,
+		Type:          e.Type,
+		Count:         e.Count,
+		Order:         e.Order,
+		IsActive:      e.IsActive,
+		IsDeleted:     e.IsDeleted,
+		IsValid:       e.IsValid,  
+		CreatedAt:     e.CreatedAt,
+		UpdatedAt:     e.UpdatedAt,
 	}
 }
