@@ -9,17 +9,17 @@ import (
 	"github.com/turistikrota/service.post/domains/post"
 )
 
-type PostDeleteCommand struct {
+type PostDeleteCmd struct {
 	Account  account.Entity `json:"-"`
 	PostUUID string         `json:"-"`
 }
 
 type PostDeleteRes struct{}
 
-type PostDeleteHandler cqrs.HandlerFunc[PostDeleteCommand, *PostDeleteRes]
+type PostDeleteHandler cqrs.HandlerFunc[PostDeleteCmd, *PostDeleteRes]
 
 func NewPostDeleteHandler(factory post.Factory, repo post.Repository, events post.Events) PostDeleteHandler {
-	return func(ctx context.Context, cmd PostDeleteCommand) (*PostDeleteRes, *i18np.Error) {
+	return func(ctx context.Context, cmd PostDeleteCmd) (*PostDeleteRes, *i18np.Error) {
 		err := repo.Delete(ctx, cmd.PostUUID)
 		if err != nil {
 			return nil, err

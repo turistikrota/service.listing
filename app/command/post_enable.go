@@ -9,17 +9,17 @@ import (
 	"github.com/turistikrota/service.post/domains/post"
 )
 
-type PostEnableCommand struct {
+type PostEnableCmd struct {
 	Account  account.Entity `json:"-"`
 	PostUUID string         `json:"-"`
 }
 
 type PostEnableRes struct{}
 
-type PostEnableHandler cqrs.HandlerFunc[PostEnableCommand, *PostEnableRes]
+type PostEnableHandler cqrs.HandlerFunc[PostEnableCmd, *PostEnableRes]
 
 func NewPostEnableHandler(factory post.Factory, repo post.Repository, events post.Events) PostEnableHandler {
-	return func(ctx context.Context, cmd PostEnableCommand) (*PostEnableRes, *i18np.Error) {
+	return func(ctx context.Context, cmd PostEnableCmd) (*PostEnableRes, *i18np.Error) {
 		err := repo.Enable(ctx, cmd.PostUUID)
 		if err != nil {
 			return nil, err

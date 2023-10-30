@@ -9,7 +9,7 @@ import (
 	"github.com/turistikrota/service.post/domains/post"
 )
 
-type PostReOrderCommand struct {
+type PostReOrderCmd struct {
 	Account  account.Entity `json:"-"`
 	PostUUID string         `json:"-"`
 	Order    *int           `json:"order" validate:"required,min=1,max=100,numeric"`
@@ -17,10 +17,10 @@ type PostReOrderCommand struct {
 
 type PostReOrderRes struct{}
 
-type PostReOrderHandler cqrs.HandlerFunc[PostReOrderCommand, *PostReOrderRes]
+type PostReOrderHandler cqrs.HandlerFunc[PostReOrderCmd, *PostReOrderRes]
 
 func NewPostReOrderHandler(factory post.Factory, repo post.Repository, events post.Events) PostReOrderHandler {
-	return func(ctx context.Context, cmd PostReOrderCommand) (*PostReOrderRes, *i18np.Error) {
+	return func(ctx context.Context, cmd PostReOrderCmd) (*PostReOrderRes, *i18np.Error) {
 		err := repo.ReOrder(ctx, cmd.PostUUID, *cmd.Order)
 		if err != nil {
 			return nil, err

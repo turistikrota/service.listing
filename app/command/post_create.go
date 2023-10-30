@@ -9,7 +9,7 @@ import (
 	"github.com/turistikrota/service.post/domains/post"
 )
 
-type PostCreateCommand struct {
+type PostCreateCmd struct {
 	Account       account.Entity                `json:"-"`
 	Owner         post.Owner                    `json:"-"`
 	Images        []post.Image                  `json:"images" validate:"min=1,max=10,dive,required"`
@@ -29,10 +29,10 @@ type PostCreateRes struct {
 	UUID string `json:"uuid"`
 }
 
-type PostCreateHandler cqrs.HandlerFunc[PostCreateCommand, *PostCreateRes]
+type PostCreateHandler cqrs.HandlerFunc[PostCreateCmd, *PostCreateRes]
 
 func NewPostCreateHandler(factory post.Factory, repo post.Repository, events post.Events) PostCreateHandler {
-	return func(ctx context.Context, cmd PostCreateCommand) (*PostCreateRes, *i18np.Error) {
+	return func(ctx context.Context, cmd PostCreateCmd) (*PostCreateRes, *i18np.Error) {
 		e := factory.New(post.NewConfig{
 			Owner:         cmd.Owner,
 			Images:        cmd.Images,

@@ -9,17 +9,17 @@ import (
 	"github.com/turistikrota/service.post/domains/post"
 )
 
-type PostDisableCommand struct {
+type PostDisableCmd struct {
 	Account  account.Entity `json:"-"`
 	PostUUID string         `json:"-"`
 }
 
 type PostDisableRes struct{}
 
-type PostDisableHandler cqrs.HandlerFunc[PostDisableCommand, *PostDisableRes]
+type PostDisableHandler cqrs.HandlerFunc[PostDisableCmd, *PostDisableRes]
 
 func NewPostDisableHandler(factory post.Factory, repo post.Repository, events post.Events) PostDisableHandler {
-	return func(ctx context.Context, cmd PostDisableCommand) (*PostDisableRes, *i18np.Error) {
+	return func(ctx context.Context, cmd PostDisableCmd) (*PostDisableRes, *i18np.Error) {
 		err := repo.Disable(ctx, cmd.PostUUID)
 		if err != nil {
 			return nil, err

@@ -9,7 +9,7 @@ import (
 	"github.com/turistikrota/service.post/domains/post"
 )
 
-type PostUpdateCommand struct {
+type PostUpdateCmd struct {
 	Account       account.Entity                `json:"-"`
 	Owner         post.Owner                    `json:"-"`
 	PostUUID      string                        `json:"-"`
@@ -30,10 +30,10 @@ type PostUpdateRes struct {
 	UUID string `json:"uuid"`
 }
 
-type PostUpdateHandler cqrs.HandlerFunc[PostUpdateCommand, *PostUpdateRes]
+type PostUpdateHandler cqrs.HandlerFunc[PostUpdateCmd, *PostUpdateRes]
 
 func NewPostUpdateHandler(factory post.Factory, repo post.Repository, events post.Events) PostUpdateHandler {
-	return func(ctx context.Context, cmd PostUpdateCommand) (*PostUpdateRes, *i18np.Error) {
+	return func(ctx context.Context, cmd PostUpdateCmd) (*PostUpdateRes, *i18np.Error) {
 		e := factory.New(post.NewConfig{
 			Owner:         cmd.Owner,
 			Images:        cmd.Images,
