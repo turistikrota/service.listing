@@ -87,6 +87,8 @@ github.com/turistikrota/service.shared v0.0.25 h1:mHCT6WTWvtli78D7HAJji0yacflAQt
 github.com/turistikrota/service.shared v0.0.25/go.mod h1:5vAK/YRqwBJkkfMJLW5sy0DInp8U83Bz6LuxLDkQ978=
 github.com/turistikrota/service.shared v0.0.27 h1:6jabu1EaI3ls9PAwwvVN0tFeRTgNk4E5I8PMpSHh/fU=
 github.com/turistikrota/service.shared v0.0.27/go.mod h1:N6c7ZRcor79GQla2XYQ1FK1JLpZAuGIMN8aJKRkB7Qw=
+github.com/turistikrota/service.shared v0.0.28 h1:5TfCJSyrGO+E1BMqynzOQNAa+h9my+uxd6zgI7L87go=
+github.com/turistikrota/service.shared v0.0.28/go.mod h1:N6c7ZRcor79GQla2XYQ1FK1JLpZAuGIMN8aJKRkB7Qw=
 github.com/valyala/bytebufferpool v1.0.0 h1:GqA5TC/0021Y/b9FG4Oi9Mr3q7XYx6KllzawFIhcdPw=
 github.com/valyala/bytebufferpool v1.0.0/go.mod h1:6bBcMArwyJ5K/AmCkWv1jt77kVWyCJ6HpOuEn7z0Csc=
 github.com/valyala/fasthttp v1.48.0 h1:oJWvHb9BIZToTQS3MuQ2R3bJZiNSa2KiNdeI8A+79Tc=

@@ -28,7 +28,7 @@ func (h srv) PostCreate(ctx *fiber.Ctx) error {
 	}
 	res, err := h.app.Commands.PostCreate(ctx.UserContext(), cmd)
 	if err != nil {
-		l, a := i18n.GetLanguagesInContext(h.i18n, ctx)
+		l, a := i18n.GetLanguagesInContext(*h.i18n, ctx)
 		return result.Error(h.i18n.TranslateFromError(*err, l, a))
 	}
 	return result.SuccessDetail(Messages.Success.PostCreated, res)
@@ -52,7 +52,7 @@ func (h srv) PostUpdate(ctx *fiber.Ctx) error {
 	}
 	res, err := h.app.Commands.PostUpdate(ctx.UserContext(), cmd)
 	if err != nil {
-		l, a := i18n.GetLanguagesInContext(h.i18n, ctx)
+		l, a := i18n.GetLanguagesInContext(*h.i18n, ctx)
 		return result.Error(h.i18n.TranslateFromError(*err, l, a))
 	}
 	return result.SuccessDetail(Messages.Success.PostUpdated, res)
@@ -70,7 +70,7 @@ func (h srv) PostEnable(ctx *fiber.Ctx) error {
 	}
 	res, err := h.app.Commands.PostEnable(ctx.UserContext(), cmd)
 	if err != nil {
-		l, a := i18n.GetLanguagesInContext(h.i18n, ctx)
+		l, a := i18n.GetLanguagesInContext(*h.i18n, ctx)
 		return result.Error(h.i18n.TranslateFromError(*err, l, a))
 	}
 	return result.SuccessDetail(Messages.Success.Ok, res)
@@ -88,7 +88,7 @@ func (h srv) PostDisable(ctx *fiber.Ctx) error {
 	}
 	res, err := h.app.Commands.PostDisable(ctx.UserContext(), cmd)
 	if err != nil {
-		l, a := i18n.GetLanguagesInContext(h.i18n, ctx)
+		l, a := i18n.GetLanguagesInContext(*h.i18n, ctx)
 		return result.Error(h.i18n.TranslateFromError(*err, l, a))
 	}
 	return result.SuccessDetail(Messages.Success.Ok, res)
@@ -106,7 +106,7 @@ func (h srv) PostDelete(ctx *fiber.Ctx) error {
 	}
 	res, err := h.app.Commands.PostDelete(ctx.UserContext(), cmd)
 	if err != nil {
-		l, a := i18n.GetLanguagesInContext(h.i18n, ctx)
+		l, a := i18n.GetLanguagesInContext(*h.i18n, ctx)
 		return result.Error(h.i18n.TranslateFromError(*err, l, a))
 	}
 	return result.SuccessDetail(Messages.Success.Ok, res)
@@ -125,7 +125,7 @@ func (h srv) PostReOrder(ctx *fiber.Ctx) error {
 	h.parseBody(ctx, &cmd)
 	res, err := h.app.Commands.PostReOrder(ctx.UserContext(), cmd)
 	if err != nil {
-		l, a := i18n.GetLanguagesInContext(h.i18n, ctx)
+		l, a := i18n.GetLanguagesInContext(*h.i18n, ctx)
 		return result.Error(h.i18n.TranslateFromError(*err, l, a))
 	}
 	return result.SuccessDetail(Messages.Success.Ok, res)
@@ -143,14 +143,14 @@ func (h srv) PostRestore(ctx *fiber.Ctx) error {
 	}
 	res, err := h.app.Commands.PostRestore(ctx.UserContext(), cmd)
 	if err != nil {
-		l, a := i18n.GetLanguagesInContext(h.i18n, ctx)
+		l, a := i18n.GetLanguagesInContext(*h.i18n, ctx)
 		return result.Error(h.i18n.TranslateFromError(*err, l, a))
 	}
 	return result.SuccessDetail(Messages.Success.Ok, res)
 }
 
 func (h srv) PostView(ctx *fiber.Ctx) error {
-	l, a := i18n.GetLanguagesInContext(h.i18n, ctx)
+	l, a := i18n.GetLanguagesInContext(*h.i18n, ctx)
 	query := query.PostViewQuery{}
 	query.Locale = l
 	h.parseParams(ctx, &query)
@@ -166,7 +166,7 @@ func (h srv) PostViewAdmin(ctx *fiber.Ctx) error {
 	h.parseParams(ctx, &query)
 	res, err := h.app.Queries.PostAdminView(ctx.UserContext(), query)
 	if err != nil {
-		l, a := i18n.GetLanguagesInContext(h.i18n, ctx)
+		l, a := i18n.GetLanguagesInContext(*h.i18n, ctx)
 		return result.Error(h.i18n.TranslateFromError(*err, l, a))
 	}
 	return result.SuccessDetail(Messages.Success.Ok, res)
@@ -183,7 +183,7 @@ func (h srv) PostFilterByOwner(ctx *fiber.Ctx) error {
 	h.parseParams(ctx, &query)
 	res, err := h.app.Queries.PostFilterByOwner(ctx.UserContext(), query)
 	if err != nil {
-		l, a := i18n.GetLanguagesInContext(h.i18n, ctx)
+		l, a := i18n.GetLanguagesInContext(*h.i18n, ctx)
 		return result.Error(h.i18n.TranslateFromError(*err, l, a))
 	}
 	return result.SuccessDetail(Messages.Success.Ok, res)
@@ -197,7 +197,7 @@ func (h srv) PostListMy(ctx *fiber.Ctx) error {
 	h.parseParams(ctx, &query)
 	res, err := h.app.Queries.PostListMy(ctx.UserContext(), query)
 	if err != nil {
-		l, a := i18n.GetLanguagesInContext(h.i18n, ctx)
+		l, a := i18n.GetLanguagesInContext(*h.i18n, ctx)
 		return result.Error(h.i18n.TranslateFromError(*err, l, a))
 	}
 	return result.SuccessDetail(Messages.Success.Ok, res)

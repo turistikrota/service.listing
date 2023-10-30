@@ -3,6 +3,7 @@ package config
 import "github.com/turistikrota/service.shared/base_roles"
 
 type postRoles struct {
+	Super   string
 	Create  string
 	Update  string
 	Delete  string
@@ -22,6 +23,7 @@ type roles struct {
 var Roles = roles{
 	Roles: base_roles.BaseRoles,
 	Post: postRoles{
+		Super:   "post.super",
 		Create:  "post.create",
 		Update:  "post.update",
 		Delete:  "post.delete",
