@@ -8,6 +8,7 @@ import (
 	"github.com/turistikrota/service.post/app/query"
 	"github.com/turistikrota/service.post/domains/account"
 	"github.com/turistikrota/service.post/domains/post"
+	"github.com/turistikrota/service.post/pkg/utils"
 	"github.com/turistikrota/service.shared/server/http/auth/current_account"
 	"github.com/turistikrota/service.shared/server/http/auth/current_owner"
 )
@@ -164,6 +165,23 @@ func (h srv) PostViewAdmin(ctx *fiber.Ctx) error {
 	query := query.PostAdminViewQuery{}
 	h.parseParams(ctx, &query)
 	res, err := h.app.Queries.PostAdminView(ctx.UserContext(), query)
+	if err != nil {
+		l, a := i18n.GetLanguagesInContext(h.i18n, ctx)
+		return result.Error(h.i18n.TranslateFromError(*err, l, a))
+	}
+	return result.SuccessDetail(Messages.Success.Ok, res)
+}
+
+func (h srv) PostFilterByOwner(ctx *fiber.Ctx) error {
+	pagination := utils.Pagination{}
+	h.parseQuery(ctx, &pagination)
+	filter := post.FilterEntity{}
+	h.parseBody(ctx, &filter)
+	query := query.PostFilterByOwnerQuery{}
+	query.Pagination = &pagination
+	query.FilterEntity = filter
+	h.parseParams(ctx, &query)
+	res, err := h.app.Queries.PostFilterByOwner(ctx.UserContext(), query)
 	if err != nil {
 		l, a := i18n.GetLanguagesInContext(h.i18n, ctx)
 		return result.Error(h.i18n.TranslateFromError(*err, l, a))
