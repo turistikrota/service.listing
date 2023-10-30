@@ -7,30 +7,28 @@ import (
 )
 
 type FilterEntity struct {
-	Locale      string
-	Query       string
-	Price       *FilterPrice
-	People      *FilterPeople
-	Coordinates []float64
-	Distance    float64
-	Features    []*FilterFeature
-	Type        Type
-	Categories  []string
+	Locale      string           `json:"-"`
+	Query       string           `json:"query,omitempty" validate:"omitempty,max=100"`
+	Price       *FilterPrice     `json:"price,omitempty" validate:"omitempty"`
+	People      *FilterPeople    `json:"people,omitempty" validate:"omitempty"`
+	Coordinates []float64        `json:"coordinates,omitempty" validate:"omitempty,min=2,max=2"`
+	Distance    float64          `json:"distance,omitempty" validate:"omitempty,gt=6,lt=16"`
+	Features    []*FilterFeature `json:"features,omitempty" validate:"omitempty,dive"`
+	Type        Type             `json:"type,omitempty" validate:"omitempty"`
+	Categories  []string         `json:"categories,omitempty" validate:"omitempty,dive,object_id"`
 }
 
 type FilterPrice struct {
-	Min                 float64
-	Max                 float64
-	StartDate           *time.Time
-	EndDate             *time.Time
-	Currencies          []string
-	IsCurrencyProtected bool
+	Min       float64    `json:"min" validate:"omitempty,gt=0"`
+	Max       float64    `json:"max" validate:"omitempty,gt=0"`
+	StartDate *time.Time `json:"start_date" validate:"omitempty,datetime=2006-01-02"`
+	EndDate   *time.Time `json:"end_date" validate:"omitempty,datetime=2006-01-02"`
 }
 
 type FilterPeople struct {
-	Adult int
-	Kid   int
-	Baby  int
+	Adult int `json:"adult" validate:"omitempty,gt=0"`
+	Kid   int `json:"kid" validate:"omitempty,gt=0"`
+	Baby  int `json:"baby" validate:"omitempty,gt=0"`
 }
 
 type FilterFeature struct {
@@ -229,13 +227,6 @@ func (r *repo) filterByPrice(list []bson.M, filter FilterEntity) []bson.M {
 			priceFilters = append(priceFilters, bson.M{
 				priceField(priceFields.EndDate): bson.M{
 					"$gte": filter.Price.EndDate,
-				},
-			})
-		}
-		if filter.Price.Currencies != nil && len(filter.Price.Currencies) > 0 {
-			priceFilters = append(priceFilters, bson.M{
-				priceField(priceFields.Currency): bson.M{
-					"$in": filter.Price.Currencies,
 				},
 			})
 		}
