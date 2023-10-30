@@ -65,7 +65,6 @@ type RSA struct {
 type Topics struct {
 	Post     PostTopics
 	Category CategoryTopics
-	Owner    OwnerTopics
 }
 
 type PostTopics struct {
@@ -78,22 +77,8 @@ type PostTopics struct {
 	Restored  string `env:"STREAMING_TOPIC_POST_RESTORED"`
 }
 
-type OwnerTopics struct {
-	Created               string `env:"STREAMING_TOPIC_OWNER_CREATED"`
-	UserRemoved           string `env:"STREAMING_TOPIC_OWNER_USER_REMOVED"`
-	UserAdded             string `env:"STREAMING_TOPIC_OWNER_USER_ADDED"`
-	UserPermissionRemoved string `env:"STREAMING_TOPIC_OWNER_USER_PERMISSION_REMOVED"`
-	UserPermissionAdded   string `env:"STREAMING_TOPIC_OWNER_USER_PERMISSION_ADDED"`
-	VerifiedByAdmin       string `env:"STREAMING_TOPIC_OWNER_VERIFIED_BY_ADMIN"`
-	DeletedByAdmin        string `env:"STREAMING_TOPIC_OWNER_DELETED_BY_ADMIN"`
-	RecoverByAdmin        string `env:"STREAMING_TOPIC_OWNER_RECOVER_BY_ADMIN"`
-	Disabled              string `env:"STREAMING_TOPIC_OWNER_DISABLED"`
-	Enabled               string `env:"STREAMING_TOPIC_OWNER_ENABLED"`
-}
-
 type CategoryTopics struct {
 	PostValidationSuccess string `env:"STREAMING_TOPIC_CATEGORY_POST_VALIDATION_SUCCESS"`
-	PostValidationFailed  string `env:"STREAMING_TOPIC_CATEGORY_POST_VALIDATION_FAILED"`
 }
 
 type Nats struct {
