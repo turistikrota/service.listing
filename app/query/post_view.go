@@ -12,7 +12,7 @@ import (
 
 type PostViewQuery struct {
 	Locale string `json:"-"`
-	Slug   string `json:"slug" params:"slug" validate:"required"`
+	Slug   string `json:"slug" params:"slug" validate:"required,slug"`
 }
 
 type PostViewRes struct {
