@@ -71,5 +71,23 @@ func (h srv) PostEnable(ctx *fiber.Ctx) error {
 		l, a := i18n.GetLanguagesInContext(h.i18n, ctx)
 		return result.Error(h.i18n.TranslateFromError(*err, l, a))
 	}
-	return result.SuccessDetail(Messages.Success.PostUpdated, res)
+	return result.SuccessDetail(Messages.Success.Ok, res)
+}
+
+func (h srv) PostDisable(ctx *fiber.Ctx) error {
+	detail := command.PostDetailCmd{}
+	a := current_account.Parse(ctx)
+	h.parseParams(ctx, &detail)
+	cmd := command.PostDisableCmd{}
+	cmd.PostUUID = detail.PostUUID
+	cmd.Account = account.Entity{
+		UUID: a.ID,
+		Name: a.Name,
+	}
+	res, err := h.app.Commands.PostDisable(ctx.UserContext(), cmd)
+	if err != nil {
+		l, a := i18n.GetLanguagesInContext(h.i18n, ctx)
+		return result.Error(h.i18n.TranslateFromError(*err, l, a))
+	}
+	return result.SuccessDetail(Messages.Success.Ok, res)
 }
