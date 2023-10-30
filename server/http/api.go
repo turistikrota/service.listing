@@ -5,6 +5,7 @@ import (
 	"github.com/cilloparch/cillop/result"
 	"github.com/gofiber/fiber/v2"
 	"github.com/turistikrota/service.post/app/command"
+	"github.com/turistikrota/service.post/app/query"
 	"github.com/turistikrota/service.post/domains/account"
 	"github.com/turistikrota/service.post/domains/post"
 	"github.com/turistikrota/service.shared/server/http/auth/current_account"
@@ -142,6 +143,18 @@ func (h srv) PostRestore(ctx *fiber.Ctx) error {
 	res, err := h.app.Commands.PostRestore(ctx.UserContext(), cmd)
 	if err != nil {
 		l, a := i18n.GetLanguagesInContext(h.i18n, ctx)
+		return result.Error(h.i18n.TranslateFromError(*err, l, a))
+	}
+	return result.SuccessDetail(Messages.Success.Ok, res)
+}
+
+func (h srv) PostView(ctx *fiber.Ctx) error {
+	l, a := i18n.GetLanguagesInContext(h.i18n, ctx)
+	query := query.PostViewQuery{}
+	query.Locale = l
+	h.parseParams(ctx, &query)
+	res, err := h.app.Queries.PostView(ctx.UserContext(), query)
+	if err != nil {
 		return result.Error(h.i18n.TranslateFromError(*err, l, a))
 	}
 	return result.SuccessDetail(Messages.Success.Ok, res)
