@@ -18,7 +18,7 @@ type PostEnableRes struct{}
 
 type PostEnableHandler cqrs.HandlerFunc[PostEnableCmd, *PostEnableRes]
 
-func NewPostEnableHandler(factory post.Factory, repo post.Repository, events post.Events) PostEnableHandler {
+func NewPostEnableHandler(repo post.Repository, events post.Events) PostEnableHandler {
 	return func(ctx context.Context, cmd PostEnableCmd) (*PostEnableRes, *i18np.Error) {
 		err := repo.Enable(ctx, cmd.PostUUID)
 		if err != nil {

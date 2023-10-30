@@ -18,7 +18,7 @@ type PostValidatedRes struct{}
 
 type PostValidatedHandler cqrs.HandlerFunc[PostValidatedCmd, *PostValidatedRes]
 
-func NewPostValidatedHandler(factory post.Factory, repo post.Repository, events post.Events) PostValidatedHandler {
+func NewPostValidatedHandler(repo post.Repository) PostValidatedHandler {
 	return func(ctx context.Context, cmd PostValidatedCmd) (*PostValidatedRes, *i18np.Error) {
 		err := repo.Update(ctx, cmd.New)
 		if err != nil {

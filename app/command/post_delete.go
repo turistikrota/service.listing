@@ -18,7 +18,7 @@ type PostDeleteRes struct{}
 
 type PostDeleteHandler cqrs.HandlerFunc[PostDeleteCmd, *PostDeleteRes]
 
-func NewPostDeleteHandler(factory post.Factory, repo post.Repository, events post.Events) PostDeleteHandler {
+func NewPostDeleteHandler(repo post.Repository, events post.Events) PostDeleteHandler {
 	return func(ctx context.Context, cmd PostDeleteCmd) (*PostDeleteRes, *i18np.Error) {
 		err := repo.Delete(ctx, cmd.PostUUID)
 		if err != nil {

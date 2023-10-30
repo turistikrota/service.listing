@@ -18,7 +18,7 @@ type PostDisableRes struct{}
 
 type PostDisableHandler cqrs.HandlerFunc[PostDisableCmd, *PostDisableRes]
 
-func NewPostDisableHandler(factory post.Factory, repo post.Repository, events post.Events) PostDisableHandler {
+func NewPostDisableHandler(repo post.Repository, events post.Events) PostDisableHandler {
 	return func(ctx context.Context, cmd PostDisableCmd) (*PostDisableRes, *i18np.Error) {
 		err := repo.Disable(ctx, cmd.PostUUID)
 		if err != nil {

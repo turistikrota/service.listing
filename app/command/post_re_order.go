@@ -19,7 +19,7 @@ type PostReOrderRes struct{}
 
 type PostReOrderHandler cqrs.HandlerFunc[PostReOrderCmd, *PostReOrderRes]
 
-func NewPostReOrderHandler(factory post.Factory, repo post.Repository, events post.Events) PostReOrderHandler {
+func NewPostReOrderHandler(repo post.Repository, events post.Events) PostReOrderHandler {
 	return func(ctx context.Context, cmd PostReOrderCmd) (*PostReOrderRes, *i18np.Error) {
 		err := repo.ReOrder(ctx, cmd.PostUUID, *cmd.Order)
 		if err != nil {

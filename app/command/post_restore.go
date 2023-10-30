@@ -18,7 +18,7 @@ type PostRestoreRes struct{}
 
 type PostRestoreHandler cqrs.HandlerFunc[PostRestoreCmd, *PostRestoreRes]
 
-func NewPostRestoreHandler(factory post.Factory, repo post.Repository, events post.Events) PostRestoreHandler {
+func NewPostRestoreHandler(repo post.Repository, events post.Events) PostRestoreHandler {
 	return func(ctx context.Context, cmd PostRestoreCmd) (*PostRestoreRes, *i18np.Error) {
 		err := repo.Restore(ctx, cmd.PostUUID)
 		if err != nil {
