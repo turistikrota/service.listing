@@ -159,3 +159,14 @@ func (h srv) PostView(ctx *fiber.Ctx) error {
 	}
 	return result.SuccessDetail(Messages.Success.Ok, res)
 }
+
+func (h srv) PostViewAdmin(ctx *fiber.Ctx) error {
+	query := query.PostAdminViewQuery{}
+	h.parseParams(ctx, &query)
+	res, err := h.app.Queries.PostAdminView(ctx.UserContext(), query)
+	if err != nil {
+		l, a := i18n.GetLanguagesInContext(h.i18n, ctx)
+		return result.Error(h.i18n.TranslateFromError(*err, l, a))
+	}
+	return result.SuccessDetail(Messages.Success.Ok, res)
+}
