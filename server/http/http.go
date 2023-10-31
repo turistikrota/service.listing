@@ -87,6 +87,7 @@ func (h srv) Listen() error {
 			// Public routes
 			router.Get("/:slug", h.rateLimit(), h.wrapWithTimeout(h.PostView))
 			router.Post("/filter/:nickName", h.rateLimit(), h.wrapWithTimeout(h.PostFilterByOwner))
+			router.Post("/filter", h.rateLimit(), h.wrapWithTimeout(h.PostFilter))
 
 			return router
 		},

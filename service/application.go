@@ -44,6 +44,7 @@ func NewApplication(cnf Config) app.Application {
 			PostView:          query.NewPostViewHandler(postRepo, cnf.CacheSrv),
 			PostAdminView:     query.NewPostAdminViewHandler(postRepo),
 			PostFilterByOwner: query.NewPostFilterByOwnerHandler(postRepo),
+			PostFilter:        query.NewPostFilterHandler(postRepo),
 			PostListMy:        query.NewPostListMyHandler(postRepo),
 		},
 	}

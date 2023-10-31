@@ -30,6 +30,7 @@ type Repository interface {
 	ReOrder(ctx context.Context, postUUID string, order int) *i18np.Error
 	View(ctx context.Context, detail I18nDetail) (*Entity, *i18np.Error)
 	AdminView(ctx context.Context, postUUID string) (*Entity, *i18np.Error)
+	Filter(ctx context.Context, filter FilterEntity, listConfig list.Config) (*list.Result[*Entity], *i18np.Error)
 	FilterByOwner(ctx context.Context, ownerNickName string, filter FilterEntity, listConfig list.Config) (*list.Result[*Entity], *i18np.Error)
 	ListMy(ctx context.Context, ownerUUID string, listConfig list.Config) (*list.Result[*Entity], *i18np.Error)
 }
@@ -257,8 +258,8 @@ func (r *repo) AdminView(ctx context.Context, postUUID string) (*Entity, *i18np.
 }
 
 func (r *repo) FilterByOwner(ctx context.Context, ownerNickName string, filter FilterEntity, listConfig list.Config) (*list.Result[*Entity], *i18np.Error) {
-	ownerFilter := r.filterToBson(ownerNickName, filter)
-	l, err := r.helper.GetListFilter(ctx, ownerFilter, r.filterOptions(listConfig))
+	ownerFilter := r.filterToBson(filter, ownerNickName)
+	l, err := r.helper.GetListFilter(ctx, ownerFilter, r.sort(r.filterOptions(listConfig), filter))
 	if err != nil {
 		return nil, err
 	}
@@ -267,6 +268,30 @@ func (r *repo) FilterByOwner(ctx context.Context, ownerNickName string, filter F
 		return nil, _err
 	}
 	total, _err := r.helper.GetFilterCount(ctx, r.ownerFilter(ownerNickName))
+	if _err != nil {
+		return nil, _err
+	}
+	return &list.Result[*Entity]{
+		IsNext:        filtered > listConfig.Offset+listConfig.Limit,
+		IsPrev:        listConfig.Offset > 0,
+		FilteredTotal: filtered,
+		Total:         total,
+		Page:          listConfig.Offset/listConfig.Limit + 1,
+		List:          l,
+	}, nil
+}
+
+func (r *repo) Filter(ctx context.Context, filter FilterEntity, listConfig list.Config) (*list.Result[*Entity], *i18np.Error) {
+	filters := r.filterToBson(filter, "")
+	l, err := r.helper.GetListFilter(ctx, filters, r.sort(r.filterOptions(listConfig), filter))
+	if err != nil {
+		return nil, err
+	}
+	filtered, _err := r.helper.GetFilterCount(ctx, filters)
+	if _err != nil {
+		return nil, _err
+	}
+	total, _err := r.helper.GetFilterCount(ctx, r.baseFilter())
 	if _err != nil {
 		return nil, _err
 	}
@@ -343,7 +368,8 @@ func (r *repo) filterOptions(listConfig list.Config) *options.FindOptions {
 		fields.Location:      1,
 		fields.Boosts:        1,
 		fields.Type:          1,
-	}).SetSort(bson.D{{Key: fields.Order, Value: 1}}).SetSkip(listConfig.Offset).SetLimit(listConfig.Limit)
+		fields.Count:         1,
+	}).SetSkip(listConfig.Offset).SetLimit(listConfig.Limit)
 	return opts
 }
 

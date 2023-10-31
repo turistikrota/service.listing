@@ -4,6 +4,7 @@ import (
 	"time"
 
 	"go.mongodb.org/mongo-driver/bson"
+	"go.mongodb.org/mongo-driver/mongo/options"
 )
 
 type FilterEntity struct {
@@ -12,10 +13,12 @@ type FilterEntity struct {
 	Price       *FilterPrice     `json:"price,omitempty" validate:"omitempty"`
 	People      *FilterPeople    `json:"people,omitempty" validate:"omitempty"`
 	Coordinates []float64        `json:"coordinates,omitempty" validate:"omitempty,min=2,max=2"`
-	Distance    float64          `json:"distance,omitempty" validate:"omitempty,gt=6,lt=16"`
+	Distance    *float64         `json:"distance,omitempty" validate:"omitempty,gt=6,lt=16"`
 	Features    []*FilterFeature `json:"features,omitempty" validate:"omitempty,dive"`
-	Type        Type             `json:"type,omitempty" validate:"omitempty"`
+	Types       []Type           `json:"types,omitempty" validate:"omitempty"`
 	Categories  []string         `json:"categories,omitempty" validate:"omitempty,dive,object_id"`
+	Sort        Sort             `json:"sort,omitempty" validate:"omitempty,oneof=most_recent nearest"`
+	Order       Order            `json:"order,omitempty" validate:"omitempty,oneof=asc desc"`
 }
 
 type FilterPrice struct {
@@ -36,10 +39,58 @@ type FilterFeature struct {
 	Value             interface{}
 }
 
-func (r *repo) filterToBson(nickName string, filter FilterEntity) bson.M {
+type (
+	Sort  string
+	Order string
+)
+
+const (
+	SortByMostRecent Sort = "most_recent"
+	SortByNearest    Sort = "nearest"
+)
+
+const (
+	OrderAsc  Order = "asc"
+	OrderDesc Order = "desc"
+)
+
+func (s Sort) IsValid() bool {
+	return s == SortByMostRecent ||
+		s == SortByNearest
+}
+
+func (o Order) IsValid() bool {
+	return o == OrderAsc ||
+		o == OrderDesc
+}
+
+func (e *FilterEntity) GetPerfectDistance() float64 {
+	if e.Distance == nil {
+		return 100
+	}
+	distances := map[float64]float64{
+		7:  500,
+		8:  300,
+		9:  200,
+		10: 100,
+		11: 50,
+		12: 20,
+		13: 10,
+		14: 5,
+		15: 3,
+	}
+	if distance, ok := distances[*e.Distance]; ok {
+		return distance
+	}
+	return 10
+}
+
+func (r *repo) filterToBson(filter FilterEntity, nickName string) bson.M {
 	list := make([]bson.M, 0)
-	list = r.filterByOwner(list, nickName)
-	list = r.filterByType(list, filter)
+	if nickName != "" {
+		list = r.filterByOwner(list, nickName)
+	}
+	list = r.filterByTypes(list, filter)
 	list = r.filterByLocation(list, filter)
 	list = r.filterByCategory(list, filter)
 	list = r.filterByQuery(list, filter)
@@ -57,10 +108,12 @@ func (r *repo) filterToBson(nickName string, filter FilterEntity) bson.M {
 	}
 }
 
-func (r *repo) filterByType(list []bson.M, filter FilterEntity) []bson.M {
-	if filter.Type != "" {
+func (r *repo) filterByTypes(list []bson.M, filter FilterEntity) []bson.M {
+	if len(filter.Types) > 0 {
 		list = append(list, bson.M{
-			fields.Type: filter.Type,
+			fields.Type: bson.M{
+				"$in": filter.Types,
+			},
 		})
 	}
 	return list
@@ -68,18 +121,15 @@ func (r *repo) filterByType(list []bson.M, filter FilterEntity) []bson.M {
 
 func (r *repo) filterByLocation(list []bson.M, filter FilterEntity) []bson.M {
 	if filter.Coordinates != nil && len(filter.Coordinates) == 2 {
-		distance := filter.Distance
-		if distance == 0 {
-			distance = 1000
-		}
+		distance := filter.GetPerfectDistance()
+		radius := distance / 6378.1
 		list = append(list, bson.M{
 			locationField(locationFields.Coordinates): bson.M{
-				"$near": bson.M{
-					"$geometry": bson.M{
-						"type":        "Point",
-						"coordinates": filter.Coordinates,
+				"$geoWithin": bson.M{
+					"$centerSphere": []interface{}{
+						filter.Coordinates,
+						radius,
 					},
-					"$maxDistance": distance,
 				},
 			},
 		})
@@ -101,6 +151,16 @@ func (r *repo) filterByCategory(list []bson.M, filter FilterEntity) []bson.M {
 func (r *repo) ownerFilter(nickName string) bson.M {
 	return bson.M{
 		ownerField(ownerFields.NickName): nickName,
+		fields.IsDeleted: bson.M{
+			"$ne": true,
+		},
+		fields.IsActive: true,
+		fields.IsValid:  true,
+	}
+}
+
+func (r *repo) baseFilter() bson.M {
+	return bson.M{
 		fields.IsDeleted: bson.M{
 			"$ne": true,
 		},
@@ -242,4 +302,20 @@ func (r *repo) filterByPrice(list []bson.M, filter FilterEntity) []bson.M {
 		}
 	}
 	return list
+}
+
+func (r *repo) sort(opts *options.FindOptions, filter FilterEntity) *options.FindOptions {
+	order := -1
+	if filter.Order == OrderAsc {
+		order = 1
+	}
+	field := fields.UpdatedAt
+	switch filter.Sort {
+	case SortByMostRecent:
+		field = fields.UpdatedAt
+	case SortByNearest:
+		field = locationField(locationFields.Coordinates)
+	}
+	opts.SetSort(bson.D{{Key: field, Value: order}})
+	return opts
 }

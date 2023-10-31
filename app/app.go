@@ -26,5 +26,6 @@ type Queries struct {
 	PostView          query.PostViewHandler
 	PostAdminView     query.PostAdminViewHandler
 	PostFilterByOwner query.PostFilterByOwnerHandler
+	PostFilter        query.PostFilterHandler
 	PostListMy        query.PostListMyHandler
 }

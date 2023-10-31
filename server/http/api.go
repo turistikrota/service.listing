@@ -190,6 +190,22 @@ func (h srv) PostFilterByOwner(ctx *fiber.Ctx) error {
 	return result.SuccessDetail(Messages.Success.Ok, res)
 }
 
+func (h srv) PostFilter(ctx *fiber.Ctx) error {
+	pagination := utils.Pagination{}
+	h.parseQuery(ctx, &pagination)
+	filter := post.FilterEntity{}
+	h.parseBody(ctx, &filter)
+	query := query.PostFilterByOwnerQuery{}
+	query.Pagination = &pagination
+	query.FilterEntity = filter
+	res, err := h.app.Queries.PostFilterByOwner(ctx.UserContext(), query)
+	if err != nil {
+		l, a := i18n.GetLanguagesInContext(*h.i18n, ctx)
+		return result.Error(h.i18n.TranslateFromError(*err, l, a))
+	}
+	return result.SuccessDetail(Messages.Success.Ok, res)
+}
+
 func (h srv) PostListMy(ctx *fiber.Ctx) error {
 	pagination := utils.Pagination{}
 	h.parseQuery(ctx, &pagination)
