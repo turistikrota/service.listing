@@ -10,10 +10,6 @@ type MongoPost struct {
 	Query      string `env:"MONGO_POST_QUERY" envDefault:""`
 }
 
-type MongoOwner struct {
-	Collection string `env:"MONGO_OWNER_COLLECTION" envDefault:"empties"`
-}
-
 type I18n struct {
 	Fallback string   `env:"I18N_FALLBACK_LANGUAGE" envDefault:"en"`
 	Dir      string   `env:"I18N_DIR" envDefault:"./src/locales"`
@@ -93,8 +89,7 @@ type CDN struct {
 type App struct {
 	Protocol string `env:"PROTOCOL" envDefault:"http"`
 	DB       struct {
-		Post  MongoPost
-		Owner MongoOwner
+		Post MongoPost
 	}
 	Http        Http
 	HttpHeaders HttpHeaders
