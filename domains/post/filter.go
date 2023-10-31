@@ -178,13 +178,13 @@ func (r *repo) filterByQuery(list []bson.M, filter FilterEntity) []bson.M {
 		list = append(list, bson.M{
 			"$or": []bson.M{
 				{
-					metaField(metaFields.Locale, metaFields.Title): bson.M{
+					metaField(filter.Locale, metaFields.Title): bson.M{
 						"$regex":   filter.Query,
 						"$options": "i",
 					},
 				},
 				{
-					metaField(metaFields.Locale, metaFields.Description): bson.M{
+					metaField(filter.Locale, metaFields.Description): bson.M{
 						"$regex":   filter.Query,
 						"$options": "i",
 					},
