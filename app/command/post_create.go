@@ -38,14 +38,10 @@ type PostCreateHandler cqrs.HandlerFunc[PostCreateCmd, *PostCreateRes]
 
 func NewPostCreateHandler(factory post.Factory, repo post.Repository, events post.Events) PostCreateHandler {
 	return func(ctx context.Context, cmd PostCreateCmd) (*PostCreateRes, *i18np.Error) {
-		meta := map[post.Locale]post.Meta{
-			post.LocaleTR: *cmd.Meta.TR,
-			post.LocaleEN: *cmd.Meta.EN,
-		}
 		e := factory.New(post.NewConfig{
 			Owner:         cmd.Owner,
 			Images:        cmd.Images,
-			Meta:          meta,
+			Meta:          factory.CreateSlugs(cmd.Meta.TR, cmd.Meta.EN),
 			CategoryUUIDs: cmd.CategoryUUIDs,
 			Features:      cmd.Features,
 			Prices:        cmd.Prices,

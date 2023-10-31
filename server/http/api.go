@@ -11,6 +11,7 @@ import (
 	"github.com/turistikrota/service.post/pkg/utils"
 	"github.com/turistikrota/service.shared/server/http/auth/current_account"
 	"github.com/turistikrota/service.shared/server/http/auth/current_owner"
+	"github.com/turistikrota/service.shared/server/http/auth/current_user"
 )
 
 func (h srv) PostCreate(ctx *fiber.Ctx) error {
@@ -65,7 +66,7 @@ func (h srv) PostEnable(ctx *fiber.Ctx) error {
 	cmd := command.PostEnableCmd{}
 	cmd.PostUUID = detail.PostUUID
 	cmd.Account = account.Entity{
-		UUID: a.ID,
+		UUID: current_user.Parse(ctx).ID,
 		Name: a.Name,
 	}
 	res, err := h.app.Commands.PostEnable(ctx.UserContext(), cmd)

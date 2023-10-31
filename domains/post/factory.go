@@ -4,6 +4,7 @@ import (
 	"time"
 
 	"github.com/cilloparch/cillop/i18np"
+	"github.com/ssibrahimbas/slug"
 )
 
 type Factory struct {
@@ -148,4 +149,13 @@ func (f Factory) validateMeta(e Entity) *i18np.Error {
 		return f.Errors.InvalidMeta()
 	}
 	return nil
+}
+
+func (f Factory) CreateSlugs(trMeta *Meta, enMeta *Meta) map[Locale]Meta {
+	trMeta.Slug = slug.New(trMeta.Title, slug.TR)
+	enMeta.Slug = slug.New(enMeta.Title, slug.EN)
+	return map[Locale]Meta{
+		LocaleTR: *trMeta,
+		LocaleEN: *enMeta,
+	}
 }
