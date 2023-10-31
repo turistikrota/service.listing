@@ -27,7 +27,6 @@ type PostUpdateCmd struct {
 }
 
 type PostUpdateRes struct {
-	UUID string `json:"uuid"`
 }
 
 type PostUpdateHandler cqrs.HandlerFunc[PostUpdateCmd, *PostUpdateRes]
