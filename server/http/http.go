@@ -76,12 +76,12 @@ func (h srv) Listen() error {
 			owner.Put("/:uuid/disable", h.currentOwnerAccess(config.Roles.Post.Super, config.Roles.Post.Disable), h.wrapWithTimeout(h.PostDisable))
 			owner.Put("/:uuid/restore", h.currentOwnerAccess(config.Roles.Post.Super, config.Roles.Post.Restore), h.wrapWithTimeout(h.PostRestore))
 			owner.Delete("/:uuid", h.currentOwnerAccess(config.Roles.Post.Super, config.Roles.Post.Delete), h.wrapWithTimeout(h.PostDelete))
-			owner.Put("/:uuid/re_order", h.currentOwnerAccess(config.Roles.Post.Super, config.Roles.Post.ReOrder), h.wrapWithTimeout(h.PostReOrder))
+			owner.Put("/:uuid/re-order", h.currentOwnerAccess(config.Roles.Post.Super, config.Roles.Post.ReOrder), h.wrapWithTimeout(h.PostReOrder))
 			owner.Get("/", h.currentOwnerAccess(config.Roles.Post.Super, config.Roles.Post.List), h.wrapWithTimeout(h.PostListMy))
-			owner.Get("/:uuid", h.currentOwnerAccess(config.Roles.Post.Super, config.Roles.Post.View), h.wrapWithTimeout(h.PostView))
+			owner.Get("/:uuid", h.currentOwnerAccess(config.Roles.Post.Super, config.Roles.Post.View), h.wrapWithTimeout(h.PostViewAdmin))
 
 			// Admin routes
-			admin := router.Group("/admin", h.currentUserAccess(), h.adminRoute())
+			admin := router.Group("/admin", h.currentUserAccess(), h.requiredAccess(), h.adminRoute())
 			admin.Get("/:uuid", h.wrapWithTimeout(h.PostViewAdmin))
 
 			// Public routes
