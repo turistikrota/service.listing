@@ -22,10 +22,12 @@ type FilterEntity struct {
 }
 
 type FilterPrice struct {
-	Min       float64    `json:"min" validate:"omitempty,gt=0"`
-	Max       float64    `json:"max" validate:"omitempty,gt=0"`
-	StartDate *time.Time `json:"start_date" validate:"omitempty,datetime=2006-01-02"`
-	EndDate   *time.Time `json:"end_date" validate:"omitempty,datetime=2006-01-02"`
+	Min          float64    `json:"min" validate:"omitempty,gt=0"`
+	Max          float64    `json:"max" validate:"omitempty,gt=0"`
+	StartDateStr string     `json:"start_date" validate:"omitempty,datetime=2006-01-02"`
+	EndDateStr   string     `json:"end_date" validate:"omitempty,datetime=2006-01-02"`
+	StartDate    *time.Time `json:"-"`
+	EndDate      *time.Time `json:"-"`
 }
 
 type FilterPeople struct {
@@ -57,6 +59,17 @@ const (
 func (s Sort) IsValid() bool {
 	return s == SortByMostRecent ||
 		s == SortByNearest
+}
+
+func (p *FilterPrice) Parse() {
+	if p.StartDateStr != "" {
+		t, _ := time.Parse("2006-01-02", p.StartDateStr)
+		p.StartDate = &t
+	}
+	if p.EndDateStr != "" {
+		t, _ := time.Parse("2006-01-02", p.EndDateStr)
+		p.EndDate = &t
+	}
 }
 
 func (o Order) IsValid() bool {
@@ -261,6 +274,7 @@ func (r *repo) filterByPeople(list []bson.M, filter FilterEntity) []bson.M {
 
 func (r *repo) filterByPrice(list []bson.M, filter FilterEntity) []bson.M {
 	if filter.Price != nil {
+		filter.Price.Parse()
 		priceFilters := make([]bson.M, 0)
 		if filter.Price.Min != 0 {
 			priceFilters = append(priceFilters, bson.M{
@@ -279,14 +293,14 @@ func (r *repo) filterByPrice(list []bson.M, filter FilterEntity) []bson.M {
 		if filter.Price.StartDate != nil {
 			priceFilters = append(priceFilters, bson.M{
 				priceField(priceFields.StartDate): bson.M{
-					"$lte": filter.Price.StartDate,
+					"$gte": filter.Price.StartDate,
 				},
 			})
 		}
 		if filter.Price.EndDate != nil {
 			priceFilters = append(priceFilters, bson.M{
 				priceField(priceFields.EndDate): bson.M{
-					"$gte": filter.Price.EndDate,
+					"$lte": filter.Price.EndDate,
 				},
 			})
 		}
