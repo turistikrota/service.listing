@@ -9,20 +9,25 @@ import (
 	"github.com/turistikrota/service.post/domains/post"
 )
 
+type PostMetaRequest struct {
+	TR *post.Meta `json:"tr" validate:"required,dive"`
+	EN *post.Meta `json:"en" validate:"required,dive"`
+}
+
 type PostCreateCmd struct {
 	Account       account.Entity                `json:"-"`
 	Owner         post.Owner                    `json:"-"`
 	Images        []post.Image                  `json:"images" validate:"min=1,max=10,dive,required"`
-	Meta          map[post.Locale]post.Meta     `json:"meta" validate:"required,dive,required"`
+	Meta          *PostMetaRequest              `json:"meta" validate:"required,dive"`
 	CategoryUUIDs []string                      `json:"categoryUUIDs" validate:"required,min=1,max=30,dive,required,object_id"`
-	Features      []post.Feature                `json:"features" validate:"required,min=1,max=30,dive,required"`
+	Features      []post.Feature                `json:"features" validate:"required,min=0,max=30,dive,required"`
 	Prices        []post.PostPriceValidationDto `json:"prices" validate:"required,min=1,max=100,dive,required"`
-	Location      post.Location                 `json:"location" validate:"required"`
-	Boosts        []post.Boost                  `json:"boosts" validate:"omitempty,min=1,max=10,dive,required"`
+	Location      *post.Location                `json:"location" validate:"required,dive"`
+	Boosts        []post.Boost                  `json:"boosts" validate:"omitempty,min=0,max=10,dive,required"`
 	Type          post.Type                     `json:"type" validate:"required"`
-	People        post.People                   `json:"people" validate:"required"`
+	People        *post.People                  `json:"people" validate:"required,dive"`
 	Count         *int                          `json:"count" validate:"required,min=1,max=100,numeric"`
-	Order         *int                          `json:"order" validate:"required,min=1,max=1000,numeric"`
+	Order         *int                          `json:"order" validate:"required,min=0,max=1000,numeric"`
 }
 
 type PostCreateRes struct {
@@ -33,16 +38,20 @@ type PostCreateHandler cqrs.HandlerFunc[PostCreateCmd, *PostCreateRes]
 
 func NewPostCreateHandler(factory post.Factory, repo post.Repository, events post.Events) PostCreateHandler {
 	return func(ctx context.Context, cmd PostCreateCmd) (*PostCreateRes, *i18np.Error) {
+		meta := map[post.Locale]post.Meta{
+			post.LocaleTR: *cmd.Meta.TR,
+			post.LocaleEN: *cmd.Meta.EN,
+		}
 		e := factory.New(post.NewConfig{
 			Owner:         cmd.Owner,
 			Images:        cmd.Images,
-			Meta:          cmd.Meta,
+			Meta:          meta,
 			CategoryUUIDs: cmd.CategoryUUIDs,
 			Features:      cmd.Features,
 			Prices:        cmd.Prices,
-			Location:      cmd.Location,
+			Location:      *cmd.Location,
 			Boosts:        cmd.Boosts,
-			People:        cmd.People,
+			People:        *cmd.People,
 			Type:          cmd.Type,
 			Count:         cmd.Count,
 			Order:         cmd.Order,

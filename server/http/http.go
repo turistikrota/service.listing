@@ -83,7 +83,6 @@ func (h srv) Listen() error {
 			// Admin routes
 			admin := router.Group("/admin", h.currentUserAccess(), h.adminRoute())
 			admin.Get("/:uuid", h.wrapWithTimeout(h.PostViewAdmin))
-			
 
 			// Public routes
 			router.Get("/:slug", h.rateLimit(), h.wrapWithTimeout(h.PostView))
@@ -172,7 +171,6 @@ func (h srv) adminRoute(extra ...string) fiber.Handler {
 
 func (h srv) cors() fiber.Handler {
 	return cors.New(cors.Config{
-		AllowOrigins:     h.httpHeaders.AllowedOrigins,
 		AllowMethods:     h.httpHeaders.AllowedMethods,
 		AllowHeaders:     h.httpHeaders.AllowedHeaders,
 		AllowCredentials: h.httpHeaders.AllowCredentials,
