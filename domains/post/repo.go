@@ -222,7 +222,7 @@ func (r *repo) ReOrder(ctx context.Context, postUUID string, order int) *i18np.E
 
 func (r *repo) View(ctx context.Context, detail I18nDetail) (*Entity, *i18np.Error) {
 	filter := bson.M{
-		metaField(metaFields.Locale, metaFields.Slug): detail.Slug,
+		metaField(detail.Locale, metaFields.Slug): detail.Slug,
 		fields.IsDeleted: bson.M{
 			"$ne": true,
 		},
