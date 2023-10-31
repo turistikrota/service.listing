@@ -192,9 +192,10 @@ func (h srv) PostFilterByOwner(ctx *fiber.Ctx) error {
 func (h srv) PostListMy(ctx *fiber.Ctx) error {
 	pagination := utils.Pagination{}
 	h.parseQuery(ctx, &pagination)
+	owner := current_owner.Parse(ctx)
 	query := query.PostListMyQuery{}
 	query.Pagination = &pagination
-	h.parseParams(ctx, &query)
+	query.OwnerUUID = owner.UUID
 	res, err := h.app.Queries.PostListMy(ctx.UserContext(), query)
 	if err != nil {
 		l, a := i18n.GetLanguagesInContext(*h.i18n, ctx)

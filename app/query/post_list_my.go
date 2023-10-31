@@ -12,7 +12,7 @@ import (
 
 type PostListMyQuery struct {
 	*utils.Pagination
-	OwnerUUID string `json:"ownerUUID" params:"owner_uuid" validate:"required,object_id"`
+	OwnerUUID string
 }
 
 type PostListMyRes struct {
