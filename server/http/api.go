@@ -22,7 +22,7 @@ func (h srv) PostCreate(ctx *fiber.Ctx) error {
 	a := current_account.Parse(ctx)
 	o := current_owner.Parse(ctx)
 	cmd.Account = account.Entity{
-		UUID: current_user.Parse(ctx).ID,
+		UUID: current_user.Parse(ctx).UUID,
 		Name: a.Name,
 	}
 	cmd.Owner = post.Owner{
@@ -46,7 +46,7 @@ func (h srv) PostUpdate(ctx *fiber.Ctx) error {
 	a := current_account.Parse(ctx)
 	o := current_owner.Parse(ctx)
 	cmd.Account = account.Entity{
-		UUID: current_user.Parse(ctx).ID,
+		UUID: current_user.Parse(ctx).UUID,
 		Name: a.Name,
 	}
 	cmd.Owner = post.Owner{
@@ -68,7 +68,7 @@ func (h srv) PostEnable(ctx *fiber.Ctx) error {
 	cmd := command.PostEnableCmd{}
 	cmd.PostUUID = detail.PostUUID
 	cmd.Account = account.Entity{
-		UUID: current_user.Parse(ctx).ID,
+		UUID: current_user.Parse(ctx).UUID,
 		Name: a.Name,
 	}
 	res, err := h.app.Commands.PostEnable(ctx.UserContext(), cmd)
@@ -86,7 +86,7 @@ func (h srv) PostDisable(ctx *fiber.Ctx) error {
 	cmd := command.PostDisableCmd{}
 	cmd.PostUUID = detail.PostUUID
 	cmd.Account = account.Entity{
-		UUID: current_user.Parse(ctx).ID,
+		UUID: current_user.Parse(ctx).UUID,
 		Name: a.Name,
 	}
 	res, err := h.app.Commands.PostDisable(ctx.UserContext(), cmd)
@@ -104,7 +104,7 @@ func (h srv) PostDelete(ctx *fiber.Ctx) error {
 	cmd := command.PostDeleteCmd{}
 	cmd.PostUUID = detail.PostUUID
 	cmd.Account = account.Entity{
-		UUID: current_user.Parse(ctx).ID,
+		UUID: current_user.Parse(ctx).UUID,
 		Name: a.Name,
 	}
 	res, err := h.app.Commands.PostDelete(ctx.UserContext(), cmd)
@@ -122,7 +122,7 @@ func (h srv) PostReOrder(ctx *fiber.Ctx) error {
 	cmd := command.PostReOrderCmd{}
 	cmd.PostUUID = detail.PostUUID
 	cmd.Account = account.Entity{
-		UUID: current_user.Parse(ctx).ID,
+		UUID: current_user.Parse(ctx).UUID,
 		Name: a.Name,
 	}
 	h.parseBody(ctx, &cmd)
@@ -141,7 +141,7 @@ func (h srv) PostRestore(ctx *fiber.Ctx) error {
 	cmd := command.PostRestoreCmd{}
 	cmd.PostUUID = detail.PostUUID
 	cmd.Account = account.Entity{
-		UUID: current_user.Parse(ctx).ID,
+		UUID: current_user.Parse(ctx).UUID,
 		Name: a.Name,
 	}
 	res, err := h.app.Commands.PostRestore(ctx.UserContext(), cmd)
