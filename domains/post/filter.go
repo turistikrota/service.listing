@@ -15,7 +15,6 @@ type FilterEntity struct {
 	Coordinates  []float64         `json:"coordinates,omitempty" validate:"omitempty,min=2,max=2"`
 	Distance     *float64          `json:"distance,omitempty" validate:"omitempty,gt=6,lt=16"`
 	Features     []*FilterFeature  `json:"features,omitempty" validate:"omitempty,dive"`
-	Types        []Type            `json:"types,omitempty" validate:"omitempty"`
 	Categories   []string          `json:"categories,omitempty" validate:"omitempty,dive,object_id"`
 	Sort         Sort              `json:"sort,omitempty" validate:"omitempty,oneof=most_recent nearest"`
 	Order        Order             `json:"order,omitempty" validate:"omitempty,oneof=asc desc"`
@@ -46,12 +45,13 @@ type FilterPrice struct {
 }
 
 type FilterValidation struct {
-	Adult  int   `json:"adult" validate:"omitempty,gt=0"`
-	Kid    int   `json:"kid" validate:"omitempty,gt=0"`
-	Baby   int   `json:"baby" validate:"omitempty,gt=0"`
-	Family *bool `json:"family" validate:"omitempty"`
-	Pet    *bool `json:"pet" validate:"omitempty"`
-	Smoke  *bool `json:"smoke" validate:"omitempty"`
+	Adult   int   `json:"adult" validate:"omitempty,gt=0"`
+	Kid     int   `json:"kid" validate:"omitempty,gt=0"`
+	Baby    int   `json:"baby" validate:"omitempty,gt=0"`
+	Family  *bool `json:"family" validate:"omitempty"`
+	Pet     *bool `json:"pet" validate:"omitempty"`
+	Smoke   *bool `json:"smoke" validate:"omitempty"`
+	Alcohol *bool `json:"alcohol" validate:"omitempty"`
 }
 
 type FilterFeature struct {
@@ -121,7 +121,6 @@ func (r *repo) filterToBson(filter FilterEntity, nickName string) bson.M {
 	if nickName != "" {
 		list = r.filterByOwner(list, nickName)
 	}
-	list = r.filterByTypes(list, filter)
 	list = r.filterByLocation(list, filter)
 	list = r.filterByCategory(list, filter)
 	list = r.filterByQuery(list, filter)
@@ -137,17 +136,6 @@ func (r *repo) filterToBson(filter FilterEntity, nickName string) bson.M {
 	return bson.M{
 		"$and": list,
 	}
-}
-
-func (r *repo) filterByTypes(list []bson.M, filter FilterEntity) []bson.M {
-	if len(filter.Types) > 0 {
-		list = append(list, bson.M{
-			fields.Type: bson.M{
-				"$in": filter.Types,
-			},
-		})
-	}
-	return list
 }
 
 func (r *repo) filterByLocation(list []bson.M, filter FilterEntity) []bson.M {
@@ -290,6 +278,11 @@ func (r *repo) filterByValidation(list []bson.M, filter FilterEntity) []bson.M {
 		if filter.Validation.Smoke != nil {
 			validationFilters = append(validationFilters, bson.M{
 				validationField(validationFields.NoSmoke): !*filter.Validation.Smoke,
+			})
+		}
+		if filter.Validation.Alcohol != nil {
+			validationFilters = append(validationFilters, bson.M{
+				validationField(validationFields.NoAlcohol): !*filter.Validation.Alcohol,
 			})
 		}
 		if filter.StartDate != nil && filter.EndDate != nil && filter.StartDate.Before(*filter.EndDate) {

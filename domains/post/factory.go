@@ -31,7 +31,6 @@ type NewConfig struct {
 	Location      Location
 	Boosts        []Boost
 	Validation    Validation
-	Type          Type
 	Count         *int
 	Order         *int
 	ForCreate     bool
@@ -53,7 +52,6 @@ func (f Factory) New(cnf NewConfig) *Entity {
 		Validation:    cnf.Validation,
 		Location:      cnf.Location,
 		Boosts:        cnf.Boosts,
-		Type:          cnf.Type,
 		Order:         cnf.Order,
 		IsActive:      false,
 		IsDeleted:     false,
@@ -71,7 +69,6 @@ type validator func(e Entity) *i18np.Error
 func (f Factory) Validate(entity Entity) *i18np.Error {
 	validators := []validator{
 		f.validateOwner,
-		f.validateType,
 		f.validatePrices,
 		f.validatePeople,
 		f.validateMeta,
@@ -105,22 +102,6 @@ func (f Factory) validatePeople(e Entity) *i18np.Error {
 		return f.Errors.MinAdult()
 	}
 	return nil
-}
-
-func (f Factory) validateType(e Entity) *i18np.Error {
-	list := []Type{
-		TypeEstate,
-		TypeCar,
-		TypeBoat,
-		TypeMotorcycle,
-		TypeOther,
-	}
-	for _, v := range list {
-		if v == e.Type {
-			return nil
-		}
-	}
-	return f.Errors.InvalidType()
 }
 
 func (f Factory) validatePrices(e Entity) *i18np.Error {

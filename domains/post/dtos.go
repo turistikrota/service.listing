@@ -23,7 +23,6 @@ type ListDto struct {
 	Location      Location        `json:"location" bson:"location"`
 	Boosts        []Boost         `json:"boosts" bson:"boosts"`
 	Validation    Validation      `json:"validation" bson:"validation"`
-	Type          Type            `json:"type" bson:"type"`
 	Count         *int            `json:"count" bson:"count"`
 }
 
@@ -38,7 +37,6 @@ type DetailDto struct {
 	Location      Location        `json:"location" bson:"location"`
 	Boosts        []Boost         `json:"boosts" bson:"boosts"`
 	Validation    Validation      `json:"validation" bson:"validation"`
-	Type          Type            `json:"type" bson:"type"`
 	Count         *int            `json:"count" bson:"count"`
 	CreatedAt     time.Time       `json:"createdAt" bson:"created_at"`
 	UpdatedAt     time.Time       `json:"updatedAt" bson:"updated_at"`
@@ -59,7 +57,6 @@ type AdminListDto struct {
 	Location      Location        `json:"location" bson:"location"`
 	Boosts        []Boost         `json:"boosts" bson:"boosts"`
 	Validation    Validation      `json:"validation" bson:"validation"`
-	Type          Type            `json:"type" bson:"type"`
 	Count         *int            `json:"count" bson:"count"`
 	Order         *int            `json:"order" bson:"order"`
 	IsActive      bool            `json:"isActive" bson:"is_active"`
@@ -91,7 +88,6 @@ func (e *Entity) ToList() *ListDto {
 		Location:      e.Location,
 		Boosts:        e.Boosts,
 		Validation:    e.Validation,
-		Type:          e.Type,
 	}
 }
 
@@ -107,7 +103,6 @@ func (e *Entity) ToDetail() *DetailDto {
 		Location:      e.Location,
 		Boosts:        e.Boosts,
 		Validation:    e.Validation,
-		Type:          e.Type,
 		CreatedAt:     e.CreatedAt,
 		UpdatedAt:     e.UpdatedAt,
 	}
@@ -131,7 +126,6 @@ func (e *Entity) ToAdminList() *AdminListDto {
 		Location:      e.Location,
 		Boosts:        e.Boosts,
 		Validation:    e.Validation,
-		Type:          e.Type,
 		Order:         e.Order,
 		IsActive:      e.IsActive,
 		IsDeleted:     e.IsDeleted,

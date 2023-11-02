@@ -87,6 +87,7 @@ type validationFieldsType struct {
 	OnlyFamily string
 	NoPet      string
 	NoSmoke    string
+	NoAlcohol  string
 }
 
 type boostFieldsType struct {
@@ -174,6 +175,7 @@ var validationFields = validationFieldsType{
 	OnlyFamily: "only_family",
 	NoPet:      "no_pet",
 	NoSmoke:    "no_smoke",
+	NoAlcohol:  "no_alcohol",
 }
 
 func ownerField(field string) string {

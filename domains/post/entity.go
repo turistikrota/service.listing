@@ -13,7 +13,6 @@ type Entity struct {
 	Location      Location        `json:"location" bson:"location" validate:"required,dive,required"`
 	Boosts        []Boost         `json:"boosts" bson:"boosts" validate:"required,min=0,max=30,dive,required"`
 	Validation    Validation      `json:"validation" bson:"validation" validate:"required,dive,required"`
-	Type          Type            `json:"type" bson:"type" validate:"required,oneof=estate car boat motorcycle other"`
 	Order         *int            `json:"order" bson:"order" validate:"required,min=0,max=1000"`
 	IsActive      bool            `json:"isActive" bson:"is_active"`
 	IsDeleted     bool            `json:"isDeleted" bson:"is_deleted"`
@@ -72,6 +71,7 @@ type Validation struct {
 	OnlyFamily *bool `json:"onlyFamily" bson:"only_family" validate:"required"`
 	NoPet      *bool `json:"noPet" bson:"no_pet" validate:"required"`
 	NoSmoke    *bool `json:"noSmoke" bson:"no_smoke" validate:"required"`
+	NoAlcohol  *bool `json:"noAlcohol" bson:"no_alcohol" validate:"required"`
 }
 
 type Boost struct {
@@ -80,26 +80,12 @@ type Boost struct {
 	EndDate   time.Time `json:"endDate"`
 }
 
-type Type string
-
 type Locale string
 
 const (
 	LocaleEN Locale = "en"
 	LocaleTR Locale = "tr"
 )
-
-const (
-	TypeEstate     Type = "estate"
-	TypeCar        Type = "car"
-	TypeBoat       Type = "boat"
-	TypeMotorcycle Type = "motorcycle"
-	TypeOther      Type = "other"
-)
-
-func (t Type) String() string {
-	return string(t)
-}
 
 func (l Locale) String() string {
 	return string(l)
