@@ -30,7 +30,7 @@ type NewConfig struct {
 	Prices        []PostPriceValidationDto
 	Location      Location
 	Boosts        []Boost
-	People        People
+	Validation    Validation
 	Type          Type
 	Count         *int
 	Order         *int
@@ -50,7 +50,7 @@ func (f Factory) New(cnf NewConfig) *Entity {
 		CategoryUUIDs: cnf.CategoryUUIDs,
 		Features:      cnf.Features,
 		Prices:        prices,
-		People:        cnf.People,
+		Validation:    cnf.Validation,
 		Location:      cnf.Location,
 		Boosts:        cnf.Boosts,
 		Type:          cnf.Type,
@@ -59,7 +59,6 @@ func (f Factory) New(cnf NewConfig) *Entity {
 		IsDeleted:     false,
 		IsValid:       false,
 		UpdatedAt:     t,
-		Count:         cnf.Count,
 	}
 	if cnf.ForCreate {
 		e.CreatedAt = t
@@ -99,10 +98,10 @@ func (f Factory) validateOwner(e Entity) *i18np.Error {
 }
 
 func (f Factory) validatePeople(e Entity) *i18np.Error {
-	if *e.People.MinAdult == 0 && *e.People.MaxAdult == 0 && *e.People.MinKid == 0 && *e.People.MaxKid == 0 && *e.People.MinBaby == 0 && *e.People.MaxBaby == 0 {
+	if *e.Validation.MinAdult == 0 && *e.Validation.MaxAdult == 0 && *e.Validation.MinKid == 0 && *e.Validation.MaxKid == 0 && *e.Validation.MinBaby == 0 && *e.Validation.MaxBaby == 0 {
 		return f.Errors.InvalidPeople()
 	}
-	if *e.People.MinAdult == 0 {
+	if *e.Validation.MinAdult == 0 {
 		return f.Errors.MinAdult()
 	}
 	return nil

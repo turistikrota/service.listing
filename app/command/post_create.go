@@ -25,7 +25,7 @@ type PostCreateCmd struct {
 	Location      *post.Location                `json:"location" validate:"required,dive"`
 	Boosts        []post.Boost                  `json:"boosts" validate:"omitempty,min=0,max=10,dive,required"`
 	Type          post.Type                     `json:"type" validate:"required"`
-	People        *post.People                  `json:"people" validate:"required,dive"`
+	Validation    *post.Validation              `json:"validation" validate:"required,dive"`
 	Count         *int                          `json:"count" validate:"required,min=1,max=100,numeric"`
 	Order         *int                          `json:"order" validate:"required,min=0,max=1000,numeric"`
 }
@@ -47,7 +47,7 @@ func NewPostCreateHandler(factory post.Factory, repo post.Repository, events pos
 			Prices:        cmd.Prices,
 			Location:      *cmd.Location,
 			Boosts:        cmd.Boosts,
-			People:        *cmd.People,
+			Validation:    *cmd.Validation,
 			Type:          cmd.Type,
 			Count:         cmd.Count,
 			Order:         cmd.Order,

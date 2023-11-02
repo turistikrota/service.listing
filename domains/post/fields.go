@@ -10,7 +10,7 @@ type fieldsType struct {
 	Prices        string
 	Location      string
 	Boosts        string
-	People        string
+	Validation    string
 	Type          string
 	Order         string
 	Count         string
@@ -75,6 +75,20 @@ type coordinateFieldsType struct {
 	Longitude string
 }
 
+type validationFieldsType struct {
+	MinAdult   string
+	MaxAdult   string
+	MinKid     string
+	MaxKid     string
+	MinBaby    string
+	MaxBaby    string
+	MinDate    string
+	MaxDate    string
+	OnlyFamily string
+	NoPet      string
+	NoSmoke    string
+}
+
 type boostFieldsType struct {
 	UUID      string
 	StartDate string
@@ -94,7 +108,7 @@ var fields = fieldsType{
 	Type:          "type",
 	Order:         "order",
 	Count:         "count",
-	People:        "people",
+	Validation:    "validation",
 	IsActive:      "is_active",
 	IsDeleted:     "is_deleted",
 	IsValid:       "is_valid",
@@ -142,19 +156,24 @@ var locationFields = locationFieldsType{
 	Coordinates: "coordinates",
 }
 
-var peopleFields = peopleFieldsType{
-	MinAdult: "min_adult",
-	MaxAdult: "max_adult",
-	MinKid:   "min_kid",
-	MaxKid:   "max_kid",
-	MinBaby:  "min_baby",
-	MaxBaby:  "max_baby",
-}
-
 var boostFields = boostFieldsType{
 	UUID:      "uuid",
 	StartDate: "start_date",
 	EndDate:   "end_date",
+}
+
+var validationFields = validationFieldsType{
+	MinAdult:   "min_adult",
+	MaxAdult:   "max_adult",
+	MinKid:     "min_kid",
+	MaxKid:     "max_kid",
+	MinBaby:    "min_baby",
+	MaxBaby:    "max_baby",
+	MinDate:    "min_date",
+	MaxDate:    "max_date",
+	OnlyFamily: "only_family",
+	NoPet:      "no_pet",
+	NoSmoke:    "no_smoke",
 }
 
 func ownerField(field string) string {
@@ -173,6 +192,10 @@ func priceField(field string) string {
 	return fields.Prices + "." + field
 }
 
-func peopleField(field string) string {
-	return fields.People + "." + field
+func featureField(field string) string {
+	return fields.Features + "." + field
+}
+
+func validationField(field string) string {
+	return fields.Validation + "." + field
 }

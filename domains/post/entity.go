@@ -12,9 +12,8 @@ type Entity struct {
 	Prices        []Price         `json:"prices" bson:"prices" validate:"required,min=1,max=100,dive,required"`
 	Location      Location        `json:"location" bson:"location" validate:"required,dive,required"`
 	Boosts        []Boost         `json:"boosts" bson:"boosts" validate:"required,min=0,max=30,dive,required"`
-	People        People          `json:"people" bson:"people" validate:"required,dive,required"`
+	Validation    Validation      `json:"validation" bson:"validation" validate:"required,dive,required"`
 	Type          Type            `json:"type" bson:"type" validate:"required,oneof=estate car boat motorcycle other"`
-	Count         *int            `json:"count" bson:"count" validate:"required,min=1,max=1000"`
 	Order         *int            `json:"order" bson:"order" validate:"required,min=0,max=1000"`
 	IsActive      bool            `json:"isActive" bson:"is_active"`
 	IsDeleted     bool            `json:"isDeleted" bson:"is_deleted"`
@@ -31,15 +30,6 @@ type Owner struct {
 type Image struct {
 	Url   string `json:"url" bson:"url" validate:"required,url"`
 	Order *int16 `json:"order" bson:"order" validate:"required,min=0,max=20"`
-}
-
-type People struct {
-	MinAdult *int `json:"minAdult" bson:"min_adult" validate:"required,min=1,max=50,ltefield=MaxAdult"`
-	MaxAdult *int `json:"maxAdult" bson:"max_adult" validate:"required,min=0,max=50,gtefield=MinAdult"`
-	MinKid   *int `json:"minKid" bson:"min_kid" validate:"required,min=0,max=50,ltefield=MaxKid"`
-	MaxKid   *int `json:"maxKid" bson:"max_kid" validate:"required,min=0,max=50,gtefield=MinKid"`
-	MinBaby  *int `json:"minBaby" bson:"min_baby" validate:"required,min=0,max=50,ltefield=MaxBaby"`
-	MaxBaby  *int `json:"maxBaby" bson:"max_baby" validate:"required,min=0,max=50,gtefield=MinBaby"`
 }
 
 type Meta struct {
@@ -68,6 +58,20 @@ type Location struct {
 	Address     string    `json:"address" validate:"required,max=255,min=3"`
 	IsStrict    *bool     `json:"isStrict" bson:"is_strict" validate:"required"`
 	Coordinates []float64 `json:"coordinates" bson:"coordinates" validate:"required,min=2,max=2,dive,required,min=-180,max=180"`
+}
+
+type Validation struct {
+	MinAdult   *int  `json:"minAdult" bson:"min_adult" validate:"required,min=1,max=50,ltefield=MaxAdult"`
+	MaxAdult   *int  `json:"maxAdult" bson:"max_adult" validate:"required,min=0,max=50,gtefield=MinAdult"`
+	MinKid     *int  `json:"minKid" bson:"min_kid" validate:"required,min=0,max=50,ltefield=MaxKid"`
+	MaxKid     *int  `json:"maxKid" bson:"max_kid" validate:"required,min=0,max=50,gtefield=MinKid"`
+	MinBaby    *int  `json:"minBaby" bson:"min_baby" validate:"required,min=0,max=50,ltefield=MaxBaby"`
+	MaxBaby    *int  `json:"maxBaby" bson:"max_baby" validate:"required,min=0,max=50,gtefield=MinBaby"`
+	MinDate    *int  `json:"minDate" bson:"min_date" validate:"required,min=0,max=50,ltefield=MaxDate"`
+	MaxDate    *int  `json:"maxDate" bson:"max_date" validate:"required,min=0,max=50,gtefield=MinDate"`
+	OnlyFamily *bool `json:"onlyFamily" bson:"only_family" validate:"required"`
+	NoPet      *bool `json:"noPet" bson:"no_pet" validate:"required"`
+	NoSmoke    *bool `json:"noSmoke" bson:"no_smoke" validate:"required"`
 }
 
 type Boost struct {

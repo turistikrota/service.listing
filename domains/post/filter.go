@@ -8,17 +8,32 @@ import (
 )
 
 type FilterEntity struct {
-	Locale      string           `json:"-"`
-	Query       string           `json:"query,omitempty" validate:"omitempty,max=100"`
-	Price       *FilterPrice     `json:"price,omitempty" validate:"omitempty"`
-	People      *FilterPeople    `json:"people,omitempty" validate:"omitempty"`
-	Coordinates []float64        `json:"coordinates,omitempty" validate:"omitempty,min=2,max=2"`
-	Distance    *float64         `json:"distance,omitempty" validate:"omitempty,gt=6,lt=16"`
-	Features    []*FilterFeature `json:"features,omitempty" validate:"omitempty,dive"`
-	Types       []Type           `json:"types,omitempty" validate:"omitempty"`
-	Categories  []string         `json:"categories,omitempty" validate:"omitempty,dive,object_id"`
-	Sort        Sort             `json:"sort,omitempty" validate:"omitempty,oneof=most_recent nearest"`
-	Order       Order            `json:"order,omitempty" validate:"omitempty,oneof=asc desc"`
+	Locale       string            `json:"-"`
+	Query        string            `json:"query,omitempty" validate:"omitempty,max=100"`
+	Price        *FilterPrice      `json:"price,omitempty" validate:"omitempty"`
+	Validation   *FilterValidation `json:"validation,omitempty" validate:"omitempty"`
+	Coordinates  []float64         `json:"coordinates,omitempty" validate:"omitempty,min=2,max=2"`
+	Distance     *float64          `json:"distance,omitempty" validate:"omitempty,gt=6,lt=16"`
+	Features     []*FilterFeature  `json:"features,omitempty" validate:"omitempty,dive"`
+	Types        []Type            `json:"types,omitempty" validate:"omitempty"`
+	Categories   []string          `json:"categories,omitempty" validate:"omitempty,dive,object_id"`
+	Sort         Sort              `json:"sort,omitempty" validate:"omitempty,oneof=most_recent nearest"`
+	Order        Order             `json:"order,omitempty" validate:"omitempty,oneof=asc desc"`
+	StartDate    *time.Time        `json:"-"`
+	EndDate      *time.Time        `json:"-"`
+	StartDateStr string            `json:"start_date" validate:"omitempty,datetime=2006-01-02"`
+	EndDateStr   string            `json:"end_date" validate:"omitempty,datetime=2006-01-02"`
+}
+
+func (e *FilterEntity) Parse() {
+	if e.StartDateStr != "" {
+		t, _ := time.Parse("2006-01-02", e.StartDateStr)
+		e.StartDate = &t
+	}
+	if e.EndDateStr != "" {
+		t, _ := time.Parse("2006-01-02", e.EndDateStr)
+		e.EndDate = &t
+	}
 }
 
 type FilterPrice struct {
@@ -30,10 +45,13 @@ type FilterPrice struct {
 	EndDate      *time.Time `json:"-"`
 }
 
-type FilterPeople struct {
-	Adult int `json:"adult" validate:"omitempty,gt=0"`
-	Kid   int `json:"kid" validate:"omitempty,gt=0"`
-	Baby  int `json:"baby" validate:"omitempty,gt=0"`
+type FilterValidation struct {
+	Adult  int   `json:"adult" validate:"omitempty,gt=0"`
+	Kid    int   `json:"kid" validate:"omitempty,gt=0"`
+	Baby   int   `json:"baby" validate:"omitempty,gt=0"`
+	Family *bool `json:"family" validate:"omitempty"`
+	Pet    *bool `json:"pet" validate:"omitempty"`
+	Smoke  *bool `json:"smoke" validate:"omitempty"`
 }
 
 type FilterFeature struct {
@@ -108,7 +126,7 @@ func (r *repo) filterToBson(filter FilterEntity, nickName string) bson.M {
 	list = r.filterByCategory(list, filter)
 	list = r.filterByQuery(list, filter)
 	list = r.filterByPrice(list, filter)
-	list = r.filterByPeople(list, filter)
+	list = r.filterByValidation(list, filter)
 	listLen := len(list)
 	if listLen == 0 {
 		return bson.M{}
@@ -208,63 +226,96 @@ func (r *repo) filterByQuery(list []bson.M, filter FilterEntity) []bson.M {
 	return list
 }
 
-func (r *repo) filterByPeople(list []bson.M, filter FilterEntity) []bson.M {
-	if filter.People != nil {
-		peopleFilters := make([]bson.M, 0)
-		if filter.People.Adult != 0 {
-			peopleFilters = append(peopleFilters, bson.M{
+func (r *repo) filterByValidation(list []bson.M, filter FilterEntity) []bson.M {
+	if filter.Validation != nil {
+		validationFilters := make([]bson.M, 0)
+		if filter.Validation.Adult != 0 {
+			validationFilters = append(validationFilters, bson.M{
 				"$and": []bson.M{
 					{
-						peopleField(peopleFields.MinAdult): bson.M{
-							"$lte": filter.People.Adult,
+						validationField(validationFields.MinAdult): bson.M{
+							"$lte": filter.Validation.Adult,
 						},
 					},
 					{
-						peopleField(peopleFields.MaxAdult): bson.M{
-							"$gte": filter.People.Adult,
+						validationField(validationFields.MaxAdult): bson.M{
+							"$gte": filter.Validation.Adult,
 						},
 					},
 				},
 			})
 		}
-		if filter.People.Kid != 0 {
-			peopleFilters = append(peopleFilters, bson.M{
+		if filter.Validation.Kid != 0 {
+			validationFilters = append(validationFilters, bson.M{
 				"$and": []bson.M{
 					{
-						peopleField(peopleFields.MinKid): bson.M{
-							"$lte": filter.People.Kid,
+						validationField(validationFields.MinKid): bson.M{
+							"$lte": filter.Validation.Kid,
 						},
 					},
 					{
-						peopleField(peopleFields.MaxKid): bson.M{
-							"$gte": filter.People.Kid,
+						validationField(validationFields.MaxKid): bson.M{
+							"$gte": filter.Validation.Kid,
 						},
 					},
 				},
 			})
 		}
-		if filter.People.Baby != 0 {
-			peopleFilters = append(peopleFilters, bson.M{
+		if filter.Validation.Baby != 0 {
+			validationFilters = append(validationFilters, bson.M{
 				"$and": []bson.M{
 					{
-						peopleField(peopleFields.MinBaby): bson.M{
-							"$lte": filter.People.Baby,
+						validationField(validationFields.MinBaby): bson.M{
+							"$lte": filter.Validation.Baby,
 						},
 					},
 					{
-						peopleField(peopleFields.MaxBaby): bson.M{
-							"$gte": filter.People.Baby,
+						validationField(validationFields.MaxBaby): bson.M{
+							"$gte": filter.Validation.Baby,
 						},
 					},
 				},
 			})
 		}
-		if len(peopleFilters) > 0 {
-			if len(peopleFilters) == 1 {
-				list = append(list, peopleFilters[0])
+		if filter.Validation.Family != nil {
+			validationFilters = append(validationFilters, bson.M{
+				validationField(validationFields.OnlyFamily): !*filter.Validation.Family,
+			})
+		}
+		if filter.Validation.Pet != nil {
+			validationFilters = append(validationFilters, bson.M{
+				validationField(validationFields.NoPet): !*filter.Validation.Pet,
+			})
+		}
+		if filter.Validation.Smoke != nil {
+			validationFilters = append(validationFilters, bson.M{
+				validationField(validationFields.NoSmoke): !*filter.Validation.Smoke,
+			})
+		}
+		if filter.StartDate != nil && filter.EndDate != nil && filter.StartDate.Before(*filter.EndDate) {
+			totalDate := filter.EndDate.Sub(*filter.StartDate).Hours() / 24
+			validationFilters = append(validationFilters, bson.M{
+				"$and": []bson.M{
+					{
+						validationField(validationFields.MinDate): bson.M{
+							"$lte": totalDate,
+						},
+					},
+					{
+						validationField(validationFields.MaxDate): bson.M{
+							"$gte": totalDate,
+						},
+					},
+				},
+			})
+		}
+
+		if len(validationFilters) > 0 {
+			if len(validationFilters) == 1 {
+				list = append(list, validationFilters[0])
 			} else {
 				list = append(list, bson.M{
-					"$and": peopleFilters,
+					"$and": validationFilters,
 				})
 			}
 		}

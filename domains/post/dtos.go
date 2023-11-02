@@ -22,7 +22,7 @@ type ListDto struct {
 	Prices        []Price         `json:"prices" bson:"prices"`
 	Location      Location        `json:"location" bson:"location"`
 	Boosts        []Boost         `json:"boosts" bson:"boosts"`
-	People        People          `json:"people" bson:"people"`
+	Validation    Validation      `json:"validation" bson:"validation"`
 	Type          Type            `json:"type" bson:"type"`
 	Count         *int            `json:"count" bson:"count"`
 }
@@ -37,7 +37,7 @@ type DetailDto struct {
 	Prices        []Price         `json:"prices" bson:"prices"`
 	Location      Location        `json:"location" bson:"location"`
 	Boosts        []Boost         `json:"boosts" bson:"boosts"`
-	People        People          `json:"people" bson:"people"`
+	Validation    Validation      `json:"validation" bson:"validation"`
 	Type          Type            `json:"type" bson:"type"`
 	Count         *int            `json:"count" bson:"count"`
 	CreatedAt     time.Time       `json:"createdAt" bson:"created_at"`
@@ -58,7 +58,7 @@ type AdminListDto struct {
 	Prices        []Price         `json:"prices" bson:"prices"`
 	Location      Location        `json:"location" bson:"location"`
 	Boosts        []Boost         `json:"boosts" bson:"boosts"`
-	People        People          `json:"people" bson:"people"`
+	Validation    Validation      `json:"validation" bson:"validation"`
 	Type          Type            `json:"type" bson:"type"`
 	Count         *int            `json:"count" bson:"count"`
 	Order         *int            `json:"order" bson:"order"`
@@ -90,9 +90,8 @@ func (e *Entity) ToList() *ListDto {
 		Prices:        e.Prices,
 		Location:      e.Location,
 		Boosts:        e.Boosts,
-		People:        e.People,
+		Validation:    e.Validation,
 		Type:          e.Type,
-		Count:         e.Count,
 	}
 }
 
@@ -107,9 +106,8 @@ func (e *Entity) ToDetail() *DetailDto {
 		Prices:        e.Prices,
 		Location:      e.Location,
 		Boosts:        e.Boosts,
-		People:        e.People,
+		Validation:    e.Validation,
 		Type:          e.Type,
-		Count:         e.Count,
 		CreatedAt:     e.CreatedAt,
 		UpdatedAt:     e.UpdatedAt,
 	}
@@ -132,13 +130,12 @@ func (e *Entity) ToAdminList() *AdminListDto {
 		Prices:        e.Prices,
 		Location:      e.Location,
 		Boosts:        e.Boosts,
-		People:        e.People,
+		Validation:    e.Validation,
 		Type:          e.Type,
-		Count:         e.Count,
 		Order:         e.Order,
 		IsActive:      e.IsActive,
 		IsDeleted:     e.IsDeleted,
-		IsValid:       e.IsValid,  
+		IsValid:       e.IsValid,
 		CreatedAt:     e.CreatedAt,
 		UpdatedAt:     e.UpdatedAt,
 	}
