@@ -61,6 +61,7 @@ type RSA struct {
 type Topics struct {
 	Post     PostTopics
 	Category CategoryTopics
+	Booking  BookingTopics
 }
 
 type PostTopics struct {
@@ -75,6 +76,12 @@ type PostTopics struct {
 
 type CategoryTopics struct {
 	PostValidationSuccess string `env:"STREAMING_TOPIC_CATEGORY_POST_VALIDATION_SUCCESS"`
+}
+
+type BookingTopics struct {
+	ValidationSuccess string `env:"STREAMING_TOPIC_BOOKING_VALIDATION_SUCCESS"`
+	ValidationFail    string `env:"STREAMING_TOPIC_BOOKING_VALIDATION_FAIL"`
+	ValidationStart   string `env:"STREAMING_TOPIC_BOOKING_VALIDATION_START"`
 }
 
 type Nats struct {

@@ -66,6 +66,11 @@ type AdminListDto struct {
 	UpdatedAt     time.Time       `json:"updatedAt" bson:"updated_at"`
 }
 
+type PricePerDay struct {
+	Date  time.Time `json:"date"`
+	Price float64   `json:"price"`
+}
+
 func (d *PostPriceValidationDto) ToEntity() Price {
 	start, _ := time.Parse(formats.DateYYYYMMDD, d.StartDate)
 	end, _ := time.Parse(formats.DateYYYYMMDD, d.EndDate)

@@ -3,6 +3,7 @@ package post
 import (
 	"github.com/cilloparch/cillop/events"
 	"github.com/turistikrota/service.post/config"
+	"github.com/turistikrota/service.post/domains/booking"
 )
 
 type Events interface {
@@ -13,6 +14,8 @@ type Events interface {
 	Enabled(event EnabledEvent)
 	ReOrder(event ReOrderEvent)
 	Restore(event RestoreEvent)
+	BookingValidationSuccess(event BookingValidationSuccessEvent)
+	BookingValidationFail(event BookingValidationFailEvent)
 }
 
 type (
@@ -49,6 +52,21 @@ type (
 	AccountEvent struct {
 		UUID string `json:"uuid"`
 		Name string `json:"name"`
+	}
+	BookingValidationSuccessEvent struct {
+		BookingUUID  string        `json:"booking_uuid"`
+		PostUUID     string        `json:"post_uuid"`
+		OwnerUUID    string        `json:"owner_uuid"`
+		OwnerName    string        `json:"owner_name"`
+		TotalPrice   float64       `json:"total_price"`
+		PricePerDays []PricePerDay `json:"price_per_days"`
+	}
+	BookingValidationFailEvent struct {
+		BookingUUID string                     `json:"booking_uuid"`
+		PostUUID    string                     `json:"post_uuid"`
+		OwnerUUID   string                     `json:"owner_uuid"`
+		OwnerName   string                     `json:"owner_name"`
+		Errors      []*booking.ValidationError `json:"errors"`
 	}
 )
 
@@ -95,4 +113,12 @@ func (e *postEvents) ReOrder(event ReOrderEvent) {
 
 func (e *postEvents) Restore(event RestoreEvent) {
 	_ = e.publisher.Publish(e.topics.Post.Restored, event)
+}
+
+func (e *postEvents) BookingValidationSuccess(event BookingValidationSuccessEvent) {
+	_ = e.publisher.Publish(e.topics.Booking.ValidationSuccess, event)
+}
+
+func (e *postEvents) BookingValidationFail(event BookingValidationFailEvent) {
+	_ = e.publisher.Publish(e.topics.Booking.ValidationFail, event)
 }

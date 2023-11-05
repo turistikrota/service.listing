@@ -26,3 +26,14 @@ func (s srv) OnPostValidationSuccess(data []byte) {
 		},
 	})
 }
+
+func (s srv) OnBookingValidationStart(data []byte) {
+	fmt.Println("OnBookingValidationStart")
+	cmd := command.PostValidateBookingCmd{}
+	err := json.Unmarshal(data, &cmd)
+	if err != nil {
+		fmt.Println(err)
+		return
+	}
+	_, _ = s.app.Commands.BookingValidate(context.Background(), cmd)
+}

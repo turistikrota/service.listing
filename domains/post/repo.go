@@ -29,6 +29,7 @@ type Repository interface {
 	MarkInvalid(ctx context.Context, postUUID string) *i18np.Error
 	ReOrder(ctx context.Context, postUUID string, order int) *i18np.Error
 	View(ctx context.Context, detail I18nDetail) (*Entity, *i18np.Error)
+	GetByUUID(ctx context.Context, postUUID string) (*Entity, bool, *i18np.Error)
 	AdminView(ctx context.Context, postUUID string) (*Entity, *i18np.Error)
 	Filter(ctx context.Context, filter FilterEntity, listConfig list.Config) (*list.Result[*Entity], *i18np.Error)
 	FilterByOwner(ctx context.Context, ownerNickName string, filter FilterEntity, listConfig list.Config) (*list.Result[*Entity], *i18np.Error)
@@ -237,6 +238,25 @@ func (r *repo) View(ctx context.Context, detail I18nDetail) (*Entity, *i18np.Err
 		return nil, r.factory.Errors.NotFound()
 	}
 	return *e, nil
+}
+
+func (r *repo) GetByUUID(ctx context.Context, uuid string) (*Entity, bool, *i18np.Error) {
+	filter := bson.M{
+		fields.UUID: uuid,
+		fields.IsDeleted: bson.M{
+			"$ne": true,
+		},
+		fields.IsActive: true,
+		fields.IsValid:  true,
+	}
+	e, exist, err := r.helper.GetFilter(ctx, filter)
+	if err != nil {
+		return nil, false, r.factory.Errors.Failed("get")
+	}
+	if !exist {
+		return nil, false, nil
+	}
+	return *e, true, nil
 }
 
 func (r *repo) AdminView(ctx context.Context, postUUID string) (*Entity, *i18np.Error) {

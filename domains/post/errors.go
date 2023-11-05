@@ -23,6 +23,11 @@ type Errors interface {
 	InvalidPeople() *i18np.Error
 	NotFound() *i18np.Error
 	MinAdult() *i18np.Error
+	ValidateBookingNotAvailable(time.Time) *i18np.Error
+	ValidateBookingAdult(int, int) *i18np.Error
+	ValidateBookingKid(int, int) *i18np.Error
+	ValidateBookingBaby(int, int) *i18np.Error
+	ValidateBookingNotFound() *i18np.Error
 }
 
 type postErrors struct{}
@@ -96,4 +101,35 @@ func (e *postErrors) MinAdult() *i18np.Error {
 	return i18np.NewError(i18nMessages.MinAdult, i18np.P{
 		"Min": 1,
 	})
+}
+
+func (e *postErrors) ValidateBookingNotAvailable(date time.Time) *i18np.Error {
+	return i18np.NewError(i18nMessages.ValidateBookingNotAvailable, i18np.P{
+		"Date": date.Format(formats.DateYYYYMMDD),
+	})
+}
+
+func (e *postErrors) ValidateBookingAdult(min int, max int) *i18np.Error {
+	return i18np.NewError(i18nMessages.ValidateBookingAdult, i18np.P{
+		"Min": min,
+		"Max": max,
+	})
+}
+
+func (e *postErrors) ValidateBookingKid(min int, max int) *i18np.Error {
+	return i18np.NewError(i18nMessages.ValidateBookingKid, i18np.P{
+		"Min": min,
+		"Max": max,
+	})
+}
+
+func (e *postErrors) ValidateBookingBaby(min int, max int) *i18np.Error {
+	return i18np.NewError(i18nMessages.ValidateBookingBaby, i18np.P{
+		"Min": min,
+		"Max": max,
+	})
+}
+
+func (e *postErrors) ValidateBookingNotFound() *i18np.Error {
+	return i18np.NewError(i18nMessages.ValidateBookingNotFound)
 }

@@ -29,5 +29,9 @@ func New(config Config) server.Server {
 
 func (s srv) Listen() error {
 	err := s.engine.Subscribe(s.topics.Category.PostValidationSuccess, s.OnPostValidationSuccess)
+	if err != nil {
+		return err
+	}
+	err = s.engine.Subscribe(s.topics.Booking.ValidationStart, s.OnBookingValidationStart)
 	return err
 }

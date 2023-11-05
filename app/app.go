@@ -20,6 +20,7 @@ type Commands struct {
 	PostDelete              command.PostDeleteHandler
 	PostRestore             command.PostRestoreHandler
 	PostReOrder             command.PostReOrderHandler
+	BookingValidate         command.PostValidateBookingHandler
 }
 
 type Queries struct {

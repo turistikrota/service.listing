@@ -39,6 +39,7 @@ func NewApplication(cnf Config) app.Application {
 			PostDelete:              command.NewPostDeleteHandler(postRepo, postEvents),
 			PostRestore:             command.NewPostRestoreHandler(postRepo, postEvents),
 			PostReOrder:             command.NewPostReOrderHandler(postRepo, postEvents),
+			BookingValidate:         command.NewPostValidateBookingHandler(postFactory, postRepo, postEvents),
 		},
 		Queries: app.Queries{
 			PostView:          query.NewPostViewHandler(postRepo, cnf.CacheSrv),

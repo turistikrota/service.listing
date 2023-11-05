@@ -90,3 +90,21 @@ const (
 func (l Locale) String() string {
 	return string(l)
 }
+
+func (e *Entity) IsAvailable(date time.Time) bool {
+	for _, p := range e.Prices {
+		if date.After(p.StartDate) && date.Before(p.EndDate) {
+			return true
+		}
+	}
+	return false
+}
+
+func (e *Entity) GetPrice(date time.Time) float64 {
+	for _, p := range e.Prices {
+		if date.After(p.StartDate) && date.Before(p.EndDate) {
+			return p.Price
+		}
+	}
+	return 0
+}
