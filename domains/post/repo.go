@@ -241,8 +241,12 @@ func (r *repo) View(ctx context.Context, detail I18nDetail) (*Entity, *i18np.Err
 }
 
 func (r *repo) GetByUUID(ctx context.Context, uuid string) (*Entity, bool, *i18np.Error) {
+	id, _err := mongo2.TransformId(uuid)
+	if _err != nil {
+		return nil, false, r.factory.Errors.InvalidUUID()
+	}
 	filter := bson.M{
-		fields.UUID: uuid,
+		fields.UUID: id,
 		fields.IsDeleted: bson.M{
 			"$ne": true,
 		},

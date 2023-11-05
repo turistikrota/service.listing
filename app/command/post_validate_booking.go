@@ -2,6 +2,7 @@ package command
 
 import (
 	"context"
+	"fmt"
 	"time"
 
 	"github.com/cilloparch/cillop/cqrs"
@@ -44,13 +45,13 @@ func NewPostValidateBookingHandler(factory post.Factory, repo post.Repository, e
 	}
 
 	validatePeople := func(cmd PostValidateBookingCmd, p *post.Entity) *i18np.Error {
-		if p.Validation.MinAdult != nil && cmd.People.Adult < *p.Validation.MinAdult || cmd.People.Adult > *p.Validation.MaxAdult {
+		if p.Validation.MinAdult != nil && p.Validation.MaxAdult != nil && cmd.People.Adult < *p.Validation.MinAdult || cmd.People.Adult > *p.Validation.MaxAdult {
 			return factory.Errors.ValidateBookingAdult(*p.Validation.MinAdult, *p.Validation.MaxAdult)
 		}
-		if p.Validation.MinKid != nil && cmd.People.Kid < *p.Validation.MinKid || cmd.People.Kid > *p.Validation.MaxKid {
+		if p.Validation.MinKid != nil && p.Validation.MaxKid != nil && cmd.People.Kid < *p.Validation.MinKid || cmd.People.Kid > *p.Validation.MaxKid {
 			return factory.Errors.ValidateBookingKid(*p.Validation.MinKid, *p.Validation.MaxKid)
 		}
-		if p.Validation.MinBaby != nil && cmd.People.Baby < *p.Validation.MinBaby || cmd.People.Baby > *p.Validation.MaxBaby {
+		if p.Validation.MinBaby != nil && p.Validation.MaxBaby != nil && cmd.People.Baby < *p.Validation.MinBaby || cmd.People.Baby > *p.Validation.MaxBaby {
 			return factory.Errors.ValidateBookingBaby(*p.Validation.MinBaby, *p.Validation.MaxBaby)
 		}
 		return nil
@@ -72,17 +73,18 @@ func NewPostValidateBookingHandler(factory post.Factory, repo post.Repository, e
 			event.OwnerName = p.Owner.NickName
 			event.OwnerUUID = p.Owner.UUID
 		}
+		fmt.Printf("%+v\n", event)
 		events.BookingValidationFail(event)
 		return nil, err
 	}
 
 	return func(ctx context.Context, cmd PostValidateBookingCmd) (*PostValidateBookingRes, *i18np.Error) {
 		p, exists, err := repo.GetByUUID(ctx, cmd.PostUUID)
-		if !exists {
-			return failEvent("post", factory.Errors.ValidateBookingNotFound(), p, cmd)
-		}
 		if err != nil {
 			return nil, err
+		}
+		if !exists {
+			return failEvent("post", factory.Errors.ValidateBookingNotFound(), p, cmd)
 		}
 		dates, totalPrice, error := validateDateRange(cmd, p)
 		if error != nil {

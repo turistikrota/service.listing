@@ -12,7 +12,7 @@ type Entity struct {
 	Prices        []Price         `json:"prices" bson:"prices" validate:"required,min=1,max=100,dive,required"`
 	Location      Location        `json:"location" bson:"location" validate:"required,dive,required"`
 	Boosts        []Boost         `json:"boosts" bson:"boosts" validate:"required,min=0,max=30,dive,required"`
-	Validation    Validation      `json:"validation" bson:"validation" validate:"required,dive,required"`
+	Validation    *Validation     `json:"validation" bson:"validation" validate:"required,dive,required"`
 	Order         *int            `json:"order" bson:"order" validate:"required,min=0,max=1000"`
 	IsActive      bool            `json:"isActive" bson:"is_active"`
 	IsDeleted     bool            `json:"isDeleted" bson:"is_deleted"`

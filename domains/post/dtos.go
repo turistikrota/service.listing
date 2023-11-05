@@ -92,7 +92,7 @@ func (e *Entity) ToList() *ListDto {
 		Prices:        e.Prices,
 		Location:      e.Location,
 		Boosts:        e.Boosts,
-		Validation:    e.Validation,
+		Validation:    *e.Validation,
 	}
 }
 
@@ -107,7 +107,7 @@ func (e *Entity) ToDetail() *DetailDto {
 		Prices:        e.Prices,
 		Location:      e.Location,
 		Boosts:        e.Boosts,
-		Validation:    e.Validation,
+		Validation:    *e.Validation,
 		CreatedAt:     e.CreatedAt,
 		UpdatedAt:     e.UpdatedAt,
 	}
@@ -130,7 +130,7 @@ func (e *Entity) ToAdminList() *AdminListDto {
 		Prices:        e.Prices,
 		Location:      e.Location,
 		Boosts:        e.Boosts,
-		Validation:    e.Validation,
+		Validation:    *e.Validation,
 		Order:         e.Order,
 		IsActive:      e.IsActive,
 		IsDeleted:     e.IsDeleted,

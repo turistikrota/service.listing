@@ -46,7 +46,7 @@ func NewPostCreateHandler(factory post.Factory, repo post.Repository, events pos
 			Prices:        cmd.Prices,
 			Location:      *cmd.Location,
 			Boosts:        cmd.Boosts,
-			Validation:    *cmd.Validation,
+			Validation:    cmd.Validation,
 			Count:         cmd.Count,
 			Order:         cmd.Order,
 			ForCreate:     true,

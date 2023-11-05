@@ -30,7 +30,7 @@ type NewConfig struct {
 	Prices        []PostPriceValidationDto
 	Location      Location
 	Boosts        []Boost
-	Validation    Validation
+	Validation    *Validation
 	Count         *int
 	Order         *int
 	ForCreate     bool
