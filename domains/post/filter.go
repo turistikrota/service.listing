@@ -45,13 +45,16 @@ type FilterPrice struct {
 }
 
 type FilterValidation struct {
-	Adult   int   `json:"adult" validate:"omitempty,gt=0"`
-	Kid     int   `json:"kid" validate:"omitempty,gt=0"`
-	Baby    int   `json:"baby" validate:"omitempty,gt=0"`
-	Family  *bool `json:"family" validate:"omitempty"`
-	Pet     *bool `json:"pet" validate:"omitempty"`
-	Smoke   *bool `json:"smoke" validate:"omitempty"`
-	Alcohol *bool `json:"alcohol" validate:"omitempty"`
+	Adult     int   `json:"adult" validate:"omitempty,gt=0"`
+	Kid       int   `json:"kid" validate:"omitempty,gt=0"`
+	Baby      int   `json:"baby" validate:"omitempty,gt=0"`
+	Family    *bool `json:"family" validate:"omitempty"`
+	Pet       *bool `json:"pet" validate:"omitempty"`
+	Smoke     *bool `json:"smoke" validate:"omitempty"`
+	Alcohol   *bool `json:"alcohol" validate:"omitempty"`
+	Party     *bool `json:"party" validate:"omitempty"`
+	Unmarried *bool `json:"unmarried" validate:"omitempty"`
+	Guest     *bool `json:"guest" validate:"omitempty"`
 }
 
 type FilterFeature struct {
@@ -283,6 +286,21 @@ func (r *repo) filterByValidation(list []bson.M, filter FilterEntity) []bson.M {
 		if filter.Validation.Alcohol != nil {
 			validationFilters = append(validationFilters, bson.M{
 				validationField(validationFields.NoAlcohol): !*filter.Validation.Alcohol,
+			})
+		}
+		if filter.Validation.Party != nil {
+			validationFilters = append(validationFilters, bson.M{
+				validationField(validationFields.NoParty): !*filter.Validation.Party,
+			})
+		}
+		if filter.Validation.Unmarried != nil {
+			validationFilters = append(validationFilters, bson.M{
+				validationField(validationFields.NoUnmarried): !*filter.Validation.Unmarried,
+			})
+		}
+		if filter.Validation.Guest != nil {
+			validationFilters = append(validationFilters, bson.M{
+				validationField(validationFields.NoGuest): !*filter.Validation.Guest,
 			})
 		}
 		if filter.StartDate != nil && filter.EndDate != nil && filter.StartDate.Before(*filter.EndDate) {

@@ -76,18 +76,21 @@ type coordinateFieldsType struct {
 }
 
 type validationFieldsType struct {
-	MinAdult   string
-	MaxAdult   string
-	MinKid     string
-	MaxKid     string
-	MinBaby    string
-	MaxBaby    string
-	MinDate    string
-	MaxDate    string
-	OnlyFamily string
-	NoPet      string
-	NoSmoke    string
-	NoAlcohol  string
+	MinAdult    string
+	MaxAdult    string
+	MinKid      string
+	MaxKid      string
+	MinBaby     string
+	MaxBaby     string
+	MinDate     string
+	MaxDate     string
+	OnlyFamily  string
+	NoPet       string
+	NoSmoke     string
+	NoAlcohol   string
+	NoParty     string
+	NoUnmarried string
+	NoGuest     string
 }
 
 type boostFieldsType struct {
@@ -164,18 +167,21 @@ var boostFields = boostFieldsType{
 }
 
 var validationFields = validationFieldsType{
-	MinAdult:   "min_adult",
-	MaxAdult:   "max_adult",
-	MinKid:     "min_kid",
-	MaxKid:     "max_kid",
-	MinBaby:    "min_baby",
-	MaxBaby:    "max_baby",
-	MinDate:    "min_date",
-	MaxDate:    "max_date",
-	OnlyFamily: "only_family",
-	NoPet:      "no_pet",
-	NoSmoke:    "no_smoke",
-	NoAlcohol:  "no_alcohol",
+	MinAdult:    "min_adult",
+	MaxAdult:    "max_adult",
+	MinKid:      "min_kid",
+	MaxKid:      "max_kid",
+	MinBaby:     "min_baby",
+	MaxBaby:     "max_baby",
+	MinDate:     "min_date",
+	MaxDate:     "max_date",
+	OnlyFamily:  "only_family",
+	NoPet:       "no_pet",
+	NoSmoke:     "no_smoke",
+	NoAlcohol:   "no_alcohol",
+	NoParty:     "no_party",
+	NoUnmarried: "no_unmarried",
+	NoGuest:     "no_guest",
 }
 
 func ownerField(field string) string {

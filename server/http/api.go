@@ -1,8 +1,6 @@
 package http
 
 import (
-	"fmt"
-
 	"github.com/cilloparch/cillop/middlewares/i18n"
 	"github.com/cilloparch/cillop/result"
 	"github.com/gofiber/fiber/v2"
@@ -211,14 +209,12 @@ func (h srv) PostFilter(ctx *fiber.Ctx) error {
 
 func (h srv) PostListMy(ctx *fiber.Ctx) error {
 	pagination := utils.Pagination{}
-	fmt.Println("list my query")
 	h.parseQuery(ctx, &pagination)
 	owner := current_owner.Parse(ctx)
 	query := query.PostListMyQuery{}
 	query.Pagination = &pagination
 	query.OwnerUUID = owner.UUID
 	res, err := h.app.Queries.PostListMy(ctx.UserContext(), query)
-	fmt.Println("list my query 2")
 	if err != nil {
 		l, a := i18n.GetLanguagesInContext(*h.i18n, ctx)
 		return result.Error(h.i18n.TranslateFromError(*err, l, a))
