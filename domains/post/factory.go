@@ -31,8 +31,6 @@ type NewConfig struct {
 	Location      Location
 	Boosts        []Boost
 	Validation    *Validation
-	Count         *int
-	Order         *int
 	ForCreate     bool
 }
 
@@ -52,7 +50,6 @@ func (f Factory) New(cnf NewConfig) *Entity {
 		Validation:    cnf.Validation,
 		Location:      cnf.Location,
 		Boosts:        cnf.Boosts,
-		Order:         cnf.Order,
 		IsActive:      false,
 		IsDeleted:     false,
 		IsValid:       false,
