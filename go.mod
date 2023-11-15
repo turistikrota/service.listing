@@ -3,7 +3,7 @@ module github.com/turistikrota/service.post
 go 1.20
 
 require (
-	github.com/cilloparch/cillop v0.0.3
+	github.com/cilloparch/cillop v0.0.7
 	github.com/gofiber/fiber/v2 v2.48.0
 	github.com/ssibrahimbas/slug v0.0.0-20230331230816-02d7d0a3cbee
 	github.com/turistikrota/service.shared v0.0.28
