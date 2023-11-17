@@ -16,7 +16,7 @@ type PostListMyQuery struct {
 }
 
 type PostListMyRes struct {
-	*list.Result[*post.AdminListDto]
+	*list.Result[*post.OwnerListDto]
 }
 
 type PostListMyHandler cqrs.HandlerFunc[PostListMyQuery, *PostListMyRes]
@@ -32,11 +32,11 @@ func NewPostListMyHandler(repo post.Repository) PostListMyHandler {
 		if err != nil {
 			return nil, err
 		}
-		li := make([]*post.AdminListDto, len(res.List))
+		li := make([]*post.OwnerListDto, len(res.List))
 		for i, v := range res.List {
-			li[i] = v.ToAdminList()
+			li[i] = v.ToOwnerList()
 		}
-		result := &list.Result[*post.AdminListDto]{
+		result := &list.Result[*post.OwnerListDto]{
 			IsNext:        res.IsNext,
 			IsPrev:        res.IsPrev,
 			FilteredTotal: res.FilteredTotal,

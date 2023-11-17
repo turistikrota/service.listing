@@ -333,7 +333,7 @@ func (r *repo) ListMy(ctx context.Context, ownerUUID string, listConfig list.Con
 	filter := bson.M{
 		ownerField(ownerFields.UUID): ownerUUID,
 	}
-	l, err := r.helper.GetListFilter(ctx, filter, r.adminListOptions(listConfig))
+	l, err := r.helper.GetListFilter(ctx, filter, r.ownerListOptions(listConfig))
 	if err != nil {
 		return nil, err
 	}
@@ -355,6 +355,23 @@ func (r *repo) ListMy(ctx context.Context, ownerUUID string, listConfig list.Con
 	}, nil
 }
 
+func (r *repo) ownerListOptions(listConfig list.Config) *options.FindOptions {
+	opts := &options.FindOptions{}
+	opts.SetProjection(bson.M{
+		fields.UUID:      1,
+		fields.Images:    1,
+		fields.Meta:      1,
+		fields.Location:  1,
+		fields.Boosts:    1,
+		fields.Order:     1,
+		fields.IsDeleted: 1,
+		fields.IsActive:  1,
+		fields.IsValid:   1,
+		fields.CreatedAt: 1,
+	}).SetSort(bson.D{{Key: fields.Order, Value: 1}}).SetSkip(listConfig.Offset).SetLimit(listConfig.Limit)
+	return opts
+}
+
 func (r *repo) adminListOptions(listConfig list.Config) *options.FindOptions {
 	opts := &options.FindOptions{}
 	opts.SetProjection(bson.M{
@@ -367,7 +384,6 @@ func (r *repo) adminListOptions(listConfig list.Config) *options.FindOptions {
 		fields.Prices:        1,
 		fields.Location:      1,
 		fields.Boosts:        1,
-		fields.Type:          1,
 		fields.Validation:    1,
 		fields.Order:         1,
 		fields.IsDeleted:     1,
@@ -391,8 +407,6 @@ func (r *repo) filterOptions(listConfig list.Config) *options.FindOptions {
 		fields.Prices:        1,
 		fields.Location:      1,
 		fields.Boosts:        1,
-		fields.Type:          1,
-		fields.Count:         1,
 	}).SetSkip(listConfig.Offset).SetLimit(listConfig.Limit)
 	return opts
 }
@@ -410,8 +424,6 @@ func (r *repo) viewOptions() *options.FindOneOptions {
 		fields.Prices:        1,
 		fields.Location:      1,
 		fields.Boosts:        1,
-		fields.Count:         1,
-		fields.Type:          1,
 		fields.UpdatedAt:     1,
 		fields.CreatedAt:     1,
 	})

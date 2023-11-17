@@ -23,7 +23,6 @@ type ListDto struct {
 	Location      Location        `json:"location" bson:"location"`
 	Boosts        []Boost         `json:"boosts" bson:"boosts"`
 	Validation    Validation      `json:"validation" bson:"validation"`
-	Count         *int            `json:"count" bson:"count"`
 }
 
 type DetailDto struct {
@@ -37,7 +36,6 @@ type DetailDto struct {
 	Location      Location        `json:"location" bson:"location"`
 	Boosts        []Boost         `json:"boosts" bson:"boosts"`
 	Validation    Validation      `json:"validation" bson:"validation"`
-	Count         *int            `json:"count" bson:"count"`
 	CreatedAt     time.Time       `json:"createdAt" bson:"created_at"`
 	UpdatedAt     time.Time       `json:"updatedAt" bson:"updated_at"`
 }
@@ -57,13 +55,25 @@ type AdminListDto struct {
 	Location      Location        `json:"location" bson:"location"`
 	Boosts        []Boost         `json:"boosts" bson:"boosts"`
 	Validation    Validation      `json:"validation" bson:"validation"`
-	Count         *int            `json:"count" bson:"count"`
 	Order         *int            `json:"order" bson:"order"`
 	IsActive      bool            `json:"isActive" bson:"is_active"`
 	IsDeleted     bool            `json:"isDeleted" bson:"is_deleted"`
 	IsValid       bool            `json:"isValid" bson:"is_valid"`
 	CreatedAt     time.Time       `json:"createdAt" bson:"created_at"`
 	UpdatedAt     time.Time       `json:"updatedAt" bson:"updated_at"`
+}
+
+type OwnerListDto struct {
+	UUID      string          `json:"uuid" bson:"_id,omitempty"`
+	Images    []Image         `json:"images" bson:"images"`
+	Meta      map[Locale]Meta `json:"meta" bson:"meta"`
+	Location  Location        `json:"location" bson:"location"`
+	Boosts    []Boost         `json:"boosts" bson:"boosts"`
+	Order     *int            `json:"order" bson:"order"`
+	IsActive  bool            `json:"isActive" bson:"is_active"`
+	IsDeleted bool            `json:"isDeleted" bson:"is_deleted"`
+	IsValid   bool            `json:"isValid" bson:"is_valid"`
+	CreatedAt time.Time       `json:"createdAt" bson:"created_at"`
 }
 
 type PricePerDay struct {
@@ -137,5 +147,20 @@ func (e *Entity) ToAdminList() *AdminListDto {
 		IsValid:       e.IsValid,
 		CreatedAt:     e.CreatedAt,
 		UpdatedAt:     e.UpdatedAt,
+	}
+}
+
+func (e *Entity) ToOwnerList() *OwnerListDto {
+	return &OwnerListDto{
+		UUID:      e.UUID,
+		Images:    e.Images,
+		Meta:      e.Meta,
+		Location:  e.Location,
+		Boosts:    e.Boosts,
+		Order:     e.Order,
+		IsActive:  e.IsActive,
+		IsDeleted: e.IsDeleted,
+		IsValid:   e.IsValid,
+		CreatedAt: e.CreatedAt,
 	}
 }

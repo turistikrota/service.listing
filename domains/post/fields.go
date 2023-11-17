@@ -11,9 +11,7 @@ type fieldsType struct {
 	Location      string
 	Boosts        string
 	Validation    string
-	Type          string
 	Order         string
-	Count         string
 	IsActive      string
 	IsDeleted     string
 	IsValid       string
@@ -109,9 +107,7 @@ var fields = fieldsType{
 	Prices:        "prices",
 	Location:      "location",
 	Boosts:        "boosts",
-	Type:          "type",
 	Order:         "order",
-	Count:         "count",
 	Validation:    "validation",
 	IsActive:      "is_active",
 	IsDeleted:     "is_deleted",
