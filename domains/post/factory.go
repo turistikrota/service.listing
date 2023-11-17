@@ -56,7 +56,9 @@ func (f Factory) New(cnf NewConfig) *Entity {
 		UpdatedAt:     t,
 	}
 	if cnf.ForCreate {
+		order := 0
 		e.CreatedAt = t
+		e.Order = &order
 	}
 	return e
 }
