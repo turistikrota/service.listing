@@ -12,7 +12,7 @@ import (
 type PostReOrderCmd struct {
 	Account  account.Entity `json:"-"`
 	PostUUID string         `json:"-"`
-	Order    *int           `json:"order" validate:"required,min=1,max=100,numeric"`
+	Order    *int           `json:"order" validate:"required,min=-1,number"`
 }
 
 type PostReOrderRes struct{}

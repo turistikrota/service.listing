@@ -9,6 +9,8 @@ github.com/cilloparch/cillop v0.0.3 h1:DG7PmHoX7MCnRFbALQUQMP0INteJl+mnbvA6kixXj
 github.com/cilloparch/cillop v0.0.3/go.mod h1:v4nfj7WcBGIqiRt3ffyncw9KVFaT03zFMSCv1bdtmug=
 github.com/cilloparch/cillop v0.0.7 h1:n8lSf/eF0W6ZU2j6KuZWDn1y4ZO4PMntcN3OHlltHUM=
 github.com/cilloparch/cillop v0.0.7/go.mod h1:v4nfj7WcBGIqiRt3ffyncw9KVFaT03zFMSCv1bdtmug=
+github.com/cilloparch/cillop v0.0.8 h1:v861lGEYpYlMOSuS+kUfT5VGAf/0YWzPdC3VZmS6G5k=
+github.com/cilloparch/cillop v0.0.8/go.mod h1:v4nfj7WcBGIqiRt3ffyncw9KVFaT03zFMSCv1bdtmug=
 github.com/davecgh/go-spew v1.1.0/go.mod h1:J7Y8YcW2NihsgmVo/mv3lAwl/skON4iLHjSsI+c5H38=
 github.com/davecgh/go-spew v1.1.1 h1:vj9j/u1bqnvCEfJOwUhtlOARqs3+rkHYY13jYWTU97c=
 github.com/davecgh/go-spew v1.1.1/go.mod h1:J7Y8YcW2NihsgmVo/mv3lAwl/skON4iLHjSsI+c5H38=
