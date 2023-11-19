@@ -12,11 +12,11 @@ import (
 
 type PostListMyQuery struct {
 	*utils.Pagination
-	OwnerUUID string
+	BusinessUUID string
 }
 
 type PostListMyRes struct {
-	*list.Result[*post.OwnerListDto]
+	*list.Result[*post.BusinessListDto]
 }
 
 type PostListMyHandler cqrs.HandlerFunc[PostListMyQuery, *PostListMyRes]
@@ -25,18 +25,18 @@ func NewPostListMyHandler(repo post.Repository) PostListMyHandler {
 	return func(ctx context.Context, query PostListMyQuery) (*PostListMyRes, *i18np.Error) {
 		query.Default()
 		offset := (*query.Page - 1) * *query.Limit
-		res, err := repo.ListMy(ctx, query.OwnerUUID, list.Config{
+		res, err := repo.ListMy(ctx, query.BusinessUUID, list.Config{
 			Offset: offset,
 			Limit:  *query.Limit,
 		})
 		if err != nil {
 			return nil, err
 		}
-		li := make([]*post.OwnerListDto, len(res.List))
+		li := make([]*post.BusinessListDto, len(res.List))
 		for i, v := range res.List {
-			li[i] = v.ToOwnerList()
+			li[i] = v.ToBusinessList()
 		}
-		result := &list.Result[*post.OwnerListDto]{
+		result := &list.Result[*post.BusinessListDto]{
 			IsNext:        res.IsNext,
 			IsPrev:        res.IsPrev,
 			FilteredTotal: res.FilteredTotal,

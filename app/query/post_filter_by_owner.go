@@ -10,23 +10,23 @@ import (
 	"github.com/turistikrota/service.post/pkg/utils"
 )
 
-type PostFilterByOwnerQuery struct {
+type PostFilterByBusinessQuery struct {
 	*utils.Pagination
 	post.FilterEntity
 	NickName string `json:"-" params:"nickName" validate:"required"`
 }
 
-type PostFilterByOwnerRes struct {
+type PostFilterByBusinessRes struct {
 	*list.Result[*post.ListDto]
 }
 
-type PostFilterByOwnerHandler cqrs.HandlerFunc[PostFilterByOwnerQuery, *PostFilterByOwnerRes]
+type PostFilterByBusinessHandler cqrs.HandlerFunc[PostFilterByBusinessQuery, *PostFilterByBusinessRes]
 
-func NewPostFilterByOwnerHandler(repo post.Repository) PostFilterByOwnerHandler {
-	return func(ctx context.Context, query PostFilterByOwnerQuery) (*PostFilterByOwnerRes, *i18np.Error) {
+func NewPostFilterByBusinessHandler(repo post.Repository) PostFilterByBusinessHandler {
+	return func(ctx context.Context, query PostFilterByBusinessQuery) (*PostFilterByBusinessRes, *i18np.Error) {
 		query.Default()
 		offset := (*query.Page - 1) * *query.Limit
-		res, err := repo.FilterByOwner(ctx, query.NickName, query.FilterEntity, list.Config{
+		res, err := repo.FilterByBusiness(ctx, query.NickName, query.FilterEntity, list.Config{
 			Offset: offset,
 			Limit:  *query.Limit,
 		})
@@ -45,7 +45,7 @@ func NewPostFilterByOwnerHandler(repo post.Repository) PostFilterByOwnerHandler 
 			Page:          res.Page,
 			List:          li,
 		}
-		return &PostFilterByOwnerRes{
+		return &PostFilterByBusinessRes{
 			Result: result,
 		}, nil
 	}

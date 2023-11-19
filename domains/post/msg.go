@@ -2,7 +2,7 @@ package post
 
 type messages struct {
 	InvalidType                 string
-	InvalidOwner                string
+	InvalidBusiness             string
 	InvalidMeta                 string
 	MetaMinLength               string
 	InvalidImages               string
@@ -25,7 +25,7 @@ type messages struct {
 
 var i18nMessages = messages{
 	InvalidType:                 "post_invalid_type",
-	InvalidOwner:                "post_invalid_owner",
+	InvalidBusiness:             "post_invalid_business",
 	InvalidMeta:                 "post_invalid_meta",
 	MetaMinLength:               "post_meta_min_length",
 	InvalidImages:               "post_invalid_images",

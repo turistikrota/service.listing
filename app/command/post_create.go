@@ -16,7 +16,7 @@ type PostMetaRequest struct {
 
 type PostCreateCmd struct {
 	Account       account.Entity                `json:"-"`
-	Owner         post.Owner                    `json:"-"`
+	Business      post.Business                 `json:"-"`
 	Images        []post.Image                  `json:"images" validate:"min=1,max=10,dive,required"`
 	Meta          *PostMetaRequest              `json:"meta" validate:"required,dive"`
 	CategoryUUIDs []string                      `json:"categoryUUIDs" validate:"required,min=1,max=30,dive,required,object_id"`
@@ -36,7 +36,7 @@ type PostCreateHandler cqrs.HandlerFunc[PostCreateCmd, *PostCreateRes]
 func NewPostCreateHandler(factory post.Factory, repo post.Repository, events post.Events) PostCreateHandler {
 	return func(ctx context.Context, cmd PostCreateCmd) (*PostCreateRes, *i18np.Error) {
 		e := factory.New(post.NewConfig{
-			Owner:         cmd.Owner,
+			Business:      cmd.Business,
 			Images:        cmd.Images,
 			Meta:          factory.CreateSlugs(cmd.Meta.TR, cmd.Meta.EN),
 			CategoryUUIDs: cmd.CategoryUUIDs,

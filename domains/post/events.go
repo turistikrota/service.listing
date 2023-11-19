@@ -56,17 +56,17 @@ type (
 	BookingValidationSuccessEvent struct {
 		BookingUUID  string        `json:"booking_uuid"`
 		PostUUID     string        `json:"post_uuid"`
-		OwnerUUID    string        `json:"owner_uuid"`
-		OwnerName    string        `json:"owner_name"`
+		BusinessUUID string        `json:"business_uuid"`
+		BusinessName string        `json:"business_name"`
 		TotalPrice   float64       `json:"total_price"`
 		PricePerDays []PricePerDay `json:"price_per_days"`
 	}
 	BookingValidationFailEvent struct {
-		BookingUUID string                     `json:"booking_uuid"`
-		PostUUID    string                     `json:"post_uuid"`
-		OwnerUUID   string                     `json:"owner_uuid"`
-		OwnerName   string                     `json:"owner_name"`
-		Errors      []*booking.ValidationError `json:"errors"`
+		BookingUUID  string                     `json:"booking_uuid"`
+		PostUUID     string                     `json:"post_uuid"`
+		BusinessUUID string                     `json:"business_uuid"`
+		BusinessName string                     `json:"business_name"`
+		Errors       []*booking.ValidationError `json:"errors"`
 	}
 )
 

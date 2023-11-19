@@ -32,8 +32,8 @@ type Repository interface {
 	GetByUUID(ctx context.Context, postUUID string) (*Entity, bool, *i18np.Error)
 	AdminView(ctx context.Context, postUUID string) (*Entity, *i18np.Error)
 	Filter(ctx context.Context, filter FilterEntity, listConfig list.Config) (*list.Result[*Entity], *i18np.Error)
-	FilterByOwner(ctx context.Context, ownerNickName string, filter FilterEntity, listConfig list.Config) (*list.Result[*Entity], *i18np.Error)
-	ListMy(ctx context.Context, ownerUUID string, listConfig list.Config) (*list.Result[*Entity], *i18np.Error)
+	FilterByBusiness(ctx context.Context, businessNickName string, filter FilterEntity, listConfig list.Config) (*list.Result[*Entity], *i18np.Error)
+	ListMy(ctx context.Context, businessUUID string, listConfig list.Config) (*list.Result[*Entity], *i18np.Error)
 }
 
 type repo struct {
@@ -281,17 +281,17 @@ func (r *repo) AdminView(ctx context.Context, postUUID string) (*Entity, *i18np.
 	return *e, nil
 }
 
-func (r *repo) FilterByOwner(ctx context.Context, ownerNickName string, filter FilterEntity, listConfig list.Config) (*list.Result[*Entity], *i18np.Error) {
-	ownerFilter := r.filterToBson(filter, ownerNickName)
-	l, err := r.helper.GetListFilter(ctx, ownerFilter, r.sort(r.filterOptions(listConfig), filter))
+func (r *repo) FilterByBusiness(ctx context.Context, businessNickName string, filter FilterEntity, listConfig list.Config) (*list.Result[*Entity], *i18np.Error) {
+	businessFilter := r.filterToBson(filter, businessNickName)
+	l, err := r.helper.GetListFilter(ctx, businessFilter, r.sort(r.filterOptions(listConfig), filter))
 	if err != nil {
 		return nil, err
 	}
-	filtered, _err := r.helper.GetFilterCount(ctx, ownerFilter)
+	filtered, _err := r.helper.GetFilterCount(ctx, businessFilter)
 	if _err != nil {
 		return nil, _err
 	}
-	total, _err := r.helper.GetFilterCount(ctx, r.ownerFilter(ownerNickName))
+	total, _err := r.helper.GetFilterCount(ctx, r.businessFilter(businessNickName))
 	if _err != nil {
 		return nil, _err
 	}
@@ -329,11 +329,11 @@ func (r *repo) Filter(ctx context.Context, filter FilterEntity, listConfig list.
 	}, nil
 }
 
-func (r *repo) ListMy(ctx context.Context, ownerUUID string, listConfig list.Config) (*list.Result[*Entity], *i18np.Error) {
+func (r *repo) ListMy(ctx context.Context, businessUUID string, listConfig list.Config) (*list.Result[*Entity], *i18np.Error) {
 	filter := bson.M{
-		ownerField(ownerFields.UUID): ownerUUID,
+		businessField(businessFields.UUID): businessUUID,
 	}
-	l, err := r.helper.GetListFilter(ctx, filter, r.ownerListOptions(listConfig))
+	l, err := r.helper.GetListFilter(ctx, filter, r.businessListOptions(listConfig))
 	if err != nil {
 		return nil, err
 	}
@@ -355,7 +355,7 @@ func (r *repo) ListMy(ctx context.Context, ownerUUID string, listConfig list.Con
 	}, nil
 }
 
-func (r *repo) ownerListOptions(listConfig list.Config) *options.FindOptions {
+func (r *repo) businessListOptions(listConfig list.Config) *options.FindOptions {
 	opts := &options.FindOptions{}
 	opts.SetProjection(bson.M{
 		fields.UUID:      1,
@@ -376,7 +376,7 @@ func (r *repo) adminListOptions(listConfig list.Config) *options.FindOptions {
 	opts := &options.FindOptions{}
 	opts.SetProjection(bson.M{
 		fields.UUID:          1,
-		fields.Owner:         1,
+		fields.Business:      1,
 		fields.Images:        1,
 		fields.Meta:          1,
 		fields.CategoryUUIDs: 1,
@@ -398,7 +398,7 @@ func (r *repo) filterOptions(listConfig list.Config) *options.FindOptions {
 	opts := &options.FindOptions{}
 	opts.SetProjection(bson.M{
 		fields.UUID:          1,
-		fields.Owner:         1,
+		fields.Business:      1,
 		fields.Images:        1,
 		fields.Meta:          1,
 		fields.CategoryUUIDs: 1,
@@ -415,7 +415,7 @@ func (r *repo) viewOptions() *options.FindOneOptions {
 	opts := &options.FindOneOptions{}
 	opts.SetProjection(bson.M{
 		fields.UUID:          1,
-		fields.Owner:         1,
+		fields.Business:      1,
 		fields.Images:        1,
 		fields.Meta:          1,
 		fields.CategoryUUIDs: 1,

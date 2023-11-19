@@ -22,7 +22,7 @@ func (f Factory) IsZero() bool {
 }
 
 type NewConfig struct {
-	Owner         Owner
+	Business      Business
 	Images        []Image
 	Meta          map[Locale]Meta
 	CategoryUUIDs []string
@@ -41,7 +41,7 @@ func (f Factory) New(cnf NewConfig) *Entity {
 		prices[i] = p.ToEntity()
 	}
 	e := &Entity{
-		Owner:         cnf.Owner,
+		Business:      cnf.Business,
 		Images:        cnf.Images,
 		Meta:          cnf.Meta,
 		CategoryUUIDs: cnf.CategoryUUIDs,
@@ -67,7 +67,7 @@ type validator func(e Entity) *i18np.Error
 
 func (f Factory) Validate(entity Entity) *i18np.Error {
 	validators := []validator{
-		f.validateOwner,
+		f.validateBusiness,
 		f.validatePrices,
 		f.validatePeople,
 		f.validateMeta,
@@ -80,15 +80,15 @@ func (f Factory) Validate(entity Entity) *i18np.Error {
 	return nil
 }
 
-func (f Factory) validateOwner(e Entity) *i18np.Error {
-	if e.Owner == (Owner{}) {
-		return f.Errors.InvalidOwner()
+func (f Factory) validateBusiness(e Entity) *i18np.Error {
+	if e.Business == (Business{}) {
+		return f.Errors.InvalidBusiness()
 	}
-	if e.Owner.UUID == "" {
-		return f.Errors.InvalidOwner()
+	if e.Business.UUID == "" {
+		return f.Errors.InvalidBusiness()
 	}
-	if e.Owner.NickName == "" {
-		return f.Errors.InvalidOwner()
+	if e.Business.NickName == "" {
+		return f.Errors.InvalidBusiness()
 	}
 	return nil
 }

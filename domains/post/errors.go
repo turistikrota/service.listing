@@ -9,7 +9,7 @@ import (
 
 type Errors interface {
 	InvalidType() *i18np.Error
-	InvalidOwner() *i18np.Error
+	InvalidBusiness() *i18np.Error
 	InvalidMeta() *i18np.Error
 	InvalidImages() *i18np.Error
 	InvalidCategories() *i18np.Error
@@ -40,8 +40,8 @@ func (e *postErrors) InvalidType() *i18np.Error {
 	return i18np.NewError(i18nMessages.InvalidType)
 }
 
-func (e *postErrors) InvalidOwner() *i18np.Error {
-	return i18np.NewError(i18nMessages.InvalidOwner)
+func (e *postErrors) InvalidBusiness() *i18np.Error {
+	return i18np.NewError(i18nMessages.InvalidBusiness)
 }
 
 func (e *postErrors) InvalidMeta() *i18np.Error {

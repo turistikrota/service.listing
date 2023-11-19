@@ -70,8 +70,8 @@ func NewPostValidateBookingHandler(factory post.Factory, repo post.Repository, e
 			Errors:      errors,
 		}
 		if p != nil {
-			event.OwnerName = p.Owner.NickName
-			event.OwnerUUID = p.Owner.UUID
+			event.BusinessName = p.Business.NickName
+			event.BusinessUUID = p.Business.UUID
 		}
 		fmt.Printf("%+v\n", event)
 		events.BookingValidationFail(event)
@@ -97,8 +97,8 @@ func NewPostValidateBookingHandler(factory post.Factory, repo post.Repository, e
 		events.BookingValidationSuccess(post.BookingValidationSuccessEvent{
 			BookingUUID:  cmd.BookingUUID,
 			PostUUID:     cmd.PostUUID,
-			OwnerUUID:    p.Owner.UUID,
-			OwnerName:    p.Owner.NickName,
+			BusinessUUID: p.Business.UUID,
+			BusinessName: p.Business.NickName,
 			TotalPrice:   *totalPrice,
 			PricePerDays: dates,
 		})

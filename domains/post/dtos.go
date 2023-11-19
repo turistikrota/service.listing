@@ -14,7 +14,7 @@ type PostPriceValidationDto struct {
 
 type ListDto struct {
 	UUID          string          `json:"uuid" bson:"_id,omitempty"`
-	Owner         Owner           `json:"owner" bson:"owner"`
+	Business      Business        `json:"business" bson:"business"`
 	Images        []Image         `json:"images" bson:"images"`
 	Meta          map[Locale]Meta `json:"meta" bson:"meta"`
 	CategoryUUIDs []string        `json:"categoryUUIDs" bson:"categoryUUIDs"`
@@ -27,7 +27,7 @@ type ListDto struct {
 
 type DetailDto struct {
 	UUID          string          `json:"uuid" bson:"_id,omitempty"`
-	Owner         Owner           `json:"owner" bson:"owner"`
+	Business      Business        `json:"business" bson:"business"`
 	Images        []Image         `json:"images" bson:"images"`
 	Meta          map[Locale]Meta `json:"meta" bson:"meta"`
 	CategoryUUIDs []string        `json:"categoryUUIDs" bson:"categoryUUIDs"`
@@ -46,7 +46,7 @@ type AdminDetailDto struct {
 
 type AdminListDto struct {
 	UUID          string          `json:"uuid" bson:"_id,omitempty"`
-	Owner         Owner           `json:"owner" bson:"owner"`
+	Business      Business        `json:"business" bson:"business"`
 	Images        []Image         `json:"images" bson:"images"`
 	Meta          map[Locale]Meta `json:"meta" bson:"meta"`
 	CategoryUUIDs []string        `json:"categoryUUIDs" bson:"categoryUUIDs"`
@@ -63,7 +63,7 @@ type AdminListDto struct {
 	UpdatedAt     time.Time       `json:"updatedAt" bson:"updated_at"`
 }
 
-type OwnerListDto struct {
+type BusinessListDto struct {
 	UUID      string          `json:"uuid" bson:"_id,omitempty"`
 	Images    []Image         `json:"images" bson:"images"`
 	Meta      map[Locale]Meta `json:"meta" bson:"meta"`
@@ -94,7 +94,7 @@ func (d *PostPriceValidationDto) ToEntity() Price {
 func (e *Entity) ToList() *ListDto {
 	return &ListDto{
 		UUID:          e.UUID,
-		Owner:         e.Owner,
+		Business:      e.Business,
 		Images:        e.Images,
 		Meta:          e.Meta,
 		CategoryUUIDs: e.CategoryUUIDs,
@@ -109,7 +109,7 @@ func (e *Entity) ToList() *ListDto {
 func (e *Entity) ToDetail() *DetailDto {
 	return &DetailDto{
 		UUID:          e.UUID,
-		Owner:         e.Owner,
+		Business:      e.Business,
 		Images:        e.Images,
 		Meta:          e.Meta,
 		CategoryUUIDs: e.CategoryUUIDs,
@@ -132,7 +132,7 @@ func (e *Entity) ToAdminDetail() *AdminDetailDto {
 func (e *Entity) ToAdminList() *AdminListDto {
 	return &AdminListDto{
 		UUID:          e.UUID,
-		Owner:         e.Owner,
+		Business:      e.Business,
 		Images:        e.Images,
 		Meta:          e.Meta,
 		CategoryUUIDs: e.CategoryUUIDs,
@@ -150,8 +150,8 @@ func (e *Entity) ToAdminList() *AdminListDto {
 	}
 }
 
-func (e *Entity) ToOwnerList() *OwnerListDto {
-	return &OwnerListDto{
+func (e *Entity) ToBusinessList() *BusinessListDto {
+	return &BusinessListDto{
 		UUID:      e.UUID,
 		Images:    e.Images,
 		Meta:      e.Meta,

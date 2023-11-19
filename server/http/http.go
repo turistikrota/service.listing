@@ -21,7 +21,7 @@ import (
 	"github.com/turistikrota/service.shared/server/http/auth"
 	"github.com/turistikrota/service.shared/server/http/auth/claim_guard"
 	"github.com/turistikrota/service.shared/server/http/auth/current_account"
-	"github.com/turistikrota/service.shared/server/http/auth/current_owner"
+	"github.com/turistikrota/service.shared/server/http/auth/current_business"
 	"github.com/turistikrota/service.shared/server/http/auth/current_user"
 	"github.com/turistikrota/service.shared/server/http/auth/device_uuid"
 	"github.com/turistikrota/service.shared/server/http/auth/required_access"
@@ -68,17 +68,17 @@ func (h srv) Listen() error {
 		CreateHandler: func(router fiber.Router) fiber.Router {
 			router.Use(h.cors(), h.deviceUUID())
 
-			// Owner routes
-			owner := router.Group("/owner", h.rateLimit(), h.currentUserAccess(), h.requiredAccess(), h.currentAccountAccess())
-			owner.Post("/", h.currentOwnerAccess(config.Roles.Post.Super, config.Roles.Post.Create), h.wrapWithTimeout(h.PostCreate))
-			owner.Put("/:uuid", h.currentOwnerAccess(config.Roles.Post.Super, config.Roles.Post.Update), h.wrapWithTimeout(h.PostUpdate))
-			owner.Patch("/:uuid/enable", h.currentOwnerAccess(config.Roles.Post.Super, config.Roles.Post.Enable), h.wrapWithTimeout(h.PostEnable))
-			owner.Patch("/:uuid/disable", h.currentOwnerAccess(config.Roles.Post.Super, config.Roles.Post.Disable), h.wrapWithTimeout(h.PostDisable))
-			owner.Patch("/:uuid/restore", h.currentOwnerAccess(config.Roles.Post.Super, config.Roles.Post.Restore), h.wrapWithTimeout(h.PostRestore))
-			owner.Delete("/:uuid", h.currentOwnerAccess(config.Roles.Post.Super, config.Roles.Post.Delete), h.wrapWithTimeout(h.PostDelete))
-			owner.Patch("/:uuid/re-order", h.currentOwnerAccess(config.Roles.Post.Super, config.Roles.Post.ReOrder), h.wrapWithTimeout(h.PostReOrder))
-			owner.Get("/", h.currentOwnerAccess(config.Roles.Post.Super, config.Roles.Post.List), h.wrapWithTimeout(h.PostListMy))
-			owner.Get("/:uuid", h.currentOwnerAccess(config.Roles.Post.Super, config.Roles.Post.View), h.wrapWithTimeout(h.PostViewAdmin))
+			// Business routes
+			business := router.Group("/business", h.rateLimit(), h.currentUserAccess(), h.requiredAccess(), h.currentAccountAccess())
+			business.Post("/", h.currentBusinessAccess(config.Roles.Post.Super, config.Roles.Post.Create), h.wrapWithTimeout(h.PostCreate))
+			business.Put("/:uuid", h.currentBusinessAccess(config.Roles.Post.Super, config.Roles.Post.Update), h.wrapWithTimeout(h.PostUpdate))
+			business.Patch("/:uuid/enable", h.currentBusinessAccess(config.Roles.Post.Super, config.Roles.Post.Enable), h.wrapWithTimeout(h.PostEnable))
+			business.Patch("/:uuid/disable", h.currentBusinessAccess(config.Roles.Post.Super, config.Roles.Post.Disable), h.wrapWithTimeout(h.PostDisable))
+			business.Patch("/:uuid/restore", h.currentBusinessAccess(config.Roles.Post.Super, config.Roles.Post.Restore), h.wrapWithTimeout(h.PostRestore))
+			business.Delete("/:uuid", h.currentBusinessAccess(config.Roles.Post.Super, config.Roles.Post.Delete), h.wrapWithTimeout(h.PostDelete))
+			business.Patch("/:uuid/re-order", h.currentBusinessAccess(config.Roles.Post.Super, config.Roles.Post.ReOrder), h.wrapWithTimeout(h.PostReOrder))
+			business.Get("/", h.currentBusinessAccess(config.Roles.Post.Super, config.Roles.Post.List), h.wrapWithTimeout(h.PostListMy))
+			business.Get("/:uuid", h.currentBusinessAccess(config.Roles.Post.Super, config.Roles.Post.View), h.wrapWithTimeout(h.PostViewAdmin))
 
 			// Admin routes
 			admin := router.Group("/admin", h.currentUserAccess(), h.requiredAccess(), h.adminRoute())
@@ -86,7 +86,7 @@ func (h srv) Listen() error {
 
 			// Public routes
 			router.Get("/:slug", h.rateLimit(), h.wrapWithTimeout(h.PostView))
-			router.Post("/filter/:nickName", h.rateLimit(), h.wrapWithTimeout(h.PostFilterByOwner))
+			router.Post("/filter/:nickName", h.rateLimit(), h.wrapWithTimeout(h.PostFilterByBusiness))
 			router.Post("/filter", h.rateLimit(), h.wrapWithTimeout(h.PostFilter))
 
 			return router
@@ -94,12 +94,12 @@ func (h srv) Listen() error {
 	})
 }
 
-func (h srv) currentOwnerAccess(roles ...string) fiber.Handler {
-	return current_owner.New(current_owner.Config{
+func (h srv) currentBusinessAccess(roles ...string) fiber.Handler {
+	return current_business.New(current_business.Config{
 		I18n:         h.i18n,
 		Roles:        roles,
-		RequiredKey:  Messages.Error.RequiredOwnerSelect,
-		ForbiddenKey: Messages.Error.ForbiddenOwnerSelect,
+		RequiredKey:  Messages.Error.RequiredBusinessSelect,
+		ForbiddenKey: Messages.Error.ForbiddenBusinessSelect,
 	})
 }
 

@@ -7,14 +7,14 @@ import (
 	"github.com/cilloparch/cillop/i18np"
 )
 
-type PostUpdateOwnerNickNameCmd struct{}
+type PostUpdateBusinessNickNameCmd struct{}
 
-type PostUpdateOwnerNickNameRes struct{}
+type PostUpdateBusinessNickNameRes struct{}
 
-type PostUpdateOwnerNickNameHandler cqrs.HandlerFunc[PostUpdateOwnerNickNameCmd, *PostUpdateOwnerNickNameRes]
+type PostUpdateBusinessNickNameHandler cqrs.HandlerFunc[PostUpdateBusinessNickNameCmd, *PostUpdateBusinessNickNameRes]
 
-func NewPostUpdateOwnerNickNameHandler() PostUpdateOwnerNickNameHandler {
-	return func(ctx context.Context, cmd PostUpdateOwnerNickNameCmd) (*PostUpdateOwnerNickNameRes, *i18np.Error) {
-		return &PostUpdateOwnerNickNameRes{}, nil
+func NewPostUpdateBusinessNickNameHandler() PostUpdateBusinessNickNameHandler {
+	return func(ctx context.Context, cmd PostUpdateBusinessNickNameCmd) (*PostUpdateBusinessNickNameRes, *i18np.Error) {
+		return &PostUpdateBusinessNickNameRes{}, nil
 	}
 }

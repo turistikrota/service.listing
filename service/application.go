@@ -30,23 +30,23 @@ func NewApplication(cnf Config) app.Application {
 
 	return app.Application{
 		Commands: app.Commands{
-			PostCreate:              command.NewPostCreateHandler(postFactory, postRepo, postEvents),
-			PostUpdate:              command.NewPostUpdateHandler(postFactory, postRepo, postEvents),
-			PostValidated:           command.NewPostValidatedHandler(postRepo),
-			PostUpdateOwnerNickName: command.NewPostUpdateOwnerNickNameHandler(),
-			PostEnable:              command.NewPostEnableHandler(postRepo, postEvents),
-			PostDisable:             command.NewPostDisableHandler(postRepo, postEvents),
-			PostDelete:              command.NewPostDeleteHandler(postRepo, postEvents),
-			PostRestore:             command.NewPostRestoreHandler(postRepo, postEvents),
-			PostReOrder:             command.NewPostReOrderHandler(postRepo, postEvents),
-			BookingValidate:         command.NewPostValidateBookingHandler(postFactory, postRepo, postEvents),
+			PostCreate:                 command.NewPostCreateHandler(postFactory, postRepo, postEvents),
+			PostUpdate:                 command.NewPostUpdateHandler(postFactory, postRepo, postEvents),
+			PostValidated:              command.NewPostValidatedHandler(postRepo),
+			PostUpdateBusinessNickName: command.NewPostUpdateBusinessNickNameHandler(),
+			PostEnable:                 command.NewPostEnableHandler(postRepo, postEvents),
+			PostDisable:                command.NewPostDisableHandler(postRepo, postEvents),
+			PostDelete:                 command.NewPostDeleteHandler(postRepo, postEvents),
+			PostRestore:                command.NewPostRestoreHandler(postRepo, postEvents),
+			PostReOrder:                command.NewPostReOrderHandler(postRepo, postEvents),
+			BookingValidate:            command.NewPostValidateBookingHandler(postFactory, postRepo, postEvents),
 		},
 		Queries: app.Queries{
-			PostView:          query.NewPostViewHandler(postRepo, cnf.CacheSrv),
-			PostAdminView:     query.NewPostAdminViewHandler(postRepo),
-			PostFilterByOwner: query.NewPostFilterByOwnerHandler(postRepo),
-			PostFilter:        query.NewPostFilterHandler(postRepo),
-			PostListMy:        query.NewPostListMyHandler(postRepo),
+			PostView:             query.NewPostViewHandler(postRepo, cnf.CacheSrv),
+			PostAdminView:        query.NewPostAdminViewHandler(postRepo),
+			PostFilterByBusiness: query.NewPostFilterByBusinessHandler(postRepo),
+			PostFilter:           query.NewPostFilterHandler(postRepo),
+			PostListMy:           query.NewPostListMyHandler(postRepo),
 		},
 	}
 }

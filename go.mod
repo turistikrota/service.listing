@@ -6,7 +6,7 @@ require (
 	github.com/cilloparch/cillop v0.0.8
 	github.com/gofiber/fiber/v2 v2.48.0
 	github.com/ssibrahimbas/slug v0.0.0-20230331230816-02d7d0a3cbee
-	github.com/turistikrota/service.shared v0.0.28
+	github.com/turistikrota/service.shared v0.1.1
 	go.mongodb.org/mongo-driver v1.12.1
 )
 

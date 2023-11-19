@@ -11,7 +11,7 @@ import (
 
 type PostUpdateCmd struct {
 	Account       account.Entity                `json:"-"`
-	Owner         post.Owner                    `json:"-"`
+	Business      post.Business                 `json:"-"`
 	PostUUID      string                        `json:"-"`
 	Images        []post.Image                  `json:"images" validate:"min=1,max=10,dive,required"`
 	Meta          *PostMetaRequest              `json:"meta" validate:"required,dive"`
@@ -31,7 +31,7 @@ type PostUpdateHandler cqrs.HandlerFunc[PostUpdateCmd, *PostUpdateRes]
 func NewPostUpdateHandler(factory post.Factory, repo post.Repository, events post.Events) PostUpdateHandler {
 	return func(ctx context.Context, cmd PostUpdateCmd) (*PostUpdateRes, *i18np.Error) {
 		e := factory.New(post.NewConfig{
-			Owner:         cmd.Owner,
+			Business:      cmd.Business,
 			Images:        cmd.Images,
 			Meta:          factory.CreateSlugs(cmd.Meta.TR, cmd.Meta.EN),
 			CategoryUUIDs: cmd.CategoryUUIDs,
