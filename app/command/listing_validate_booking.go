@@ -7,35 +7,35 @@ import (
 
 	"github.com/cilloparch/cillop/cqrs"
 	"github.com/cilloparch/cillop/i18np"
-	"github.com/turistikrota/service.post/domains/booking"
-	"github.com/turistikrota/service.post/domains/post"
+	"github.com/turistikrota/service.listing/domains/booking"
+	"github.com/turistikrota/service.listing/domains/listing"
 )
 
-type PostValidateBookingCmd struct {
+type ListingValidateBookingCmd struct {
 	BookingUUID string          `json:"booking_uuid"`
-	PostUUID    string          `json:"post_uuid"`
+	ListingUUID string          `json:"listing_uuid"`
 	People      *booking.People `json:"people"`
 	StartDate   time.Time       `json:"start_date"`
 	EndDate     time.Time       `json:"end_date"`
 }
 
-type PostValidateBookingRes struct{}
+type ListingValidateBookingRes struct{}
 
-type PostValidateBookingHandler cqrs.HandlerFunc[PostValidateBookingCmd, *PostValidateBookingRes]
+type ListingValidateBookingHandler cqrs.HandlerFunc[ListingValidateBookingCmd, *ListingValidateBookingRes]
 
-func NewPostValidateBookingHandler(factory post.Factory, repo post.Repository, events post.Events) PostValidateBookingHandler {
+func NewListingValidateBookingHandler(factory listing.Factory, repo listing.Repository, events listing.Events) ListingValidateBookingHandler {
 
-	validateDateRange := func(cmd PostValidateBookingCmd, p *post.Entity) ([]post.PricePerDay, *float64, *i18np.Error) {
-		days := make([]post.PricePerDay, 0)
+	validateDateRange := func(cmd ListingValidateBookingCmd, p *listing.Entity) ([]listing.PricePerDay, *float64, *i18np.Error) {
+		days := make([]listing.PricePerDay, 0)
 		var totalPrice float64
 		for i := cmd.StartDate; i.Before(cmd.EndDate); i = i.AddDate(0, 0, 1) {
 			if !p.IsAvailable(i) {
-				return nil, nil, i18np.NewError("post.validation.booking.not_available", i18np.P{
+				return nil, nil, i18np.NewError("listing.validation.booking.not_available", i18np.P{
 					"date": i.Format("2006-01-02"),
 				})
 			}
 			price := p.GetPrice(i)
-			days = append(days, post.PricePerDay{
+			days = append(days, listing.PricePerDay{
 				Date:  i,
 				Price: price,
 			})
@@ -44,7 +44,7 @@ func NewPostValidateBookingHandler(factory post.Factory, repo post.Repository, e
 		return days, &totalPrice, nil
 	}
 
-	validatePeople := func(cmd PostValidateBookingCmd, p *post.Entity) *i18np.Error {
+	validatePeople := func(cmd ListingValidateBookingCmd, p *listing.Entity) *i18np.Error {
 		if p.Validation.MinAdult != nil && p.Validation.MaxAdult != nil && cmd.People.Adult < *p.Validation.MinAdult || cmd.People.Adult > *p.Validation.MaxAdult {
 			return factory.Errors.ValidateBookingAdult(*p.Validation.MinAdult, *p.Validation.MaxAdult)
 		}
@@ -57,16 +57,16 @@ func NewPostValidateBookingHandler(factory post.Factory, repo post.Repository, e
 		return nil
 	}
 
-	failEvent := func(field string, err *i18np.Error, p *post.Entity, cmd PostValidateBookingCmd) (*PostValidateBookingRes, *i18np.Error) {
+	failEvent := func(field string, err *i18np.Error, p *listing.Entity, cmd ListingValidateBookingCmd) (*ListingValidateBookingRes, *i18np.Error) {
 		errors := make([]*booking.ValidationError, 0)
 		errors = append(errors, &booking.ValidationError{
 			Field:   field,
 			Message: err.Key,
 			Params:  *err.Params,
 		})
-		event := post.BookingValidationFailEvent{
+		event := listing.BookingValidationFailEvent{
 			BookingUUID: cmd.BookingUUID,
-			PostUUID:    cmd.PostUUID,
+			ListingUUID: cmd.ListingUUID,
 			Errors:      errors,
 		}
 		if p != nil {
@@ -78,13 +78,13 @@ func NewPostValidateBookingHandler(factory post.Factory, repo post.Repository, e
 		return nil, err
 	}
 
-	return func(ctx context.Context, cmd PostValidateBookingCmd) (*PostValidateBookingRes, *i18np.Error) {
-		p, exists, err := repo.GetByUUID(ctx, cmd.PostUUID)
+	return func(ctx context.Context, cmd ListingValidateBookingCmd) (*ListingValidateBookingRes, *i18np.Error) {
+		p, exists, err := repo.GetByUUID(ctx, cmd.ListingUUID)
 		if err != nil {
 			return nil, err
 		}
 		if !exists {
-			return failEvent("post", factory.Errors.ValidateBookingNotFound(), p, cmd)
+			return failEvent("listing", factory.Errors.ValidateBookingNotFound(), p, cmd)
 		}
 		dates, totalPrice, error := validateDateRange(cmd, p)
 		if error != nil {
@@ -94,14 +94,14 @@ func NewPostValidateBookingHandler(factory post.Factory, repo post.Repository, e
 		if _err != nil {
 			return failEvent("people", _err, p, cmd)
 		}
-		events.BookingValidationSuccess(post.BookingValidationSuccessEvent{
+		events.BookingValidationSuccess(listing.BookingValidationSuccessEvent{
 			BookingUUID:  cmd.BookingUUID,
-			PostUUID:     cmd.PostUUID,
+			ListingUUID:  cmd.ListingUUID,
 			BusinessUUID: p.Business.UUID,
 			BusinessName: p.Business.NickName,
 			TotalPrice:   *totalPrice,
 			PricePerDays: dates,
 		})
-		return &PostValidateBookingRes{}, nil
+		return &ListingValidateBookingRes{}, nil
 	}
 }

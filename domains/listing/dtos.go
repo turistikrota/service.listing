@@ -1,4 +1,4 @@
-package post
+package listing
 
 import (
 	"time"
@@ -6,7 +6,7 @@ import (
 	"github.com/cilloparch/cillop/formats"
 )
 
-type PostPriceValidationDto struct {
+type ListingPriceValidationDto struct {
 	Price     float64 `json:"price" validate:"required,gt=0"`
 	StartDate string  `json:"startDate" validate:"required,datetime=2006-01-02"`
 	EndDate   string  `json:"endDate" validate:"required,datetime=2006-01-02"`
@@ -81,7 +81,7 @@ type PricePerDay struct {
 	Price float64   `json:"price"`
 }
 
-func (d *PostPriceValidationDto) ToEntity() Price {
+func (d *ListingPriceValidationDto) ToEntity() Price {
 	start, _ := time.Parse(formats.DateYYYYMMDD, d.StartDate)
 	end, _ := time.Parse(formats.DateYYYYMMDD, d.EndDate)
 	return Price{

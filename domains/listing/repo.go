@@ -1,4 +1,4 @@
-package post
+package listing
 
 import (
 	"context"
@@ -21,16 +21,16 @@ type I18nDetail struct {
 type Repository interface {
 	Create(ctx context.Context, entity *Entity) (*Entity, *i18np.Error)
 	Update(ctx context.Context, entity *Entity) *i18np.Error
-	Delete(ctx context.Context, postUUID string) *i18np.Error
-	Restore(ctx context.Context, postUUID string) *i18np.Error
-	Disable(ctx context.Context, postUUID string) *i18np.Error
-	Enable(ctx context.Context, postUUID string) *i18np.Error
-	MarkValid(ctx context.Context, postUUID string) *i18np.Error
-	MarkInvalid(ctx context.Context, postUUID string) *i18np.Error
-	ReOrder(ctx context.Context, postUUID string, order int) *i18np.Error
+	Delete(ctx context.Context, listingUUID string) *i18np.Error
+	Restore(ctx context.Context, listingUUID string) *i18np.Error
+	Disable(ctx context.Context, listingUUID string) *i18np.Error
+	Enable(ctx context.Context, listingUUID string) *i18np.Error
+	MarkValid(ctx context.Context, listingUUID string) *i18np.Error
+	MarkInvalid(ctx context.Context, listingUUID string) *i18np.Error
+	ReOrder(ctx context.Context, listingUUID string, order int) *i18np.Error
 	View(ctx context.Context, detail I18nDetail) (*Entity, *i18np.Error)
-	GetByUUID(ctx context.Context, postUUID string) (*Entity, bool, *i18np.Error)
-	AdminView(ctx context.Context, postUUID string) (*Entity, *i18np.Error)
+	GetByUUID(ctx context.Context, listingUUID string) (*Entity, bool, *i18np.Error)
+	AdminView(ctx context.Context, listingUUID string) (*Entity, *i18np.Error)
 	Filter(ctx context.Context, filter FilterEntity, listConfig list.Config) (*list.Result[*Entity], *i18np.Error)
 	FilterByBusiness(ctx context.Context, businessNickName string, filter FilterEntity, listConfig list.Config) (*list.Result[*Entity], *i18np.Error)
 	ListMy(ctx context.Context, businessUUID string, listConfig list.Config) (*list.Result[*Entity], *i18np.Error)
@@ -89,8 +89,8 @@ func (r *repo) Update(ctx context.Context, e *Entity) *i18np.Error {
 	return r.helper.UpdateOne(ctx, filter, update)
 }
 
-func (r *repo) Delete(ctx context.Context, postUUID string) *i18np.Error {
-	id, err := mongo2.TransformId(postUUID)
+func (r *repo) Delete(ctx context.Context, listingUUID string) *i18np.Error {
+	id, err := mongo2.TransformId(listingUUID)
 	if err != nil {
 		return r.factory.Errors.InvalidUUID()
 	}
@@ -110,8 +110,8 @@ func (r *repo) Delete(ctx context.Context, postUUID string) *i18np.Error {
 	return r.helper.UpdateOne(ctx, filter, update)
 }
 
-func (r *repo) Restore(ctx context.Context, postUUID string) *i18np.Error {
-	id, err := mongo2.TransformId(postUUID)
+func (r *repo) Restore(ctx context.Context, listingUUID string) *i18np.Error {
+	id, err := mongo2.TransformId(listingUUID)
 	if err != nil {
 		return r.factory.Errors.InvalidUUID()
 	}
@@ -128,8 +128,8 @@ func (r *repo) Restore(ctx context.Context, postUUID string) *i18np.Error {
 	return r.helper.UpdateOne(ctx, filter, update)
 }
 
-func (r *repo) Disable(ctx context.Context, postUUID string) *i18np.Error {
-	id, err := mongo2.TransformId(postUUID)
+func (r *repo) Disable(ctx context.Context, listingUUID string) *i18np.Error {
+	id, err := mongo2.TransformId(listingUUID)
 	if err != nil {
 		return r.factory.Errors.InvalidUUID()
 	}
@@ -146,8 +146,8 @@ func (r *repo) Disable(ctx context.Context, postUUID string) *i18np.Error {
 	return r.helper.UpdateOne(ctx, filter, update)
 }
 
-func (r *repo) Enable(ctx context.Context, postUUID string) *i18np.Error {
-	id, err := mongo2.TransformId(postUUID)
+func (r *repo) Enable(ctx context.Context, listingUUID string) *i18np.Error {
+	id, err := mongo2.TransformId(listingUUID)
 	if err != nil {
 		return r.factory.Errors.InvalidUUID()
 	}
@@ -166,8 +166,8 @@ func (r *repo) Enable(ctx context.Context, postUUID string) *i18np.Error {
 	return r.helper.UpdateOne(ctx, filter, update)
 }
 
-func (r *repo) MarkValid(ctx context.Context, postUUID string) *i18np.Error {
-	id, err := mongo2.TransformId(postUUID)
+func (r *repo) MarkValid(ctx context.Context, listingUUID string) *i18np.Error {
+	id, err := mongo2.TransformId(listingUUID)
 	if err != nil {
 		return r.factory.Errors.InvalidUUID()
 	}
@@ -186,8 +186,8 @@ func (r *repo) MarkValid(ctx context.Context, postUUID string) *i18np.Error {
 	return r.helper.UpdateOne(ctx, filter, update)
 }
 
-func (r *repo) MarkInvalid(ctx context.Context, postUUID string) *i18np.Error {
-	id, err := mongo2.TransformId(postUUID)
+func (r *repo) MarkInvalid(ctx context.Context, listingUUID string) *i18np.Error {
+	id, err := mongo2.TransformId(listingUUID)
 	if err != nil {
 		return r.factory.Errors.InvalidUUID()
 	}
@@ -204,8 +204,8 @@ func (r *repo) MarkInvalid(ctx context.Context, postUUID string) *i18np.Error {
 	return r.helper.UpdateOne(ctx, filter, update)
 }
 
-func (r *repo) ReOrder(ctx context.Context, postUUID string, order int) *i18np.Error {
-	id, err := mongo2.TransformId(postUUID)
+func (r *repo) ReOrder(ctx context.Context, listingUUID string, order int) *i18np.Error {
+	id, err := mongo2.TransformId(listingUUID)
 	if err != nil {
 		return r.factory.Errors.InvalidUUID()
 	}
@@ -263,8 +263,8 @@ func (r *repo) GetByUUID(ctx context.Context, uuid string) (*Entity, bool, *i18n
 	return *e, true, nil
 }
 
-func (r *repo) AdminView(ctx context.Context, postUUID string) (*Entity, *i18np.Error) {
-	id, _err := mongo2.TransformId(postUUID)
+func (r *repo) AdminView(ctx context.Context, listingUUID string) (*Entity, *i18np.Error) {
+	id, _err := mongo2.TransformId(listingUUID)
 	if _err != nil {
 		return nil, r.factory.Errors.InvalidUUID()
 	}

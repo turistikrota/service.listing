@@ -1,9 +1,9 @@
 package http
 
 type successMessages struct {
-	PostCreated string
-	PostUpdated string
-	Ok          string
+	ListingCreated string
+	ListingUpdated string
+	Ok             string
 }
 
 type errorMessages struct {
@@ -23,9 +23,9 @@ type messages struct {
 
 var Messages = messages{
 	Success: successMessages{
-		PostCreated: "http_success_post_created",
-		PostUpdated: "http_success_post_updated",
-		Ok:          "http_success_ok",
+		ListingCreated: "http_success_listing_created",
+		ListingUpdated: "http_success_listing_updated",
+		Ok:             "http_success_ok",
 	},
 	Error: errorMessages{
 		RequiredAuth:            "http_error_required_auth",

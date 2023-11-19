@@ -1,9 +1,9 @@
-package post
+package listing
 
 import (
 	"github.com/cilloparch/cillop/events"
-	"github.com/turistikrota/service.post/config"
-	"github.com/turistikrota/service.post/domains/booking"
+	"github.com/turistikrota/service.listing/config"
+	"github.com/turistikrota/service.listing/domains/booking"
 )
 
 type Events interface {
@@ -55,7 +55,7 @@ type (
 	}
 	BookingValidationSuccessEvent struct {
 		BookingUUID  string        `json:"booking_uuid"`
-		PostUUID     string        `json:"post_uuid"`
+		ListingUUID  string        `json:"listing_uuid"`
 		BusinessUUID string        `json:"business_uuid"`
 		BusinessName string        `json:"business_name"`
 		TotalPrice   float64       `json:"total_price"`
@@ -63,14 +63,14 @@ type (
 	}
 	BookingValidationFailEvent struct {
 		BookingUUID  string                     `json:"booking_uuid"`
-		PostUUID     string                     `json:"post_uuid"`
+		ListingUUID  string                     `json:"listing_uuid"`
 		BusinessUUID string                     `json:"business_uuid"`
 		BusinessName string                     `json:"business_name"`
 		Errors       []*booking.ValidationError `json:"errors"`
 	}
 )
 
-type postEvents struct {
+type listingEvents struct {
 	publisher events.Publisher
 	topics    config.Topics
 }
@@ -81,44 +81,44 @@ type EventConfig struct {
 }
 
 func NewEvents(cnf EventConfig) Events {
-	return &postEvents{
+	return &listingEvents{
 		publisher: cnf.Publisher,
 		topics:    cnf.Topics,
 	}
 }
 
-func (e *postEvents) Created(event CreatedEvent) {
-	_ = e.publisher.Publish(e.topics.Post.Created, event)
+func (e *listingEvents) Created(event CreatedEvent) {
+	_ = e.publisher.Publish(e.topics.Listing.Created, event)
 }
 
-func (e *postEvents) Updated(event UpdatedEvent) {
-	_ = e.publisher.Publish(e.topics.Post.Updated, event)
+func (e *listingEvents) Updated(event UpdatedEvent) {
+	_ = e.publisher.Publish(e.topics.Listing.Updated, event)
 }
 
-func (e *postEvents) Deleted(event DeletedEvent) {
-	_ = e.publisher.Publish(e.topics.Post.Deleted, event)
+func (e *listingEvents) Deleted(event DeletedEvent) {
+	_ = e.publisher.Publish(e.topics.Listing.Deleted, event)
 }
 
-func (e *postEvents) Disabled(event DisabledEvent) {
-	_ = e.publisher.Publish(e.topics.Post.Disabled, event)
+func (e *listingEvents) Disabled(event DisabledEvent) {
+	_ = e.publisher.Publish(e.topics.Listing.Disabled, event)
 }
 
-func (e *postEvents) Enabled(event EnabledEvent) {
-	_ = e.publisher.Publish(e.topics.Post.Enabled, event)
+func (e *listingEvents) Enabled(event EnabledEvent) {
+	_ = e.publisher.Publish(e.topics.Listing.Enabled, event)
 }
 
-func (e *postEvents) ReOrder(event ReOrderEvent) {
-	_ = e.publisher.Publish(e.topics.Post.ReOrdered, event)
+func (e *listingEvents) ReOrder(event ReOrderEvent) {
+	_ = e.publisher.Publish(e.topics.Listing.ReOrdered, event)
 }
 
-func (e *postEvents) Restore(event RestoreEvent) {
-	_ = e.publisher.Publish(e.topics.Post.Restored, event)
+func (e *listingEvents) Restore(event RestoreEvent) {
+	_ = e.publisher.Publish(e.topics.Listing.Restored, event)
 }
 
-func (e *postEvents) BookingValidationSuccess(event BookingValidationSuccessEvent) {
+func (e *listingEvents) BookingValidationSuccess(event BookingValidationSuccessEvent) {
 	_ = e.publisher.Publish(e.topics.Booking.ValidationSuccess, event)
 }
 
-func (e *postEvents) BookingValidationFail(event BookingValidationFailEvent) {
+func (e *listingEvents) BookingValidationFail(event BookingValidationFailEvent) {
 	_ = e.publisher.Publish(e.topics.Booking.ValidationFail, event)
 }

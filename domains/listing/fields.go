@@ -1,4 +1,4 @@
-package post
+package listing
 
 type fieldsType struct {
 	UUID          string

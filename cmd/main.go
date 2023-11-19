@@ -6,10 +6,10 @@ import (
 	"github.com/cilloparch/cillop/events/nats"
 	"github.com/cilloparch/cillop/i18np"
 	"github.com/cilloparch/cillop/validation"
-	"github.com/turistikrota/service.post/config"
-	event_stream "github.com/turistikrota/service.post/server/event-stream"
-	"github.com/turistikrota/service.post/server/http"
-	"github.com/turistikrota/service.post/service"
+	"github.com/turistikrota/service.listing/config"
+	event_stream "github.com/turistikrota/service.listing/server/event-stream"
+	"github.com/turistikrota/service.listing/server/http"
+	"github.com/turistikrota/service.listing/service"
 	"github.com/turistikrota/service.shared/auth/session"
 	"github.com/turistikrota/service.shared/auth/token"
 	"github.com/turistikrota/service.shared/db/mongo"
@@ -80,14 +80,14 @@ func main() {
 
 func loadMongo(cnf config.App) *mongo.DB {
 	uri := mongo.CalcMongoUri(mongo.UriParams{
-		Host:  cnf.DB.Post.Host,
-		Port:  cnf.DB.Post.Port,
-		User:  cnf.DB.Post.Username,
-		Pass:  cnf.DB.Post.Password,
-		Db:    cnf.DB.Post.Database,
-		Query: cnf.DB.Post.Query,
+		Host:  cnf.DB.Listing.Host,
+		Port:  cnf.DB.Listing.Port,
+		User:  cnf.DB.Listing.Username,
+		Pass:  cnf.DB.Listing.Password,
+		Db:    cnf.DB.Listing.Database,
+		Query: cnf.DB.Listing.Query,
 	})
-	d, err := mongo.New(uri, cnf.DB.Post.Database)
+	d, err := mongo.New(uri, cnf.DB.Listing.Database)
 	if err != nil {
 		panic(err)
 	}

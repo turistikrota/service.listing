@@ -1,4 +1,4 @@
-package post
+package listing
 
 import (
 	"time"
@@ -30,106 +30,106 @@ type Errors interface {
 	ValidateBookingNotFound() *i18np.Error
 }
 
-type postErrors struct{}
+type listingErrors struct{}
 
-func newPostErrors() Errors {
-	return &postErrors{}
+func newListingErrors() Errors {
+	return &listingErrors{}
 }
 
-func (e *postErrors) InvalidType() *i18np.Error {
+func (e *listingErrors) InvalidType() *i18np.Error {
 	return i18np.NewError(i18nMessages.InvalidType)
 }
 
-func (e *postErrors) InvalidBusiness() *i18np.Error {
+func (e *listingErrors) InvalidBusiness() *i18np.Error {
 	return i18np.NewError(i18nMessages.InvalidBusiness)
 }
 
-func (e *postErrors) InvalidMeta() *i18np.Error {
+func (e *listingErrors) InvalidMeta() *i18np.Error {
 	return i18np.NewError(i18nMessages.InvalidMeta)
 }
 
-func (e *postErrors) MetaMinLength() *i18np.Error {
+func (e *listingErrors) MetaMinLength() *i18np.Error {
 	return i18np.NewError(i18nMessages.MetaMinLength)
 }
 
-func (e *postErrors) InvalidImages() *i18np.Error {
+func (e *listingErrors) InvalidImages() *i18np.Error {
 	return i18np.NewError(i18nMessages.InvalidImages)
 }
 
-func (e *postErrors) ImagesMinLength() *i18np.Error {
+func (e *listingErrors) ImagesMinLength() *i18np.Error {
 	return i18np.NewError(i18nMessages.ImagesMinLength)
 }
 
-func (e *postErrors) InvalidCategories() *i18np.Error {
+func (e *listingErrors) InvalidCategories() *i18np.Error {
 	return i18np.NewError(i18nMessages.InvalidCategories)
 }
 
-func (e *postErrors) CategoriesMinLength() *i18np.Error {
+func (e *listingErrors) CategoriesMinLength() *i18np.Error {
 	return i18np.NewError(i18nMessages.CategoriesMinLength)
 }
 
-func (e *postErrors) InvalidPriceDate() *i18np.Error {
+func (e *listingErrors) InvalidPriceDate() *i18np.Error {
 	return i18np.NewError(i18nMessages.InvalidPriceDate)
 }
 
-func (e *postErrors) PriceDateConflict(start time.Time, end time.Time) *i18np.Error {
+func (e *listingErrors) PriceDateConflict(start time.Time, end time.Time) *i18np.Error {
 	return i18np.NewError(i18nMessages.PriceDateConflict, i18np.P{
 		"Start": start.Format(formats.DateYYYYMMDD),
 		"End":   end.Format(formats.DateYYYYMMDD),
 	})
 }
 
-func (e *postErrors) Failed(operation string) *i18np.Error {
+func (e *listingErrors) Failed(operation string) *i18np.Error {
 	return i18np.NewError(i18nMessages.Failed, i18np.P{
 		"Operation": operation,
 	})
 }
 
-func (e *postErrors) InvalidUUID() *i18np.Error {
+func (e *listingErrors) InvalidUUID() *i18np.Error {
 	return i18np.NewError(i18nMessages.InvalidUUID)
 }
 
-func (e *postErrors) NotFound() *i18np.Error {
+func (e *listingErrors) NotFound() *i18np.Error {
 	return i18np.NewError(i18nMessages.NotFound)
 }
 
-func (e *postErrors) InvalidPeople() *i18np.Error {
+func (e *listingErrors) InvalidPeople() *i18np.Error {
 	return i18np.NewError(i18nMessages.InvalidPeople)
 }
 
-func (e *postErrors) MinAdult() *i18np.Error {
+func (e *listingErrors) MinAdult() *i18np.Error {
 	return i18np.NewError(i18nMessages.MinAdult, i18np.P{
 		"Min": 1,
 	})
 }
 
-func (e *postErrors) ValidateBookingNotAvailable(date time.Time) *i18np.Error {
+func (e *listingErrors) ValidateBookingNotAvailable(date time.Time) *i18np.Error {
 	return i18np.NewError(i18nMessages.ValidateBookingNotAvailable, i18np.P{
 		"Date": date.Format(formats.DateYYYYMMDD),
 	})
 }
 
-func (e *postErrors) ValidateBookingAdult(min int, max int) *i18np.Error {
+func (e *listingErrors) ValidateBookingAdult(min int, max int) *i18np.Error {
 	return i18np.NewError(i18nMessages.ValidateBookingAdult, i18np.P{
 		"Min": min,
 		"Max": max,
 	})
 }
 
-func (e *postErrors) ValidateBookingKid(min int, max int) *i18np.Error {
+func (e *listingErrors) ValidateBookingKid(min int, max int) *i18np.Error {
 	return i18np.NewError(i18nMessages.ValidateBookingKid, i18np.P{
 		"Min": min,
 		"Max": max,
 	})
 }
 
-func (e *postErrors) ValidateBookingBaby(min int, max int) *i18np.Error {
+func (e *listingErrors) ValidateBookingBaby(min int, max int) *i18np.Error {
 	return i18np.NewError(i18nMessages.ValidateBookingBaby, i18np.P{
 		"Min": min,
 		"Max": max,
 	})
 }
 
-func (e *postErrors) ValidateBookingNotFound() *i18np.Error {
+func (e *listingErrors) ValidateBookingNotFound() *i18np.Error {
 	return i18np.NewError(i18nMessages.ValidateBookingNotFound)
 }

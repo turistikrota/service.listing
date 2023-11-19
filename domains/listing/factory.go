@@ -1,4 +1,4 @@
-package post
+package listing
 
 import (
 	"time"
@@ -13,7 +13,7 @@ type Factory struct {
 
 func NewFactory() Factory {
 	return Factory{
-		Errors: newPostErrors(),
+		Errors: newListingErrors(),
 	}
 }
 
@@ -27,7 +27,7 @@ type NewConfig struct {
 	Meta          map[Locale]Meta
 	CategoryUUIDs []string
 	Features      []Feature
-	Prices        []PostPriceValidationDto
+	Prices        []ListingPriceValidationDto
 	Location      Location
 	Boosts        []Boost
 	Validation    *Validation

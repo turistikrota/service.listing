@@ -1,4 +1,4 @@
-module github.com/turistikrota/service.post
+module github.com/turistikrota/service.listing
 
 go 1.20
 

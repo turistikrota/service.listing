@@ -1,4 +1,4 @@
-package post
+package listing
 
 import (
 	"time"

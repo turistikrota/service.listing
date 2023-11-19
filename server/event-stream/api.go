@@ -5,21 +5,21 @@ import (
 	"encoding/json"
 	"fmt"
 
-	"github.com/turistikrota/service.post/app/command"
-	"github.com/turistikrota/service.post/domains/account"
-	"github.com/turistikrota/service.post/domains/category"
+	"github.com/turistikrota/service.listing/app/command"
+	"github.com/turistikrota/service.listing/domains/account"
+	"github.com/turistikrota/service.listing/domains/category"
 )
 
-func (s srv) OnPostValidationSuccess(data []byte) {
-	fmt.Println("OnPostValidationSuccess")
+func (s srv) OnListingValidationSuccess(data []byte) {
+	fmt.Println("OnListingValidationSuccess")
 	e := category.ValidationSuccessEvent{}
 	err := json.Unmarshal(data, &e)
 	if err != nil {
 		fmt.Println(err)
 		return
 	}
-	_, _ = s.app.Commands.PostValidated(context.Background(), command.PostValidatedCmd{
-		New: e.Post,
+	_, _ = s.app.Commands.ListingValidated(context.Background(), command.ListingValidatedCmd{
+		New: e.Listing,
 		Account: account.Entity{
 			UUID: e.User.UUID,
 			Name: e.User.Name,
@@ -29,7 +29,7 @@ func (s srv) OnPostValidationSuccess(data []byte) {
 
 func (s srv) OnBookingValidationStart(data []byte) {
 	fmt.Println("OnBookingValidationStart")
-	cmd := command.PostValidateBookingCmd{}
+	cmd := command.ListingValidateBookingCmd{}
 	err := json.Unmarshal(data, &cmd)
 	if err != nil {
 		fmt.Println(err)
