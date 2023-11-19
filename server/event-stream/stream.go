@@ -3,8 +3,8 @@ package event_stream
 import (
 	"github.com/cilloparch/cillop/events"
 	"github.com/cilloparch/cillop/server"
-	"github.com/turistikrota/service.post/app"
-	"github.com/turistikrota/service.post/config"
+	"github.com/turistikrota/service.listing/app"
+	"github.com/turistikrota/service.listing/config"
 )
 
 type srv struct {
@@ -28,7 +28,7 @@ func New(config Config) server.Server {
 }
 
 func (s srv) Listen() error {
-	err := s.engine.Subscribe(s.topics.Category.PostValidationSuccess, s.OnPostValidationSuccess)
+	err := s.engine.Subscribe(s.topics.Category.ListingValidationSuccess, s.OnListingValidationSuccess)
 	if err != nil {
 		return err
 	}

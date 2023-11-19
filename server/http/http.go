@@ -13,15 +13,15 @@ import (
 	"github.com/gofiber/fiber/v2/middleware/limiter"
 	"github.com/gofiber/fiber/v2/middleware/timeout"
 
-	"github.com/turistikrota/service.post/app"
-	"github.com/turistikrota/service.post/config"
+	"github.com/turistikrota/service.listing/app"
+	"github.com/turistikrota/service.listing/config"
 	"github.com/turistikrota/service.shared/auth/session"
 	"github.com/turistikrota/service.shared/auth/token"
 	httpServer "github.com/turistikrota/service.shared/server/http"
 	"github.com/turistikrota/service.shared/server/http/auth"
 	"github.com/turistikrota/service.shared/server/http/auth/claim_guard"
 	"github.com/turistikrota/service.shared/server/http/auth/current_account"
-	"github.com/turistikrota/service.shared/server/http/auth/current_owner"
+	"github.com/turistikrota/service.shared/server/http/auth/current_business"
 	"github.com/turistikrota/service.shared/server/http/auth/current_user"
 	"github.com/turistikrota/service.shared/server/http/auth/device_uuid"
 	"github.com/turistikrota/service.shared/server/http/auth/required_access"
@@ -68,38 +68,38 @@ func (h srv) Listen() error {
 		CreateHandler: func(router fiber.Router) fiber.Router {
 			router.Use(h.cors(), h.deviceUUID())
 
-			// Owner routes
-			owner := router.Group("/owner", h.rateLimit(), h.currentUserAccess(), h.requiredAccess(), h.currentAccountAccess())
-			owner.Post("/", h.currentOwnerAccess(config.Roles.Post.Super, config.Roles.Post.Create), h.wrapWithTimeout(h.PostCreate))
-			owner.Put("/:uuid", h.currentOwnerAccess(config.Roles.Post.Super, config.Roles.Post.Update), h.wrapWithTimeout(h.PostUpdate))
-			owner.Patch("/:uuid/enable", h.currentOwnerAccess(config.Roles.Post.Super, config.Roles.Post.Enable), h.wrapWithTimeout(h.PostEnable))
-			owner.Patch("/:uuid/disable", h.currentOwnerAccess(config.Roles.Post.Super, config.Roles.Post.Disable), h.wrapWithTimeout(h.PostDisable))
-			owner.Patch("/:uuid/restore", h.currentOwnerAccess(config.Roles.Post.Super, config.Roles.Post.Restore), h.wrapWithTimeout(h.PostRestore))
-			owner.Delete("/:uuid", h.currentOwnerAccess(config.Roles.Post.Super, config.Roles.Post.Delete), h.wrapWithTimeout(h.PostDelete))
-			owner.Patch("/:uuid/re-order", h.currentOwnerAccess(config.Roles.Post.Super, config.Roles.Post.ReOrder), h.wrapWithTimeout(h.PostReOrder))
-			owner.Get("/", h.currentOwnerAccess(config.Roles.Post.Super, config.Roles.Post.List), h.wrapWithTimeout(h.PostListMy))
-			owner.Get("/:uuid", h.currentOwnerAccess(config.Roles.Post.Super, config.Roles.Post.View), h.wrapWithTimeout(h.PostViewAdmin))
+			// Business routes
+			business := router.Group("/business", h.rateLimit(), h.currentUserAccess(), h.requiredAccess(), h.currentAccountAccess())
+			business.Post("/", h.currentBusinessAccess(config.Roles.Listing.Super, config.Roles.Listing.Create), h.wrapWithTimeout(h.ListingCreate))
+			business.Put("/:uuid", h.currentBusinessAccess(config.Roles.Listing.Super, config.Roles.Listing.Update), h.wrapWithTimeout(h.ListingUpdate))
+			business.Patch("/:uuid/enable", h.currentBusinessAccess(config.Roles.Listing.Super, config.Roles.Listing.Enable), h.wrapWithTimeout(h.ListingEnable))
+			business.Patch("/:uuid/disable", h.currentBusinessAccess(config.Roles.Listing.Super, config.Roles.Listing.Disable), h.wrapWithTimeout(h.ListingDisable))
+			business.Patch("/:uuid/restore", h.currentBusinessAccess(config.Roles.Listing.Super, config.Roles.Listing.Restore), h.wrapWithTimeout(h.ListingRestore))
+			business.Delete("/:uuid", h.currentBusinessAccess(config.Roles.Listing.Super, config.Roles.Listing.Delete), h.wrapWithTimeout(h.ListingDelete))
+			business.Patch("/:uuid/re-order", h.currentBusinessAccess(config.Roles.Listing.Super, config.Roles.Listing.ReOrder), h.wrapWithTimeout(h.ListingReOrder))
+			business.Get("/", h.currentBusinessAccess(config.Roles.Listing.Super, config.Roles.Listing.List), h.wrapWithTimeout(h.ListingListMy))
+			business.Get("/:uuid", h.currentBusinessAccess(config.Roles.Listing.Super, config.Roles.Listing.View), h.wrapWithTimeout(h.ListingViewAdmin))
 
 			// Admin routes
 			admin := router.Group("/admin", h.currentUserAccess(), h.requiredAccess(), h.adminRoute())
-			admin.Get("/:uuid", h.wrapWithTimeout(h.PostViewAdmin))
+			admin.Get("/:uuid", h.wrapWithTimeout(h.ListingViewAdmin))
 
 			// Public routes
-			router.Get("/:slug", h.rateLimit(), h.wrapWithTimeout(h.PostView))
-			router.Post("/filter/:nickName", h.rateLimit(), h.wrapWithTimeout(h.PostFilterByOwner))
-			router.Post("/filter", h.rateLimit(), h.wrapWithTimeout(h.PostFilter))
+			router.Get("/:slug", h.rateLimit(), h.wrapWithTimeout(h.ListingView))
+			router.Post("/filter/:nickName", h.rateLimit(), h.wrapWithTimeout(h.ListingFilterByBusiness))
+			router.Post("/filter", h.rateLimit(), h.wrapWithTimeout(h.ListingFilter))
 
 			return router
 		},
 	})
 }
 
-func (h srv) currentOwnerAccess(roles ...string) fiber.Handler {
-	return current_owner.New(current_owner.Config{
+func (h srv) currentBusinessAccess(roles ...string) fiber.Handler {
+	return current_business.New(current_business.Config{
 		I18n:         h.i18n,
 		Roles:        roles,
-		RequiredKey:  Messages.Error.RequiredOwnerSelect,
-		ForbiddenKey: Messages.Error.ForbiddenOwnerSelect,
+		RequiredKey:  Messages.Error.RequiredBusinessSelect,
+		ForbiddenKey: Messages.Error.ForbiddenBusinessSelect,
 	})
 }
 

@@ -1,8 +1,8 @@
-package post
+package listing
 
 type fieldsType struct {
 	UUID          string
-	Owner         string
+	Business      string
 	Images        string
 	Meta          string
 	CategoryUUIDs string
@@ -19,7 +19,7 @@ type fieldsType struct {
 	UpdatedAt     string
 }
 
-type ownerFieldsType struct {
+type businessFieldsType struct {
 	UUID     string
 	NickName string
 }
@@ -99,7 +99,7 @@ type boostFieldsType struct {
 
 var fields = fieldsType{
 	UUID:          "_id",
-	Owner:         "owner",
+	Business:      "business",
 	Images:        "images",
 	Meta:          "meta",
 	CategoryUUIDs: "category_uuids",
@@ -116,7 +116,7 @@ var fields = fieldsType{
 	UpdatedAt:     "updated_at",
 }
 
-var ownerFields = ownerFieldsType{
+var businessFields = businessFieldsType{
 	UUID:     "uuid",
 	NickName: "nick_name",
 }
@@ -180,8 +180,8 @@ var validationFields = validationFieldsType{
 	NoGuest:     "no_guest",
 }
 
-func ownerField(field string) string {
-	return fields.Owner + "." + field
+func businessField(field string) string {
+	return fields.Business + "." + field
 }
 
 func metaField(locale string, field string) string {

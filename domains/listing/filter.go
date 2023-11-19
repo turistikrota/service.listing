@@ -1,4 +1,4 @@
-package post
+package listing
 
 import (
 	"time"
@@ -122,7 +122,7 @@ func (e *FilterEntity) GetPerfectDistance() float64 {
 func (r *repo) filterToBson(filter FilterEntity, nickName string) bson.M {
 	list := make([]bson.M, 0)
 	if nickName != "" {
-		list = r.filterByOwner(list, nickName)
+		list = r.filterByBusiness(list, nickName)
 	}
 	list = r.filterByLocation(list, filter)
 	list = r.filterByCategory(list, filter)
@@ -170,9 +170,9 @@ func (r *repo) filterByCategory(list []bson.M, filter FilterEntity) []bson.M {
 	return list
 }
 
-func (r *repo) ownerFilter(nickName string) bson.M {
+func (r *repo) businessFilter(nickName string) bson.M {
 	return bson.M{
-		ownerField(ownerFields.NickName): nickName,
+		businessField(businessFields.NickName): nickName,
 		fields.IsDeleted: bson.M{
 			"$ne": true,
 		},
@@ -191,8 +191,8 @@ func (r *repo) baseFilter() bson.M {
 	}
 }
 
-func (r *repo) filterByOwner(list []bson.M, nickName string) []bson.M {
-	return append(list, r.ownerFilter(nickName))
+func (r *repo) filterByBusiness(list []bson.M, nickName string) []bson.M {
+	return append(list, r.businessFilter(nickName))
 }
 
 func (r *repo) filterByQuery(list []bson.M, filter FilterEntity) []bson.M {

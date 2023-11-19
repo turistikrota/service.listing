@@ -1,8 +1,8 @@
 package app
 
 import (
-	"github.com/turistikrota/service.post/app/command"
-	"github.com/turistikrota/service.post/app/query"
+	"github.com/turistikrota/service.listing/app/command"
+	"github.com/turistikrota/service.listing/app/query"
 )
 
 type Application struct {
@@ -11,22 +11,22 @@ type Application struct {
 }
 
 type Commands struct {
-	PostCreate              command.PostCreateHandler
-	PostUpdate              command.PostUpdateHandler
-	PostValidated           command.PostValidatedHandler
-	PostUpdateOwnerNickName command.PostUpdateOwnerNickNameHandler
-	PostEnable              command.PostEnableHandler
-	PostDisable             command.PostDisableHandler
-	PostDelete              command.PostDeleteHandler
-	PostRestore             command.PostRestoreHandler
-	PostReOrder             command.PostReOrderHandler
-	BookingValidate         command.PostValidateBookingHandler
+	ListingCreate                 command.ListingCreateHandler
+	ListingUpdate                 command.ListingUpdateHandler
+	ListingValidated              command.ListingValidatedHandler
+	ListingUpdateBusinessNickName command.ListingUpdateBusinessNickNameHandler
+	ListingEnable                 command.ListingEnableHandler
+	ListingDisable                command.ListingDisableHandler
+	ListingDelete                 command.ListingDeleteHandler
+	ListingRestore                command.ListingRestoreHandler
+	ListingReOrder                command.ListingReOrderHandler
+	BookingValidate               command.ListingValidateBookingHandler
 }
 
 type Queries struct {
-	PostView          query.PostViewHandler
-	PostAdminView     query.PostAdminViewHandler
-	PostFilterByOwner query.PostFilterByOwnerHandler
-	PostFilter        query.PostFilterHandler
-	PostListMy        query.PostListMyHandler
+	ListingView             query.ListingViewHandler
+	ListingAdminView        query.ListingAdminViewHandler
+	ListingFilterByBusiness query.ListingFilterByBusinessHandler
+	ListingFilter           query.ListingFilterHandler
+	ListingListMy           query.ListingListMyHandler
 }

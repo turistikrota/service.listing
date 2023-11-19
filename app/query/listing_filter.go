@@ -6,23 +6,23 @@ import (
 	"github.com/cilloparch/cillop/cqrs"
 	"github.com/cilloparch/cillop/i18np"
 	"github.com/cilloparch/cillop/types/list"
-	"github.com/turistikrota/service.post/domains/post"
-	"github.com/turistikrota/service.post/pkg/utils"
+	"github.com/turistikrota/service.listing/domains/listing"
+	"github.com/turistikrota/service.listing/pkg/utils"
 )
 
-type PostFilterQuery struct {
+type ListingFilterQuery struct {
 	*utils.Pagination
-	post.FilterEntity
+	listing.FilterEntity
 }
 
-type PostFilterRes struct {
-	*list.Result[*post.ListDto]
+type ListingFilterRes struct {
+	*list.Result[*listing.ListDto]
 }
 
-type PostFilterHandler cqrs.HandlerFunc[PostFilterQuery, *PostFilterRes]
+type ListingFilterHandler cqrs.HandlerFunc[ListingFilterQuery, *ListingFilterRes]
 
-func NewPostFilterHandler(repo post.Repository) PostFilterHandler {
-	return func(ctx context.Context, query PostFilterQuery) (*PostFilterRes, *i18np.Error) {
+func NewListingFilterHandler(repo listing.Repository) ListingFilterHandler {
+	return func(ctx context.Context, query ListingFilterQuery) (*ListingFilterRes, *i18np.Error) {
 		query.Default()
 		offset := (*query.Page - 1) * *query.Limit
 		res, err := repo.Filter(ctx, query.FilterEntity, list.Config{
@@ -32,11 +32,11 @@ func NewPostFilterHandler(repo post.Repository) PostFilterHandler {
 		if err != nil {
 			return nil, err
 		}
-		li := make([]*post.ListDto, len(res.List))
+		li := make([]*listing.ListDto, len(res.List))
 		for i, v := range res.List {
 			li[i] = v.ToList()
 		}
-		result := &list.Result[*post.ListDto]{
+		result := &list.Result[*listing.ListDto]{
 			IsNext:        res.IsNext,
 			IsPrev:        res.IsPrev,
 			FilteredTotal: res.FilteredTotal,
@@ -44,7 +44,7 @@ func NewPostFilterHandler(repo post.Repository) PostFilterHandler {
 			Page:          res.Page,
 			List:          li,
 		}
-		return &PostFilterRes{
+		return &ListingFilterRes{
 			Result: result,
 		}, nil
 	}

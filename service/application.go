@@ -4,11 +4,11 @@ import (
 	"github.com/cilloparch/cillop/events"
 	"github.com/cilloparch/cillop/helpers/cache"
 	"github.com/cilloparch/cillop/validation"
-	"github.com/turistikrota/service.post/app"
-	"github.com/turistikrota/service.post/app/command"
-	"github.com/turistikrota/service.post/app/query"
-	"github.com/turistikrota/service.post/config"
-	"github.com/turistikrota/service.post/domains/post"
+	"github.com/turistikrota/service.listing/app"
+	"github.com/turistikrota/service.listing/app/command"
+	"github.com/turistikrota/service.listing/app/query"
+	"github.com/turistikrota/service.listing/config"
+	"github.com/turistikrota/service.listing/domains/listing"
 	"github.com/turistikrota/service.shared/db/mongo"
 )
 
@@ -21,32 +21,32 @@ type Config struct {
 }
 
 func NewApplication(cnf Config) app.Application {
-	postFactory := post.NewFactory()
-	postRepo := post.NewRepo(cnf.MongoDB.GetCollection(cnf.App.DB.Post.Collection), postFactory)
-	postEvents := post.NewEvents(post.EventConfig{
+	listingFactory := listing.NewFactory()
+	listingRepo := listing.NewRepo(cnf.MongoDB.GetCollection(cnf.App.DB.Listing.Collection), listingFactory)
+	listingEvents := listing.NewEvents(listing.EventConfig{
 		Topics:    cnf.App.Topics,
 		Publisher: cnf.EventEngine,
 	})
 
 	return app.Application{
 		Commands: app.Commands{
-			PostCreate:              command.NewPostCreateHandler(postFactory, postRepo, postEvents),
-			PostUpdate:              command.NewPostUpdateHandler(postFactory, postRepo, postEvents),
-			PostValidated:           command.NewPostValidatedHandler(postRepo),
-			PostUpdateOwnerNickName: command.NewPostUpdateOwnerNickNameHandler(),
-			PostEnable:              command.NewPostEnableHandler(postRepo, postEvents),
-			PostDisable:             command.NewPostDisableHandler(postRepo, postEvents),
-			PostDelete:              command.NewPostDeleteHandler(postRepo, postEvents),
-			PostRestore:             command.NewPostRestoreHandler(postRepo, postEvents),
-			PostReOrder:             command.NewPostReOrderHandler(postRepo, postEvents),
-			BookingValidate:         command.NewPostValidateBookingHandler(postFactory, postRepo, postEvents),
+			ListingCreate:                 command.NewListingCreateHandler(listingFactory, listingRepo, listingEvents),
+			ListingUpdate:                 command.NewListingUpdateHandler(listingFactory, listingRepo, listingEvents),
+			ListingValidated:              command.NewListingValidatedHandler(listingRepo),
+			ListingUpdateBusinessNickName: command.NewListingUpdateBusinessNickNameHandler(),
+			ListingEnable:                 command.NewListingEnableHandler(listingRepo, listingEvents),
+			ListingDisable:                command.NewListingDisableHandler(listingRepo, listingEvents),
+			ListingDelete:                 command.NewListingDeleteHandler(listingRepo, listingEvents),
+			ListingRestore:                command.NewListingRestoreHandler(listingRepo, listingEvents),
+			ListingReOrder:                command.NewListingReOrderHandler(listingRepo, listingEvents),
+			BookingValidate:               command.NewListingValidateBookingHandler(listingFactory, listingRepo, listingEvents),
 		},
 		Queries: app.Queries{
-			PostView:          query.NewPostViewHandler(postRepo, cnf.CacheSrv),
-			PostAdminView:     query.NewPostAdminViewHandler(postRepo),
-			PostFilterByOwner: query.NewPostFilterByOwnerHandler(postRepo),
-			PostFilter:        query.NewPostFilterHandler(postRepo),
-			PostListMy:        query.NewPostListMyHandler(postRepo),
+			ListingView:             query.NewListingViewHandler(listingRepo, cnf.CacheSrv),
+			ListingAdminView:        query.NewListingAdminViewHandler(listingRepo),
+			ListingFilterByBusiness: query.NewListingFilterByBusinessHandler(listingRepo),
+			ListingFilter:           query.NewListingFilterHandler(listingRepo),
+			ListingListMy:           query.NewListingListMyHandler(listingRepo),
 		},
 	}
 }

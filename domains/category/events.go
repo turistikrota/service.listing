@@ -2,20 +2,20 @@ package category
 
 import (
 	"github.com/cilloparch/cillop/i18np"
-	"github.com/turistikrota/service.post/domains/post"
+	"github.com/turistikrota/service.listing/domains/listing"
 )
 
 type ValidationSuccessEvent struct {
-	PostUUID string          `json:"postUUID"`
-	Post     *post.Entity    `json:"entity"`
-	User     UserDetailEvent `json:"user"`
+	ListingUUID string          `json:"listingUUID"`
+	Listing     *listing.Entity `json:"entity"`
+	User        UserDetailEvent `json:"user"`
 }
 
 type ValidationFailedEvent struct {
-	PostUUID string             `json:"postUUID"`
-	Post     *post.Entity       `json:"entity"`
-	Errors   []*ValidationError `json:"errors"`
-	User     UserDetailEvent    `json:"user"`
+	ListingUUID string             `json:"listingUUID"`
+	Listing     *listing.Entity    `json:"entity"`
+	Errors      []*ValidationError `json:"errors"`
+	User        UserDetailEvent    `json:"user"`
 }
 
 type UserDetailEvent struct {

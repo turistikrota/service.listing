@@ -1,13 +1,13 @@
 package config
 
-type MongoPost struct {
-	Host       string `env:"MONGO_POST_HOST" envDefault:"localhost"`
-	Port       string `env:"MONGO_POST_PORT" envDefault:"27017"`
-	Username   string `env:"MONGO_POST_USERNAME" envDefault:""`
-	Password   string `env:"MONGO_POST_PASSWORD" envDefault:""`
-	Database   string `env:"MONGO_POST_DATABASE" envDefault:"account"`
-	Collection string `env:"MONGO_POST_COLLECTION" envDefault:"accounts"`
-	Query      string `env:"MONGO_POST_QUERY" envDefault:""`
+type MongoListing struct {
+	Host       string `env:"MONGO_LISTING_HOST" envDefault:"localhost"`
+	Port       string `env:"MONGO_LISTING_PORT" envDefault:"27017"`
+	Username   string `env:"MONGO_LISTING_USERNAME" envDefault:""`
+	Password   string `env:"MONGO_LISTING_PASSWORD" envDefault:""`
+	Database   string `env:"MONGO_LISTING_DATABASE" envDefault:"account"`
+	Collection string `env:"MONGO_LISTING_COLLECTION" envDefault:"accounts"`
+	Query      string `env:"MONGO_LISTING_QUERY" envDefault:""`
 }
 
 type I18n struct {
@@ -38,7 +38,7 @@ type CacheRedis struct {
 
 type HttpHeaders struct {
 	AllowedOrigins   string `env:"CORS_ALLOWED_ORIGINS" envDefault:"*"`
-	AllowedMethods   string `env:"CORS_ALLOWED_METHODS" envDefault:"GET,POST,PUT,DELETE,OPTIONS"`
+	AllowedMethods   string `env:"CORS_ALLOWED_METHODS" envDefault:"GET,LISTING,PUT,DELETE,OPTIONS"`
 	AllowedHeaders   string `env:"CORS_ALLOWED_HEADERS" envDefault:"*"`
 	AllowCredentials bool   `env:"CORS_ALLOW_CREDENTIALS" envDefault:"true"`
 	Domain           string `env:"HTTP_HEADER_DOMAIN" envDefault:"*"`
@@ -59,23 +59,23 @@ type RSA struct {
 }
 
 type Topics struct {
-	Post     PostTopics
+	Listing  ListingTopics
 	Category CategoryTopics
 	Booking  BookingTopics
 }
 
-type PostTopics struct {
-	Created   string `env:"STREAMING_TOPIC_POST_CREATED"`
-	Updated   string `env:"STREAMING_TOPIC_POST_UPDATED"`
-	Deleted   string `env:"STREAMING_TOPIC_POST_DELETED"`
-	Disabled  string `env:"STREAMING_TOPIC_POST_DISABLED"`
-	Enabled   string `env:"STREAMING_TOPIC_POST_ENABLED"`
-	ReOrdered string `env:"STREAMING_TOPIC_POST_REORDERED"`
-	Restored  string `env:"STREAMING_TOPIC_POST_RESTORED"`
+type ListingTopics struct {
+	Created   string `env:"STREAMING_TOPIC_LISTING_CREATED"`
+	Updated   string `env:"STREAMING_TOPIC_LISTING_UPDATED"`
+	Deleted   string `env:"STREAMING_TOPIC_LISTING_DELETED"`
+	Disabled  string `env:"STREAMING_TOPIC_LISTING_DISABLED"`
+	Enabled   string `env:"STREAMING_TOPIC_LISTING_ENABLED"`
+	ReOrdered string `env:"STREAMING_TOPIC_LISTING_REORDERED"`
+	Restored  string `env:"STREAMING_TOPIC_LISTING_RESTORED"`
 }
 
 type CategoryTopics struct {
-	PostValidationSuccess string `env:"STREAMING_TOPIC_CATEGORY_POST_VALIDATION_SUCCESS"`
+	ListingValidationSuccess string `env:"STREAMING_TOPIC_CATEGORY_LISTING_VALIDATION_SUCCESS"`
 }
 
 type BookingTopics struct {
@@ -96,7 +96,7 @@ type CDN struct {
 type App struct {
 	Protocol string `env:"PROTOCOL" envDefault:"http"`
 	DB       struct {
-		Post MongoPost
+		Listing MongoListing
 	}
 	Http        Http
 	HttpHeaders HttpHeaders

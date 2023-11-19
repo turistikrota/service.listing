@@ -1,10 +1,10 @@
-package post
+package listing
 
 import "time"
 
 type Entity struct {
 	UUID          string          `json:"uuid" bson:"_id,omitempty"`
-	Owner         Owner           `json:"owner" bson:"owner" validate:"required,dive,required"`
+	Business      Business        `json:"business" bson:"business" validate:"required,dive,required"`
 	Images        []Image         `json:"images" bson:"images" validate:"required,min=1,max=30,dive,required"`
 	Meta          map[Locale]Meta `json:"meta" bson:"meta" validate:"required,dive,required"`
 	CategoryUUIDs []string        `json:"categoryUUIDs" bson:"categoryUUIDs" validate:"required,min=1,max=30,dive,required"`
@@ -21,7 +21,7 @@ type Entity struct {
 	UpdatedAt     time.Time       `json:"updatedAt" bson:"updated_at"`
 }
 
-type Owner struct {
+type Business struct {
 	UUID     string `json:"uuid"`
 	NickName string `json:"nickName"`
 }

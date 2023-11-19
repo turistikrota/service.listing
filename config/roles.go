@@ -2,7 +2,7 @@ package config
 
 import "github.com/turistikrota/service.shared/base_roles"
 
-type postRoles struct {
+type listingRoles struct {
 	Super   string
 	Create  string
 	Update  string
@@ -17,21 +17,21 @@ type postRoles struct {
 
 type roles struct {
 	base_roles.Roles
-	Post postRoles
+	Listing listingRoles
 }
 
 var Roles = roles{
 	Roles: base_roles.BaseRoles,
-	Post: postRoles{
-		Super:   "post.super",
-		Create:  "post.create",
-		Update:  "post.update",
-		Delete:  "post.delete",
-		Enable:  "post.enable",
-		Disable: "post.disable",
-		ReOrder: "post.re_order",
-		Restore: "post.restore",
-		List:    "post.list",
-		View:    "post.view",
+	Listing: listingRoles{
+		Super:   "listing.super",
+		Create:  "listing.create",
+		Update:  "listing.update",
+		Delete:  "listing.delete",
+		Enable:  "listing.enable",
+		Disable: "listing.disable",
+		ReOrder: "listing.re_order",
+		Restore: "listing.restore",
+		List:    "listing.list",
+		View:    "listing.view",
 	},
 }

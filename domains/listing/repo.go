@@ -1,4 +1,4 @@
-package post
+package listing
 
 import (
 	"context"
@@ -21,19 +21,19 @@ type I18nDetail struct {
 type Repository interface {
 	Create(ctx context.Context, entity *Entity) (*Entity, *i18np.Error)
 	Update(ctx context.Context, entity *Entity) *i18np.Error
-	Delete(ctx context.Context, postUUID string) *i18np.Error
-	Restore(ctx context.Context, postUUID string) *i18np.Error
-	Disable(ctx context.Context, postUUID string) *i18np.Error
-	Enable(ctx context.Context, postUUID string) *i18np.Error
-	MarkValid(ctx context.Context, postUUID string) *i18np.Error
-	MarkInvalid(ctx context.Context, postUUID string) *i18np.Error
-	ReOrder(ctx context.Context, postUUID string, order int) *i18np.Error
+	Delete(ctx context.Context, listingUUID string) *i18np.Error
+	Restore(ctx context.Context, listingUUID string) *i18np.Error
+	Disable(ctx context.Context, listingUUID string) *i18np.Error
+	Enable(ctx context.Context, listingUUID string) *i18np.Error
+	MarkValid(ctx context.Context, listingUUID string) *i18np.Error
+	MarkInvalid(ctx context.Context, listingUUID string) *i18np.Error
+	ReOrder(ctx context.Context, listingUUID string, order int) *i18np.Error
 	View(ctx context.Context, detail I18nDetail) (*Entity, *i18np.Error)
-	GetByUUID(ctx context.Context, postUUID string) (*Entity, bool, *i18np.Error)
-	AdminView(ctx context.Context, postUUID string) (*Entity, *i18np.Error)
+	GetByUUID(ctx context.Context, listingUUID string) (*Entity, bool, *i18np.Error)
+	AdminView(ctx context.Context, listingUUID string) (*Entity, *i18np.Error)
 	Filter(ctx context.Context, filter FilterEntity, listConfig list.Config) (*list.Result[*Entity], *i18np.Error)
-	FilterByOwner(ctx context.Context, ownerNickName string, filter FilterEntity, listConfig list.Config) (*list.Result[*Entity], *i18np.Error)
-	ListMy(ctx context.Context, ownerUUID string, listConfig list.Config) (*list.Result[*Entity], *i18np.Error)
+	FilterByBusiness(ctx context.Context, businessNickName string, filter FilterEntity, listConfig list.Config) (*list.Result[*Entity], *i18np.Error)
+	ListMy(ctx context.Context, businessUUID string, listConfig list.Config) (*list.Result[*Entity], *i18np.Error)
 }
 
 type repo struct {
@@ -89,8 +89,8 @@ func (r *repo) Update(ctx context.Context, e *Entity) *i18np.Error {
 	return r.helper.UpdateOne(ctx, filter, update)
 }
 
-func (r *repo) Delete(ctx context.Context, postUUID string) *i18np.Error {
-	id, err := mongo2.TransformId(postUUID)
+func (r *repo) Delete(ctx context.Context, listingUUID string) *i18np.Error {
+	id, err := mongo2.TransformId(listingUUID)
 	if err != nil {
 		return r.factory.Errors.InvalidUUID()
 	}
@@ -110,8 +110,8 @@ func (r *repo) Delete(ctx context.Context, postUUID string) *i18np.Error {
 	return r.helper.UpdateOne(ctx, filter, update)
 }
 
-func (r *repo) Restore(ctx context.Context, postUUID string) *i18np.Error {
-	id, err := mongo2.TransformId(postUUID)
+func (r *repo) Restore(ctx context.Context, listingUUID string) *i18np.Error {
+	id, err := mongo2.TransformId(listingUUID)
 	if err != nil {
 		return r.factory.Errors.InvalidUUID()
 	}
@@ -128,8 +128,8 @@ func (r *repo) Restore(ctx context.Context, postUUID string) *i18np.Error {
 	return r.helper.UpdateOne(ctx, filter, update)
 }
 
-func (r *repo) Disable(ctx context.Context, postUUID string) *i18np.Error {
-	id, err := mongo2.TransformId(postUUID)
+func (r *repo) Disable(ctx context.Context, listingUUID string) *i18np.Error {
+	id, err := mongo2.TransformId(listingUUID)
 	if err != nil {
 		return r.factory.Errors.InvalidUUID()
 	}
@@ -146,8 +146,8 @@ func (r *repo) Disable(ctx context.Context, postUUID string) *i18np.Error {
 	return r.helper.UpdateOne(ctx, filter, update)
 }
 
-func (r *repo) Enable(ctx context.Context, postUUID string) *i18np.Error {
-	id, err := mongo2.TransformId(postUUID)
+func (r *repo) Enable(ctx context.Context, listingUUID string) *i18np.Error {
+	id, err := mongo2.TransformId(listingUUID)
 	if err != nil {
 		return r.factory.Errors.InvalidUUID()
 	}
@@ -166,8 +166,8 @@ func (r *repo) Enable(ctx context.Context, postUUID string) *i18np.Error {
 	return r.helper.UpdateOne(ctx, filter, update)
 }
 
-func (r *repo) MarkValid(ctx context.Context, postUUID string) *i18np.Error {
-	id, err := mongo2.TransformId(postUUID)
+func (r *repo) MarkValid(ctx context.Context, listingUUID string) *i18np.Error {
+	id, err := mongo2.TransformId(listingUUID)
 	if err != nil {
 		return r.factory.Errors.InvalidUUID()
 	}
@@ -186,8 +186,8 @@ func (r *repo) MarkValid(ctx context.Context, postUUID string) *i18np.Error {
 	return r.helper.UpdateOne(ctx, filter, update)
 }
 
-func (r *repo) MarkInvalid(ctx context.Context, postUUID string) *i18np.Error {
-	id, err := mongo2.TransformId(postUUID)
+func (r *repo) MarkInvalid(ctx context.Context, listingUUID string) *i18np.Error {
+	id, err := mongo2.TransformId(listingUUID)
 	if err != nil {
 		return r.factory.Errors.InvalidUUID()
 	}
@@ -204,8 +204,8 @@ func (r *repo) MarkInvalid(ctx context.Context, postUUID string) *i18np.Error {
 	return r.helper.UpdateOne(ctx, filter, update)
 }
 
-func (r *repo) ReOrder(ctx context.Context, postUUID string, order int) *i18np.Error {
-	id, err := mongo2.TransformId(postUUID)
+func (r *repo) ReOrder(ctx context.Context, listingUUID string, order int) *i18np.Error {
+	id, err := mongo2.TransformId(listingUUID)
 	if err != nil {
 		return r.factory.Errors.InvalidUUID()
 	}
@@ -263,8 +263,8 @@ func (r *repo) GetByUUID(ctx context.Context, uuid string) (*Entity, bool, *i18n
 	return *e, true, nil
 }
 
-func (r *repo) AdminView(ctx context.Context, postUUID string) (*Entity, *i18np.Error) {
-	id, _err := mongo2.TransformId(postUUID)
+func (r *repo) AdminView(ctx context.Context, listingUUID string) (*Entity, *i18np.Error) {
+	id, _err := mongo2.TransformId(listingUUID)
 	if _err != nil {
 		return nil, r.factory.Errors.InvalidUUID()
 	}
@@ -281,17 +281,17 @@ func (r *repo) AdminView(ctx context.Context, postUUID string) (*Entity, *i18np.
 	return *e, nil
 }
 
-func (r *repo) FilterByOwner(ctx context.Context, ownerNickName string, filter FilterEntity, listConfig list.Config) (*list.Result[*Entity], *i18np.Error) {
-	ownerFilter := r.filterToBson(filter, ownerNickName)
-	l, err := r.helper.GetListFilter(ctx, ownerFilter, r.sort(r.filterOptions(listConfig), filter))
+func (r *repo) FilterByBusiness(ctx context.Context, businessNickName string, filter FilterEntity, listConfig list.Config) (*list.Result[*Entity], *i18np.Error) {
+	businessFilter := r.filterToBson(filter, businessNickName)
+	l, err := r.helper.GetListFilter(ctx, businessFilter, r.sort(r.filterOptions(listConfig), filter))
 	if err != nil {
 		return nil, err
 	}
-	filtered, _err := r.helper.GetFilterCount(ctx, ownerFilter)
+	filtered, _err := r.helper.GetFilterCount(ctx, businessFilter)
 	if _err != nil {
 		return nil, _err
 	}
-	total, _err := r.helper.GetFilterCount(ctx, r.ownerFilter(ownerNickName))
+	total, _err := r.helper.GetFilterCount(ctx, r.businessFilter(businessNickName))
 	if _err != nil {
 		return nil, _err
 	}
@@ -329,11 +329,11 @@ func (r *repo) Filter(ctx context.Context, filter FilterEntity, listConfig list.
 	}, nil
 }
 
-func (r *repo) ListMy(ctx context.Context, ownerUUID string, listConfig list.Config) (*list.Result[*Entity], *i18np.Error) {
+func (r *repo) ListMy(ctx context.Context, businessUUID string, listConfig list.Config) (*list.Result[*Entity], *i18np.Error) {
 	filter := bson.M{
-		ownerField(ownerFields.UUID): ownerUUID,
+		businessField(businessFields.UUID): businessUUID,
 	}
-	l, err := r.helper.GetListFilter(ctx, filter, r.ownerListOptions(listConfig))
+	l, err := r.helper.GetListFilter(ctx, filter, r.businessListOptions(listConfig))
 	if err != nil {
 		return nil, err
 	}
@@ -355,7 +355,7 @@ func (r *repo) ListMy(ctx context.Context, ownerUUID string, listConfig list.Con
 	}, nil
 }
 
-func (r *repo) ownerListOptions(listConfig list.Config) *options.FindOptions {
+func (r *repo) businessListOptions(listConfig list.Config) *options.FindOptions {
 	opts := &options.FindOptions{}
 	opts.SetProjection(bson.M{
 		fields.UUID:      1,
@@ -376,7 +376,7 @@ func (r *repo) adminListOptions(listConfig list.Config) *options.FindOptions {
 	opts := &options.FindOptions{}
 	opts.SetProjection(bson.M{
 		fields.UUID:          1,
-		fields.Owner:         1,
+		fields.Business:      1,
 		fields.Images:        1,
 		fields.Meta:          1,
 		fields.CategoryUUIDs: 1,
@@ -398,7 +398,7 @@ func (r *repo) filterOptions(listConfig list.Config) *options.FindOptions {
 	opts := &options.FindOptions{}
 	opts.SetProjection(bson.M{
 		fields.UUID:          1,
-		fields.Owner:         1,
+		fields.Business:      1,
 		fields.Images:        1,
 		fields.Meta:          1,
 		fields.CategoryUUIDs: 1,
@@ -415,7 +415,7 @@ func (r *repo) viewOptions() *options.FindOneOptions {
 	opts := &options.FindOneOptions{}
 	opts.SetProjection(bson.M{
 		fields.UUID:          1,
-		fields.Owner:         1,
+		fields.Business:      1,
 		fields.Images:        1,
 		fields.Meta:          1,
 		fields.CategoryUUIDs: 1,
