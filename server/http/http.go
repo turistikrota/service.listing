@@ -95,6 +95,7 @@ func (h srv) Listen() error {
 }
 
 func (h srv) currentBusinessAccess(roles ...string) fiber.Handler {
+	roles = append(roles, config.Roles.Business.Super)
 	return current_business.New(current_business.Config{
 		Roles: roles,
 	})
