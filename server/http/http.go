@@ -96,19 +96,12 @@ func (h srv) Listen() error {
 
 func (h srv) currentBusinessAccess(roles ...string) fiber.Handler {
 	return current_business.New(current_business.Config{
-		I18n:         h.i18n,
-		Roles:        roles,
-		RequiredKey:  Messages.Error.RequiredBusinessSelect,
-		ForbiddenKey: Messages.Error.ForbiddenBusinessSelect,
+		Roles: roles,
 	})
 }
 
 func (h srv) currentAccountAccess() fiber.Handler {
-	return current_account.New(current_account.Config{
-		I18n:         h.i18n,
-		RequiredKey:  Messages.Error.RequiredAccountSelect,
-		ForbiddenKey: Messages.Error.ForbiddenAccountSelect,
-	})
+	return current_account.New(current_account.Config{})
 }
 
 func (h srv) parseBody(c *fiber.Ctx, d interface{}) {
