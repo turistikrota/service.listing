@@ -15,9 +15,14 @@ type listingRoles struct {
 	View    string
 }
 
+type businessRoles struct {
+	Super string
+}
+
 type roles struct {
 	base_roles.Roles
-	Listing listingRoles
+	Listing  listingRoles
+	Business businessRoles
 }
 
 var Roles = roles{
@@ -33,5 +38,8 @@ var Roles = roles{
 		Restore: "listing.restore",
 		List:    "listing.list",
 		View:    "listing.view",
+	},
+	Business: businessRoles{
+		Super: "business.super",
 	},
 }

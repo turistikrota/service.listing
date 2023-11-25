@@ -11,6 +11,8 @@ github.com/cilloparch/cillop v0.0.7 h1:n8lSf/eF0W6ZU2j6KuZWDn1y4ZO4PMntcN3OHlltH
 github.com/cilloparch/cillop v0.0.7/go.mod h1:v4nfj7WcBGIqiRt3ffyncw9KVFaT03zFMSCv1bdtmug=
 github.com/cilloparch/cillop v0.0.8 h1:v861lGEYpYlMOSuS+kUfT5VGAf/0YWzPdC3VZmS6G5k=
 github.com/cilloparch/cillop v0.0.8/go.mod h1:v4nfj7WcBGIqiRt3ffyncw9KVFaT03zFMSCv1bdtmug=
+github.com/cilloparch/cillop v0.0.9 h1:XnndphcfC+T26VyavFXTPdXdn3aYbwMrW2yRSTJu6Vw=
+github.com/cilloparch/cillop v0.0.9/go.mod h1:v4nfj7WcBGIqiRt3ffyncw9KVFaT03zFMSCv1bdtmug=
 github.com/davecgh/go-spew v1.1.0/go.mod h1:J7Y8YcW2NihsgmVo/mv3lAwl/skON4iLHjSsI+c5H38=
 github.com/davecgh/go-spew v1.1.1 h1:vj9j/u1bqnvCEfJOwUhtlOARqs3+rkHYY13jYWTU97c=
 github.com/davecgh/go-spew v1.1.1/go.mod h1:J7Y8YcW2NihsgmVo/mv3lAwl/skON4iLHjSsI+c5H38=
@@ -101,6 +103,8 @@ github.com/turistikrota/service.shared v0.1.0 h1:Bd+QGRIZ+iFpyGeYiNKuhWY1B3Oejk3
 github.com/turistikrota/service.shared v0.1.0/go.mod h1:N6c7ZRcor79GQla2XYQ1FK1JLpZAuGIMN8aJKRkB7Qw=
 github.com/turistikrota/service.shared v0.1.1 h1:F29Tr0a8t7IcC7WwS5vkTaIxw9/OUHPv8QKpKtgIdQo=
 github.com/turistikrota/service.shared v0.1.1/go.mod h1:N6c7ZRcor79GQla2XYQ1FK1JLpZAuGIMN8aJKRkB7Qw=
+github.com/turistikrota/service.shared v0.1.3 h1:jemGfTitAflyaXzuDV4nVsgY33s5RVjeCr+aIPT1k0o=
+github.com/turistikrota/service.shared v0.1.3/go.mod h1:N6c7ZRcor79GQla2XYQ1FK1JLpZAuGIMN8aJKRkB7Qw=
 github.com/valyala/bytebufferpool v1.0.0 h1:GqA5TC/0021Y/b9FG4Oi9Mr3q7XYx6KllzawFIhcdPw=
 github.com/valyala/bytebufferpool v1.0.0/go.mod h1:6bBcMArwyJ5K/AmCkWv1jt77kVWyCJ6HpOuEn7z0Csc=
 github.com/valyala/fasthttp v1.48.0 h1:oJWvHb9BIZToTQS3MuQ2R3bJZiNSa2KiNdeI8A+79Tc=
