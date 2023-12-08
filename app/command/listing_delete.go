@@ -10,8 +10,9 @@ import (
 )
 
 type ListingDeleteCmd struct {
-	Account     account.Entity `json:"-"`
-	ListingUUID string         `json:"-"`
+	Account          account.Entity `json:"-"`
+	ListingUUID      string         `json:"-"`
+	BusinessNickName string         `json:"-"`
 }
 
 type ListingDeleteRes struct{}
@@ -30,6 +31,7 @@ func NewListingDeleteHandler(repo listing.Repository, events listing.Events) Lis
 				UUID: cmd.Account.UUID,
 				Name: cmd.Account.Name,
 			},
+			BusinessNickName: cmd.BusinessNickName,
 		})
 		return &ListingDeleteRes{}, nil
 	}

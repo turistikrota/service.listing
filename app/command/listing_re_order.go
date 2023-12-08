@@ -10,9 +10,10 @@ import (
 )
 
 type ListingReOrderCmd struct {
-	Account     account.Entity `json:"-"`
-	ListingUUID string         `json:"-"`
-	Order       *int           `json:"order" validate:"required,min=-1,number"`
+	Account          account.Entity `json:"-"`
+	ListingUUID      string         `json:"-"`
+	Order            *int           `json:"order" validate:"required,min=-1,number"`
+	BusinessNickName string         `json:"-"`
 }
 
 type ListingReOrderRes struct{}
@@ -31,7 +32,8 @@ func NewListingReOrderHandler(repo listing.Repository, events listing.Events) Li
 				UUID: cmd.Account.UUID,
 				Name: cmd.Account.Name,
 			},
-			NewOrder: *cmd.Order,
+			NewOrder:         *cmd.Order,
+			BusinessNickName: cmd.BusinessNickName,
 		})
 		return &ListingReOrderRes{}, nil
 	}

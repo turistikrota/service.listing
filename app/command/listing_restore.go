@@ -10,8 +10,9 @@ import (
 )
 
 type ListingRestoreCmd struct {
-	Account     account.Entity `json:"-"`
-	ListingUUID string         `json:"-"`
+	Account          account.Entity `json:"-"`
+	ListingUUID      string         `json:"-"`
+	BusinessNickName string         `json:"-"`
 }
 
 type ListingRestoreRes struct{}
@@ -30,6 +31,7 @@ func NewListingRestoreHandler(repo listing.Repository, events listing.Events) Li
 				UUID: cmd.Account.UUID,
 				Name: cmd.Account.Name,
 			},
+			BusinessNickName: cmd.BusinessNickName,
 		})
 		return &ListingRestoreRes{}, nil
 	}
