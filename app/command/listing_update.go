@@ -60,6 +60,7 @@ func NewListingUpdateHandler(factory listing.Factory, repo listing.Repository, e
 				UUID: cmd.Account.UUID,
 				Name: cmd.Account.Name,
 			},
+			BusinessNickName: cmd.Business.NickName,
 		})
 		return &ListingUpdateRes{}, nil
 	}
