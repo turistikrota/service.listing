@@ -202,10 +202,10 @@ func (h srv) ListingFilter(ctx *fiber.Ctx) error {
 	filter := listing.FilterEntity{}
 	filter.Locale = l
 	h.parseBody(ctx, &filter)
-	query := query.ListingFilterByBusinessQuery{}
+	query := query.ListingFilterQuery{}
 	query.Pagination = &pagination
 	query.FilterEntity = filter
-	res, err := h.app.Queries.ListingFilterByBusiness(ctx.UserContext(), query)
+	res, err := h.app.Queries.ListingFilter(ctx.UserContext(), query)
 	if err != nil {
 		return result.Error(h.i18n.TranslateFromError(*err, l, a))
 	}
