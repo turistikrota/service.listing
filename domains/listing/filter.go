@@ -54,8 +54,8 @@ type FilterValidation struct {
 }
 
 type FilterFeature struct {
-	CategoryInputUUID string
-	Value             interface{}
+	CategoryInputUUID string      `json:"categoryInputUUID" validate:"required,object_id"`
+	Value             interface{} `json:"value" validate:"required"`
 }
 
 type (
