@@ -16,7 +16,7 @@ type FilterEntity struct {
 	Distance     *float64          `json:"distance,omitempty" validate:"omitempty,gt=6,lt=16"`
 	Features     []*FilterFeature  `json:"features,omitempty" validate:"omitempty,dive"`
 	Categories   []string          `json:"categories,omitempty" validate:"omitempty,dive,object_id"`
-	Sort         Sort              `json:"sort,omitempty" validate:"omitempty,oneof=most_recent nearest"`
+	Sort         Sort              `json:"sort,omitempty" validate:"omitempty,oneof=most_recent nearest price"`
 	Order        Order             `json:"order,omitempty" validate:"omitempty,oneof=asc desc"`
 	StartDate    *time.Time        `json:"-"`
 	EndDate      *time.Time        `json:"-"`
@@ -36,18 +36,14 @@ func (e *FilterEntity) Parse() {
 }
 
 type FilterPrice struct {
-	Min          float64    `json:"min" validate:"omitempty,gt=0"`
-	Max          float64    `json:"max" validate:"omitempty,gt=0"`
-	StartDateStr string     `json:"start_date" validate:"omitempty,datetime=2006-01-02"`
-	EndDateStr   string     `json:"end_date" validate:"omitempty,datetime=2006-01-02"`
-	StartDate    *time.Time `json:"-"`
-	EndDate      *time.Time `json:"-"`
+	Min *float64 `json:"min" validate:"omitempty,gt=0"`
+	Max *float64 `json:"max" validate:"omitempty,gt=0"`
 }
 
 type FilterValidation struct {
-	Adult     int   `json:"adult" validate:"omitempty,gt=0"`
-	Kid       int   `json:"kid" validate:"omitempty,gt=0"`
-	Baby      int   `json:"baby" validate:"omitempty,gt=0"`
+	Adult     *int  `json:"adult" validate:"omitempty,gt=0"`
+	Kid       *int  `json:"kid" validate:"omitempty,gt=0"`
+	Baby      *int  `json:"baby" validate:"omitempty,gt=0"`
 	Family    *bool `json:"family" validate:"omitempty"`
 	Pet       *bool `json:"pet" validate:"omitempty"`
 	Smoke     *bool `json:"smoke" validate:"omitempty"`
@@ -70,6 +66,7 @@ type (
 const (
 	SortByMostRecent Sort = "most_recent"
 	SortByNearest    Sort = "nearest"
+	SortByPrice      Sort = "price"
 )
 
 const (
@@ -79,18 +76,8 @@ const (
 
 func (s Sort) IsValid() bool {
 	return s == SortByMostRecent ||
-		s == SortByNearest
-}
-
-func (p *FilterPrice) Parse() {
-	if p.StartDateStr != "" {
-		t, _ := time.Parse("2006-01-02", p.StartDateStr)
-		p.StartDate = &t
-	}
-	if p.EndDateStr != "" {
-		t, _ := time.Parse("2006-01-02", p.EndDateStr)
-		p.EndDate = &t
-	}
+		s == SortByNearest ||
+		s == SortByPrice
 }
 
 func (o Order) IsValid() bool {
@@ -220,7 +207,7 @@ func (r *repo) filterByQuery(list []bson.M, filter FilterEntity) []bson.M {
 func (r *repo) filterByValidation(list []bson.M, filter FilterEntity) []bson.M {
 	if filter.Validation != nil {
 		validationFilters := make([]bson.M, 0)
-		if filter.Validation.Adult != 0 {
+		if filter.Validation.Adult != nil {
 			validationFilters = append(validationFilters, bson.M{
 				"$and": []bson.M{
 					{
@@ -236,7 +223,7 @@ func (r *repo) filterByValidation(list []bson.M, filter FilterEntity) []bson.M {
 				},
 			})
 		}
-		if filter.Validation.Kid != 0 {
+		if filter.Validation.Kid != nil {
 			validationFilters = append(validationFilters, bson.M{
 				"$and": []bson.M{
 					{
@@ -252,17 +239,17 @@ func (r *repo) filterByValidation(list []bson.M, filter FilterEntity) []bson.M {
 				},
 			})
 		}
-		if filter.Validation.Baby != 0 {
+		if filter.Validation.Baby != nil {
 			validationFilters = append(validationFilters, bson.M{
 				"$and": []bson.M{
 					{
 						validationField(validationFields.MinBaby): bson.M{
-							"$lte": filter.Validation.Baby,
+							"$lte": *filter.Validation.Baby,
 						},
 					},
 					{
 						validationField(validationFields.MaxBaby): bson.M{
-							"$gte": filter.Validation.Baby,
+							"$gte": *filter.Validation.Baby,
 						},
 					},
 				},
@@ -336,33 +323,32 @@ func (r *repo) filterByValidation(list []bson.M, filter FilterEntity) []bson.M {
 
 func (r *repo) filterByPrice(list []bson.M, filter FilterEntity) []bson.M {
 	if filter.Price != nil {
-		filter.Price.Parse()
 		priceFilters := make([]bson.M, 0)
-		if filter.Price.Min != 0 {
+		if filter.Price.Min != nil {
 			priceFilters = append(priceFilters, bson.M{
 				priceField(priceFields.Price): bson.M{
 					"$gte": filter.Price.Min,
 				},
 			})
 		}
-		if filter.Price.Max != 0 {
+		if filter.Price.Max != nil {
 			priceFilters = append(priceFilters, bson.M{
 				priceField(priceFields.Price): bson.M{
 					"$lte": filter.Price.Max,
 				},
 			})
 		}
-		if filter.Price.StartDate != nil {
+		if filter.StartDate != nil {
 			priceFilters = append(priceFilters, bson.M{
 				priceField(priceFields.StartDate): bson.M{
-					"$gte": filter.Price.StartDate,
+					"$gte": filter.StartDate,
 				},
 			})
 		}
-		if filter.Price.EndDate != nil {
+		if filter.EndDate != nil {
 			priceFilters = append(priceFilters, bson.M{
 				priceField(priceFields.EndDate): bson.M{
-					"$lte": filter.Price.EndDate,
+					"$lte": filter.EndDate,
 				},
 			})
 		}
@@ -391,6 +377,8 @@ func (r *repo) sort(opts *options.FindOptions, filter FilterEntity) *options.Fin
 		field = fields.UpdatedAt
 	case SortByNearest:
 		field = locationField(locationFields.Coordinates)
+	case SortByPrice:
+		field = priceField(priceFields.Price)
 	}
 	opts.SetSort(bson.D{{Key: field, Value: order}})
 	return opts

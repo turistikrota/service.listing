@@ -43,7 +43,6 @@ type metaFieldsType struct {
 	Description string
 	Title       string
 	Slug        string
-	MarkdownURL string
 }
 
 type featureFieldsType struct {
@@ -102,7 +101,7 @@ var fields = fieldsType{
 	Business:      "business",
 	Images:        "images",
 	Meta:          "meta",
-	CategoryUUIDs: "category_uuids",
+	CategoryUUIDs: "categoryUUIDs",
 	Features:      "features",
 	Prices:        "prices",
 	Location:      "location",
@@ -118,7 +117,7 @@ var fields = fieldsType{
 
 var businessFields = businessFieldsType{
 	UUID:     "uuid",
-	NickName: "nick_name",
+	NickName: "nickName",
 }
 
 var imageFields = imageFieldsType{
@@ -131,7 +130,6 @@ var metaFields = metaFieldsType{
 	Description: "description",
 	Title:       "title",
 	Slug:        "slug",
-	MarkdownURL: "markdown_url",
 }
 
 var featureFields = featureFieldsType{
