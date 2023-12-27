@@ -339,6 +339,20 @@ func (r *repo) filterByPrice(list []bson.M, filter FilterEntity) []bson.M {
 				},
 			},
 		})
+		totalDays := filter.EndDate.Sub(*filter.StartDate).Hours() / 24
+		priceFilters = append(priceFilters, bson.M{
+			"$and": []bson.M{
+				{
+					validationField(validationFields.MinDate): bson.M{
+						"$lte": totalDays,
+					},
+				},
+				{
+					validationField(validationFields.MaxDate): bson.M{
+						"$gte": totalDays,
+					},
+				},
+			}})
 	}
 	if filter.Price != nil {
 		if filter.Price.Min != nil {
