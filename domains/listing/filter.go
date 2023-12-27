@@ -107,6 +107,7 @@ func (e *FilterEntity) GetPerfectDistance() float64 {
 }
 
 func (r *repo) filterToBson(filter FilterEntity, nickName string) bson.M {
+	filter.Parse()
 	list := make([]bson.M, 0)
 	if nickName != "" {
 		list = r.filterByBusiness(list, nickName)
@@ -322,8 +323,24 @@ func (r *repo) filterByValidation(list []bson.M, filter FilterEntity) []bson.M {
 }
 
 func (r *repo) filterByPrice(list []bson.M, filter FilterEntity) []bson.M {
+	priceFilters := make([]bson.M, 0)
+	if filter.StartDate != nil && filter.EndDate != nil && filter.StartDate.Before(*filter.EndDate) {
+		priceFilters = append(priceFilters, bson.M{
+			"$and": []bson.M{
+				{
+					priceField(priceFields.StartDate): bson.M{
+						"$lte": filter.StartDate,
+					},
+				},
+				{
+					priceField(priceFields.EndDate): bson.M{
+						"$gte": filter.EndDate,
+					},
+				},
+			},
+		})
+	}
 	if filter.Price != nil {
-		priceFilters := make([]bson.M, 0)
 		if filter.Price.Min != nil {
 			priceFilters = append(priceFilters, bson.M{
 				priceField(priceFields.Price): bson.M{
@@ -338,29 +355,15 @@ func (r *repo) filterByPrice(list []bson.M, filter FilterEntity) []bson.M {
 				},
 			})
 		}
-		if filter.StartDate != nil {
-			priceFilters = append(priceFilters, bson.M{
-				priceField(priceFields.StartDate): bson.M{
-					"$gte": filter.StartDate,
-				},
+	}
+	filterLen := len(priceFilters)
+	if filterLen > 0 {
+		if filterLen == 1 {
+			list = append(list, priceFilters[0])
+		} else {
+			list = append(list, bson.M{
+				"$and": priceFilters,
 			})
-		}
-		if filter.EndDate != nil {
-			priceFilters = append(priceFilters, bson.M{
-				priceField(priceFields.EndDate): bson.M{
-					"$lte": filter.EndDate,
-				},
-			})
-		}
-		filterLen := len(priceFilters)
-		if filterLen > 0 {
-			if filterLen == 1 {
-				list = append(list, priceFilters[0])
-			} else {
-				list = append(list, bson.M{
-					"$and": priceFilters,
-				})
-			}
 		}
 	}
 	return list
