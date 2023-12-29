@@ -21,6 +21,8 @@ validation_gtefield = "This field must be greater than {{.Param}}."
 validation_gtfield = "This field must be greater than {{.Param}}."
 validation_ltefield = "This field must be less than {{.Param}}."
 validation_ltfield = "This field must be less than {{.Param}}."
+validation_lt = "This field must be less than {{.Param}}."
+validation_gt = "This field must be greater than {{.Param}}."
 
 error_invalid_request_body = "Invalid request body."
 error_invalid_request_query = "Invalid request query."
