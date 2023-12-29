@@ -13,16 +13,12 @@ type ListingPriceValidationDto struct {
 }
 
 type ListDto struct {
-	UUID          string          `json:"uuid" bson:"_id,omitempty"`
-	Business      Business        `json:"business" bson:"business"`
-	Images        []Image         `json:"images" bson:"images"`
-	Meta          map[Locale]Meta `json:"meta" bson:"meta"`
-	CategoryUUIDs []string        `json:"categoryUUIDs" bson:"categoryUUIDs"`
-	Features      []Feature       `json:"features" bson:"features"`
-	Prices        []Price         `json:"prices" bson:"prices"`
-	Location      Location        `json:"location" bson:"location"`
-	Boosts        []Boost         `json:"boosts" bson:"boosts"`
-	Validation    Validation      `json:"validation" bson:"validation"`
+	UUID     string          `json:"uuid" bson:"_id,omitempty"`
+	Business Business        `json:"business" bson:"business"`
+	Images   []Image         `json:"images" bson:"images"`
+	Meta     map[Locale]Meta `json:"meta" bson:"meta"`
+	Prices   []Price         `json:"prices" bson:"prices"`
+	Location Location        `json:"location" bson:"location"`
 }
 
 type DetailDto struct {
@@ -93,16 +89,12 @@ func (d *ListingPriceValidationDto) ToEntity() Price {
 
 func (e *Entity) ToList() *ListDto {
 	return &ListDto{
-		UUID:          e.UUID,
-		Business:      e.Business,
-		Images:        e.Images,
-		Meta:          e.Meta,
-		CategoryUUIDs: e.CategoryUUIDs,
-		Features:      e.Features,
-		Prices:        e.Prices,
-		Location:      e.Location,
-		Boosts:        e.Boosts,
-		Validation:    *e.Validation,
+		UUID:     e.UUID,
+		Business: e.Business,
+		Images:   e.Images,
+		Meta:     e.Meta,
+		Prices:   e.Prices,
+		Location: e.Location,
 	}
 }
 
