@@ -90,7 +90,7 @@ func (e *FilterEntity) GetPerfectDistance() float64 {
 		if e.Coordinates != nil && len(e.Coordinates) == 2 {
 			return 60
 		}
-		return 100
+		return 500
 	}
 	distances := map[float64]float64{
 		7:  500,
@@ -109,7 +109,7 @@ func (e *FilterEntity) GetPerfectDistance() float64 {
 	if distance, ok := distances[*e.Distance]; ok {
 		return distance
 	}
-	return 60
+	return 500
 }
 
 func (r *repo) filterToBson(filter FilterEntity, nickName string) bson.M {
