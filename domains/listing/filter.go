@@ -13,7 +13,7 @@ type FilterEntity struct {
 	Price        *FilterPrice      `json:"price,omitempty" validate:"omitempty"`
 	Validation   *FilterValidation `json:"validation,omitempty" validate:"omitempty"`
 	Coordinates  []float64         `json:"coordinates,omitempty" validate:"omitempty,min=2,max=2"`
-	Distance     *float64          `json:"distance,omitempty" validate:"omitempty,gt=6,lt=16"`
+	Distance     *float64          `json:"distance,omitempty" validate:"omitempty,gt=6,lt=19"`
 	Features     []*FilterFeature  `json:"features,omitempty" validate:"omitempty,dive"`
 	Categories   []string          `json:"categories,omitempty" validate:"omitempty,dive,object_id"`
 	Sort         Sort              `json:"sort,omitempty" validate:"omitempty,oneof=most_recent nearest price"`
@@ -87,23 +87,29 @@ func (o Order) IsValid() bool {
 
 func (e *FilterEntity) GetPerfectDistance() float64 {
 	if e.Distance == nil {
-		return 100
+		if e.Coordinates != nil && len(e.Coordinates) == 2 {
+			return 60
+		}
+		return 500
 	}
 	distances := map[float64]float64{
 		7:  500,
 		8:  300,
 		9:  200,
 		10: 100,
-		11: 50,
-		12: 20,
-		13: 10,
-		14: 5,
-		15: 3,
+		11: 80,
+		12: 60,
+		13: 40,
+		14: 20,
+		15: 10,
+		16: 5,
+		17: 3,
+		18: 2,
 	}
 	if distance, ok := distances[*e.Distance]; ok {
 		return distance
 	}
-	return 10
+	return 500
 }
 
 func (r *repo) filterToBson(filter FilterEntity, nickName string) bson.M {
