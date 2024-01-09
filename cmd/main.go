@@ -9,6 +9,7 @@ import (
 	"github.com/turistikrota/service.listing/config"
 	event_stream "github.com/turistikrota/service.listing/server/event-stream"
 	"github.com/turistikrota/service.listing/server/http"
+	"github.com/turistikrota/service.listing/server/rpc"
 	"github.com/turistikrota/service.listing/service"
 	"github.com/turistikrota/service.shared/auth/session"
 	"github.com/turistikrota/service.shared/auth/token"
@@ -74,6 +75,12 @@ func main() {
 		Engine: eventEngine,
 		Topics: cnf.Topics,
 	})
+	rpc := rpc.New(rpc.Config{
+		Port: cnf.Grpc.Port,
+		App:  app,
+		I18n: *i18n,
+	})
+	go rpc.Listen()
 	go eventStream.Listen()
 	http.Listen()
 }

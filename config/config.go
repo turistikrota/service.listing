@@ -22,6 +22,10 @@ type Http struct {
 	Group string `env:"SERVER_GROUP" envDefault:"account"`
 }
 
+type Grpc struct {
+	Port int `env:"GRPC_PORT" envDefault:"3001"`
+}
+
 type Redis struct {
 	Host string `env:"REDIS_HOST"`
 	Port string `env:"REDIS_PORT"`
@@ -98,6 +102,7 @@ type App struct {
 	DB       struct {
 		Listing MongoListing
 	}
+	Grpc        Grpc
 	Http        Http
 	HttpHeaders HttpHeaders
 	I18n        I18n
