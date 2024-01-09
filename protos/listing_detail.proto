@@ -1,0 +1,31 @@
+syntax = "proto3";
+
+package listing;
+
+option go_package = "github.com/turistikrota/service.listing/protos/listing";
+
+message Image {
+    string url = 1;
+    int32 order = 2;
+}
+
+message Entity {
+    string uuid = 1;
+    string title = 2;
+    string slug = 3;
+    string description = 4;
+    string business_name = 5;
+    string city_name = 6;
+    string district_name = 7;
+    string country_name = 8;
+    repeated Image images = 9;
+}
+
+message GetEntityRequest {
+    string uuid = 1;
+    string locale = 2;
+}
+
+service ListingService {
+    rpc GetEntity (GetEntityRequest) returns (Entity) {}
+}
