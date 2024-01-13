@@ -82,7 +82,7 @@ func (h srv) Listen() error {
 
 			// Admin routes
 			admin := router.Group("/admin", h.currentUserAccess(), h.requiredAccess(), h.adminRoute())
-			admin.Get("/:uuid", h.wrapWithTimeout(h.ListingViewAdmin))
+			admin.Get("/:uuid", h.adminRoute(config.Roles.Listing.Super, config.Roles.Listing.View), h.wrapWithTimeout(h.ListingViewAdmin))
 
 			// Public routes
 			router.Get("/:slug", h.rateLimit(), h.wrapWithTimeout(h.ListingView))
