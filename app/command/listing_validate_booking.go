@@ -101,6 +101,7 @@ func NewListingValidateBookingHandler(factory listing.Factory, repo listing.Repo
 			BusinessName: p.Business.NickName,
 			TotalPrice:   *totalPrice,
 			PricePerDays: dates,
+			Currency:     p.Currency,
 		})
 		return &ListingValidateBookingRes{}, nil
 	}

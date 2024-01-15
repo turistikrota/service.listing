@@ -25,6 +25,7 @@ type ListingCreateCmd struct {
 	Location      *listing.Location                   `json:"location" validate:"required,dive"`
 	Boosts        []listing.Boost                     `json:"boosts" validate:"omitempty,min=0,max=10,dive,required"`
 	Validation    *listing.Validation                 `json:"validation" validate:"required,dive"`
+	Currency      string                              `json:"currency" validate:"required,oneof=TRY USD EUR"`
 }
 
 type ListingCreateRes struct {
@@ -45,6 +46,7 @@ func NewListingCreateHandler(factory listing.Factory, repo listing.Repository, e
 			Location:      *cmd.Location,
 			Boosts:        cmd.Boosts,
 			Validation:    cmd.Validation,
+			Currency:      listing.Currency(cmd.Currency),
 			ForCreate:     true,
 		})
 		err := factory.Validate(*e)

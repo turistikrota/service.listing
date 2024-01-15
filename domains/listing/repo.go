@@ -83,6 +83,7 @@ func (r *repo) Update(ctx context.Context, e *Entity) *i18np.Error {
 			fields.Validation:    e.Validation,
 			fields.Order:         e.Order,
 			fields.IsValid:       e.IsValid,
+			fields.Currency:      e.Currency,
 			fields.UpdatedAt:     time.Now(),
 		},
 	}
@@ -366,6 +367,7 @@ func (r *repo) businessListOptions(listConfig list.Config) *options.FindOptions 
 		fields.Order:     1,
 		fields.IsDeleted: 1,
 		fields.IsActive:  1,
+		fields.Currency:  1,
 		fields.IsValid:   1,
 		fields.CreatedAt: 1,
 	}).SetSort(bson.D{{Key: fields.Order, Value: 1}}).SetSkip(listConfig.Offset).SetLimit(listConfig.Limit)
@@ -387,6 +389,7 @@ func (r *repo) adminListOptions(listConfig list.Config) *options.FindOptions {
 		fields.Validation:    1,
 		fields.Order:         1,
 		fields.IsDeleted:     1,
+		fields.Currency:      1,
 		fields.IsActive:      1,
 		fields.IsValid:       1,
 		fields.CreatedAt:     1,
@@ -406,6 +409,7 @@ func (r *repo) filterOptions(listConfig list.Config) *options.FindOptions {
 		fields.Features:      1,
 		fields.Prices:        1,
 		fields.Location:      1,
+		fields.Currency:      1,
 		fields.Boosts:        1,
 	}).SetSkip(listConfig.Offset).SetLimit(listConfig.Limit)
 	return opts
@@ -423,6 +427,7 @@ func (r *repo) viewOptions() *options.FindOneOptions {
 		fields.Features:      1,
 		fields.Prices:        1,
 		fields.Location:      1,
+		fields.Currency:      1,
 		fields.Boosts:        1,
 		fields.UpdatedAt:     1,
 		fields.CreatedAt:     1,
