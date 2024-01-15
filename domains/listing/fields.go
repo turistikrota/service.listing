@@ -12,6 +12,7 @@ type fieldsType struct {
 	Boosts        string
 	Validation    string
 	Order         string
+	Currency      string
 	IsActive      string
 	IsDeleted     string
 	IsValid       string
@@ -55,7 +56,6 @@ type priceFieldsType struct {
 	StartDate string
 	EndDate   string
 	Price     string
-	Currency  string
 }
 
 type locationFieldsType struct {
@@ -107,6 +107,7 @@ var fields = fieldsType{
 	Location:      "location",
 	Boosts:        "boosts",
 	Order:         "order",
+	Currency:      "currency",
 	Validation:    "validation",
 	IsActive:      "is_active",
 	IsDeleted:     "is_deleted",
@@ -142,7 +143,6 @@ var priceFields = priceFieldsType{
 	StartDate: "start_date",
 	EndDate:   "end_date",
 	Price:     "price",
-	Currency:  "currency",
 }
 
 var locationFields = locationFieldsType{

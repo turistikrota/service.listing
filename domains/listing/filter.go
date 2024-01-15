@@ -11,6 +11,7 @@ type FilterEntity struct {
 	Locale       string            `json:"-"`
 	Query        string            `json:"query,omitempty" validate:"omitempty,max=100"`
 	Price        *FilterPrice      `json:"price,omitempty" validate:"omitempty"`
+	Currency     Currency          `json:"currency,omitempty" validate:"omitempty,oneof=TRY USD EUR"`
 	Validation   *FilterValidation `json:"validation,omitempty" validate:"omitempty"`
 	Coordinates  []float64         `json:"coordinates,omitempty" validate:"omitempty,min=2,max=2"`
 	Distance     *float64          `json:"distance,omitempty" validate:"omitempty,gt=6,lt=19"`
@@ -375,6 +376,11 @@ func (r *repo) filterByPrice(list []bson.M, filter FilterEntity) []bson.M {
 				},
 			})
 		}
+	}
+	if filter.Currency != "" {
+		priceFilters = append(priceFilters, bson.M{
+			fields.Currency: filter.Currency,
+		})
 	}
 	filterLen := len(priceFilters)
 	if filterLen > 0 {

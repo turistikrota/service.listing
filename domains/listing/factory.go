@@ -32,6 +32,7 @@ type NewConfig struct {
 	Boosts        []Boost
 	Validation    *Validation
 	ForCreate     bool
+	Currency      Currency
 }
 
 func (f Factory) New(cnf NewConfig) *Entity {
@@ -50,6 +51,7 @@ func (f Factory) New(cnf NewConfig) *Entity {
 		Validation:    cnf.Validation,
 		Location:      cnf.Location,
 		Boosts:        cnf.Boosts,
+		Currency:      cnf.Currency,
 		IsActive:      false,
 		IsDeleted:     false,
 		IsValid:       false,

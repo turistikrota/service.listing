@@ -65,6 +65,7 @@ type (
 		ListingUUID  string        `json:"listing_uuid"`
 		BusinessUUID string        `json:"business_uuid"`
 		BusinessName string        `json:"business_name"`
+		Currency     Currency      `json:"currency"`
 		TotalPrice   float64       `json:"total_price"`
 		PricePerDays []PricePerDay `json:"price_per_days"`
 	}

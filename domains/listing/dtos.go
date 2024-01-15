@@ -18,6 +18,7 @@ type ListDto struct {
 	Images   []Image         `json:"images" bson:"images"`
 	Meta     map[Locale]Meta `json:"meta" bson:"meta"`
 	Prices   []Price         `json:"prices" bson:"prices"`
+	Currency Currency        `json:"currency" bson:"currency"`
 	Location Location        `json:"location" bson:"location"`
 }
 
@@ -31,6 +32,7 @@ type DetailDto struct {
 	Prices        []Price         `json:"prices" bson:"prices"`
 	Location      Location        `json:"location" bson:"location"`
 	Boosts        []Boost         `json:"boosts" bson:"boosts"`
+	Currency      Currency        `json:"currency" bson:"currency"`
 	Validation    Validation      `json:"validation" bson:"validation"`
 	CreatedAt     time.Time       `json:"createdAt" bson:"created_at"`
 	UpdatedAt     time.Time       `json:"updatedAt" bson:"updated_at"`
@@ -51,6 +53,7 @@ type AdminListDto struct {
 	Location      Location        `json:"location" bson:"location"`
 	Boosts        []Boost         `json:"boosts" bson:"boosts"`
 	Validation    Validation      `json:"validation" bson:"validation"`
+	Currency      Currency        `json:"currency" bson:"currency"`
 	Order         *int            `json:"order" bson:"order"`
 	IsActive      bool            `json:"isActive" bson:"is_active"`
 	IsDeleted     bool            `json:"isDeleted" bson:"is_deleted"`
@@ -65,6 +68,7 @@ type BusinessListDto struct {
 	Meta      map[Locale]Meta `json:"meta" bson:"meta"`
 	Location  Location        `json:"location" bson:"location"`
 	Boosts    []Boost         `json:"boosts" bson:"boosts"`
+	Currency  Currency        `json:"currency" bson:"currency"`
 	Order     *int            `json:"order" bson:"order"`
 	IsActive  bool            `json:"isActive" bson:"is_active"`
 	IsDeleted bool            `json:"isDeleted" bson:"is_deleted"`
@@ -95,6 +99,7 @@ func (e *Entity) ToList() *ListDto {
 		Meta:     e.Meta,
 		Prices:   e.Prices,
 		Location: e.Location,
+		Currency: e.Currency,
 	}
 }
 
@@ -109,6 +114,7 @@ func (e *Entity) ToDetail() *DetailDto {
 		Prices:        e.Prices,
 		Location:      e.Location,
 		Boosts:        e.Boosts,
+		Currency:      e.Currency,
 		Validation:    *e.Validation,
 		CreatedAt:     e.CreatedAt,
 		UpdatedAt:     e.UpdatedAt,
@@ -132,6 +138,7 @@ func (e *Entity) ToAdminList() *AdminListDto {
 		Prices:        e.Prices,
 		Location:      e.Location,
 		Boosts:        e.Boosts,
+		Currency:      e.Currency,
 		Validation:    *e.Validation,
 		Order:         e.Order,
 		IsActive:      e.IsActive,
@@ -147,6 +154,7 @@ func (e *Entity) ToBusinessList() *BusinessListDto {
 		UUID:      e.UUID,
 		Images:    e.Images,
 		Meta:      e.Meta,
+		Currency:  e.Currency,
 		Location:  e.Location,
 		Boosts:    e.Boosts,
 		Order:     e.Order,

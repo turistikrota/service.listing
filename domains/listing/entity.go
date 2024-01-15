@@ -13,6 +13,7 @@ type Entity struct {
 	Location      Location        `json:"location" bson:"location" validate:"required,dive,required"`
 	Boosts        []Boost         `json:"boosts" bson:"boosts" validate:"required,min=0,max=30,dive,required"`
 	Validation    *Validation     `json:"validation" bson:"validation" validate:"required,dive,required"`
+	Currency      Currency        `json:"currency" bson:"currency" validate:"required,oneof=TRY USD EUR"`
 	Order         *int            `json:"order" bson:"order" validate:"required,min=0,max=1000"`
 	IsActive      bool            `json:"isActive" bson:"is_active"`
 	IsDeleted     bool            `json:"isDeleted" bson:"is_deleted"`
@@ -82,6 +83,14 @@ type Boost struct {
 	StartDate time.Time `json:"startDate"`
 	EndDate   time.Time `json:"endDate"`
 }
+
+type Currency string
+
+const (
+	CurrencyTRY Currency = "TRY"
+	CurrencyUSD Currency = "USD"
+	CurrencyEUR Currency = "EUR"
+)
 
 type Locale string
 

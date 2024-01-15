@@ -21,6 +21,7 @@ type ListingUpdateCmd struct {
 	Location      *listing.Location                   `json:"location" validate:"required,dive"`
 	Boosts        []listing.Boost                     `json:"boosts" validate:"omitempty,min=0,max=10,dive,required"`
 	Validation    *listing.Validation                 `json:"validation" validate:"required,dive"`
+	Currency      listing.Currency                    `json:"currency" validate:"required,oneof=TRY USD EUR"`
 }
 
 type ListingUpdateRes struct {
@@ -40,6 +41,7 @@ func NewListingUpdateHandler(factory listing.Factory, repo listing.Repository, e
 			Location:      *cmd.Location,
 			Boosts:        cmd.Boosts,
 			Validation:    cmd.Validation,
+			Currency:      cmd.Currency,
 			ForCreate:     false,
 		})
 		err := factory.Validate(*e)
