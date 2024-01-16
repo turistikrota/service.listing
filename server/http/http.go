@@ -83,7 +83,7 @@ func (h srv) Listen() error {
 			admin.Get("/:uuid", h.adminRoute(config.Roles.Listing.Super, config.Roles.Listing.View), h.wrapWithTimeout(h.ListingViewAdmin))
 			admin.Patch("/:uuid/restore", h.adminRoute(config.Roles.Listing.Super, config.Roles.Listing.Restore), h.wrapWithTimeout(h.ListingRestore))
 			admin.Delete("/:uuid", h.adminRoute(config.Roles.Listing.Super, config.Roles.Listing.Delete), h.wrapWithTimeout(h.ListingDelete))
-			router.Post("/", h.adminRoute(config.Roles.Listing.Super, config.Roles.Listing.List), h.wrapWithTimeout(h.ListingAdminFilter))
+			admin.Post("/", h.adminRoute(config.Roles.Listing.Super, config.Roles.Listing.List), h.wrapWithTimeout(h.ListingAdminFilter))
 
 			// Public routes
 			router.Get("/:slug", h.rateLimit(), h.wrapWithTimeout(h.ListingView))
