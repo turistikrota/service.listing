@@ -74,15 +74,16 @@ func (h srv) Listen() error {
 			business.Put("/:uuid", h.currentBusinessAccess(config.Roles.Listing.Super, config.Roles.Listing.Update), h.wrapWithTimeout(h.ListingUpdate))
 			business.Patch("/:uuid/enable", h.currentBusinessAccess(config.Roles.Listing.Super, config.Roles.Listing.Enable), h.wrapWithTimeout(h.ListingEnable))
 			business.Patch("/:uuid/disable", h.currentBusinessAccess(config.Roles.Listing.Super, config.Roles.Listing.Disable), h.wrapWithTimeout(h.ListingDisable))
-			business.Patch("/:uuid/restore", h.currentBusinessAccess(config.Roles.Listing.Super, config.Roles.Listing.Restore), h.wrapWithTimeout(h.ListingRestore))
-			business.Delete("/:uuid", h.currentBusinessAccess(config.Roles.Listing.Super, config.Roles.Listing.Delete), h.wrapWithTimeout(h.ListingDelete))
 			business.Patch("/:uuid/re-order", h.currentBusinessAccess(config.Roles.Listing.Super, config.Roles.Listing.ReOrder), h.wrapWithTimeout(h.ListingReOrder))
 			business.Get("/", h.currentBusinessAccess(config.Roles.Listing.Super, config.Roles.Listing.List), h.wrapWithTimeout(h.ListingListMy))
-			business.Get("/:uuid", h.currentBusinessAccess(config.Roles.Listing.Super, config.Roles.Listing.View), h.wrapWithTimeout(h.ListingViewAdmin))
+			business.Get("/:uuid", h.currentBusinessAccess(config.Roles.Listing.Super, config.Roles.Listing.View), h.wrapWithTimeout(h.ListingViewBusiness))
 
 			// Admin routes
-			admin := router.Group("/admin", h.currentUserAccess(), h.requiredAccess(), h.adminRoute())
+			admin := router.Group("/admin", h.currentUserAccess(), h.requiredAccess())
 			admin.Get("/:uuid", h.adminRoute(config.Roles.Listing.Super, config.Roles.Listing.View), h.wrapWithTimeout(h.ListingViewAdmin))
+			admin.Patch("/:uuid/restore", h.adminRoute(config.Roles.Listing.Super, config.Roles.Listing.Restore), h.wrapWithTimeout(h.ListingRestore))
+			admin.Delete("/:uuid", h.adminRoute(config.Roles.Listing.Super, config.Roles.Listing.Delete), h.wrapWithTimeout(h.ListingDelete))
+			admin.Post("/", h.adminRoute(config.Roles.Listing.Super, config.Roles.Listing.List), h.wrapWithTimeout(h.ListingAdminFilter))
 
 			// Public routes
 			router.Get("/:slug", h.rateLimit(), h.wrapWithTimeout(h.ListingView))

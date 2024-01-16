@@ -99,15 +99,9 @@ func (h srv) ListingDisable(ctx *fiber.Ctx) error {
 
 func (h srv) ListingDelete(ctx *fiber.Ctx) error {
 	detail := command.ListingDetailCmd{}
-	a := current_account.Parse(ctx)
 	h.parseParams(ctx, &detail)
 	cmd := command.ListingDeleteCmd{}
 	cmd.ListingUUID = detail.ListingUUID
-	cmd.Account = account.Entity{
-		UUID: current_user.Parse(ctx).UUID,
-		Name: a.Name,
-	}
-	cmd.BusinessNickName = current_business.Parse(ctx).NickName
 	res, err := h.app.Commands.ListingDelete(ctx.UserContext(), cmd)
 	if err != nil {
 		l, a := i18n.GetLanguagesInContext(*h.i18n, ctx)
@@ -138,15 +132,9 @@ func (h srv) ListingReOrder(ctx *fiber.Ctx) error {
 
 func (h srv) ListingRestore(ctx *fiber.Ctx) error {
 	detail := command.ListingDetailCmd{}
-	a := current_account.Parse(ctx)
 	h.parseParams(ctx, &detail)
 	cmd := command.ListingRestoreCmd{}
 	cmd.ListingUUID = detail.ListingUUID
-	cmd.Account = account.Entity{
-		UUID: current_user.Parse(ctx).UUID,
-		Name: a.Name,
-	}
-	cmd.BusinessNickName = current_business.Parse(ctx).NickName
 	res, err := h.app.Commands.ListingRestore(ctx.UserContext(), cmd)
 	if err != nil {
 		l, a := i18n.GetLanguagesInContext(*h.i18n, ctx)
@@ -171,6 +159,17 @@ func (h srv) ListingViewAdmin(ctx *fiber.Ctx) error {
 	query := query.ListingAdminViewQuery{}
 	h.parseParams(ctx, &query)
 	res, err := h.app.Queries.ListingAdminView(ctx.UserContext(), query)
+	if err != nil {
+		l, a := i18n.GetLanguagesInContext(*h.i18n, ctx)
+		return result.Error(h.i18n.TranslateFromError(*err, l, a))
+	}
+	return result.SuccessDetail(Messages.Success.Ok, res)
+}
+
+func (h srv) ListingViewBusiness(ctx *fiber.Ctx) error {
+	query := query.ListingBusinessViewQuery{}
+	h.parseParams(ctx, &query)
+	res, err := h.app.Queries.ListingBusinessView(ctx.UserContext(), query)
 	if err != nil {
 		l, a := i18n.GetLanguagesInContext(*h.i18n, ctx)
 		return result.Error(h.i18n.TranslateFromError(*err, l, a))
@@ -206,6 +205,23 @@ func (h srv) ListingFilter(ctx *fiber.Ctx) error {
 	query.Pagination = &pagination
 	query.FilterEntity = filter
 	res, err := h.app.Queries.ListingFilter(ctx.UserContext(), query)
+	if err != nil {
+		return result.Error(h.i18n.TranslateFromError(*err, l, a))
+	}
+	return result.SuccessDetail(Messages.Success.Ok, res)
+}
+
+func (h srv) ListingAdminFilter(ctx *fiber.Ctx) error {
+	l, a := i18n.GetLanguagesInContext(*h.i18n, ctx)
+	pagination := utils.Pagination{}
+	h.parseQuery(ctx, &pagination)
+	filter := listing.FilterEntity{}
+	filter.Locale = l
+	h.parseBody(ctx, &filter)
+	query := query.ListingAdminFilterQuery{}
+	query.Pagination = &pagination
+	query.FilterEntity = filter
+	res, err := h.app.Queries.ListingAdminFilter(ctx.UserContext(), query)
 	if err != nil {
 		return result.Error(h.i18n.TranslateFromError(*err, l, a))
 	}

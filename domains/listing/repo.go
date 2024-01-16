@@ -31,8 +31,10 @@ type Repository interface {
 	View(ctx context.Context, detail I18nDetail) (*Entity, *i18np.Error)
 	GetByUUID(ctx context.Context, listingUUID string) (*Entity, bool, *i18np.Error)
 	AdminView(ctx context.Context, listingUUID string) (*Entity, *i18np.Error)
+	BusinessView(ctx context.Context, listingUUID string) (*Entity, *i18np.Error)
 	Filter(ctx context.Context, filter FilterEntity, listConfig list.Config) (*list.Result[*Entity], *i18np.Error)
 	FilterByBusiness(ctx context.Context, businessNickName string, filter FilterEntity, listConfig list.Config) (*list.Result[*Entity], *i18np.Error)
+	AdminFilter(ctx context.Context, filter FilterEntity, listConfig list.Config) (*list.Result[*Entity], *i18np.Error)
 	ListMy(ctx context.Context, businessUUID string, listConfig list.Config) (*list.Result[*Entity], *i18np.Error)
 }
 
@@ -137,6 +139,9 @@ func (r *repo) Disable(ctx context.Context, listingUUID string) *i18np.Error {
 	filter := bson.M{
 		fields.UUID:     id,
 		fields.IsActive: true,
+		fields.IsDeleted: bson.M{
+			"$ne": true,
+		},
 	}
 	update := bson.M{
 		"$set": bson.M{
@@ -155,6 +160,9 @@ func (r *repo) Enable(ctx context.Context, listingUUID string) *i18np.Error {
 	filter := bson.M{
 		fields.UUID: id,
 		fields.IsActive: bson.M{
+			"$ne": true,
+		},
+		fields.IsDeleted: bson.M{
 			"$ne": true,
 		},
 	}
@@ -212,6 +220,9 @@ func (r *repo) ReOrder(ctx context.Context, listingUUID string, order int) *i18n
 	}
 	filter := bson.M{
 		fields.UUID: id,
+		fields.IsDeleted: bson.M{
+			"$ne": true,
+		},
 	}
 	update := bson.M{
 		"$set": bson.M{
@@ -282,6 +293,27 @@ func (r *repo) AdminView(ctx context.Context, listingUUID string) (*Entity, *i18
 	return *e, nil
 }
 
+func (r *repo) BusinessView(ctx context.Context, listingUUID string) (*Entity, *i18np.Error) {
+	id, _err := mongo2.TransformId(listingUUID)
+	if _err != nil {
+		return nil, r.factory.Errors.InvalidUUID()
+	}
+	filter := bson.M{
+		fields.UUID: id,
+		fields.IsDeleted: bson.M{
+			"$ne": true,
+		},
+	}
+	e, exist, err := r.helper.GetFilter(ctx, filter)
+	if err != nil {
+		return nil, r.factory.Errors.Failed("get")
+	}
+	if !exist {
+		return nil, r.factory.Errors.NotFound()
+	}
+	return *e, nil
+}
+
 func (r *repo) FilterByBusiness(ctx context.Context, businessNickName string, filter FilterEntity, listConfig list.Config) (*list.Result[*Entity], *i18np.Error) {
 	businessFilter := r.filterToBson(filter, businessNickName)
 	l, err := r.helper.GetListFilter(ctx, businessFilter, r.sort(r.filterOptions(listConfig), filter))
@@ -330,9 +362,36 @@ func (r *repo) Filter(ctx context.Context, filter FilterEntity, listConfig list.
 	}, nil
 }
 
+func (r *repo) AdminFilter(ctx context.Context, filter FilterEntity, listConfig list.Config) (*list.Result[*Entity], *i18np.Error) {
+	filters := r.adminFilterToBson(filter)
+	l, err := r.helper.GetListFilter(ctx, filters, r.sort(r.filterOptions(listConfig), filter))
+	if err != nil {
+		return nil, err
+	}
+	filtered, _err := r.helper.GetFilterCount(ctx, filters)
+	if _err != nil {
+		return nil, _err
+	}
+	total, _err := r.helper.GetFilterCount(ctx, bson.M{})
+	if _err != nil {
+		return nil, _err
+	}
+	return &list.Result[*Entity]{
+		IsNext:        filtered > listConfig.Offset+listConfig.Limit,
+		IsPrev:        listConfig.Offset > 0,
+		FilteredTotal: filtered,
+		Total:         total,
+		Page:          listConfig.Offset/listConfig.Limit + 1,
+		List:          l,
+	}, nil
+}
+
 func (r *repo) ListMy(ctx context.Context, businessUUID string, listConfig list.Config) (*list.Result[*Entity], *i18np.Error) {
 	filter := bson.M{
 		businessField(businessFields.UUID): businessUUID,
+		fields.IsDeleted: bson.M{
+			"$ne": true,
+		},
 	}
 	l, err := r.helper.GetListFilter(ctx, filter, r.businessListOptions(listConfig))
 	if err != nil {

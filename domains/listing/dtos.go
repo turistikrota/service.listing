@@ -42,6 +42,24 @@ type AdminDetailDto struct {
 	*Entity
 }
 
+type BusinessDetailDto struct {
+	UUID          string          `json:"uuid" bson:"_id,omitempty"`
+	Images        []Image         `json:"images" bson:"images" validate:"required,min=1,max=30,dive,required"`
+	Meta          map[Locale]Meta `json:"meta" bson:"meta" validate:"required,dive,required"`
+	CategoryUUIDs []string        `json:"categoryUUIDs" bson:"categoryUUIDs" validate:"required,min=1,max=30,dive,required"`
+	Features      []Feature       `json:"features" bson:"features" validate:"required,min=1,max=30,dive,required"`
+	Prices        []Price         `json:"prices" bson:"prices" validate:"required,min=1,max=100,dive,required"`
+	Location      Location        `json:"location" bson:"location" validate:"required,dive,required"`
+	Boosts        []Boost         `json:"boosts" bson:"boosts" validate:"required,min=0,max=30,dive,required"`
+	Validation    *Validation     `json:"validation" bson:"validation" validate:"required,dive,required"`
+	Currency      Currency        `json:"currency" bson:"currency" validate:"required,oneof=TRY USD EUR"`
+	Order         *int            `json:"order" bson:"order" validate:"required,min=0,max=1000"`
+	IsActive      bool            `json:"isActive" bson:"is_active"`
+	IsValid       bool            `json:"isValid" bson:"is_valid"`
+	CreatedAt     time.Time       `json:"createdAt" bson:"created_at"`
+	UpdatedAt     time.Time       `json:"updatedAt" bson:"updated_at"`
+}
+
 type AdminListDto struct {
 	UUID          string          `json:"uuid" bson:"_id,omitempty"`
 	Business      Business        `json:"business" bson:"business"`
@@ -162,5 +180,25 @@ func (e *Entity) ToBusinessList() *BusinessListDto {
 		IsDeleted: e.IsDeleted,
 		IsValid:   e.IsValid,
 		CreatedAt: e.CreatedAt,
+	}
+}
+
+func (e *Entity) ToBusinessDetail() *BusinessDetailDto {
+	return &BusinessDetailDto{
+		UUID:          e.UUID,
+		Images:        e.Images,
+		Meta:          e.Meta,
+		CategoryUUIDs: e.CategoryUUIDs,
+		Features:      e.Features,
+		Prices:        e.Prices,
+		Location:      e.Location,
+		Boosts:        e.Boosts,
+		Currency:      e.Currency,
+		Validation:    e.Validation,
+		Order:         e.Order,
+		IsActive:      e.IsActive,
+		IsValid:       e.IsValid,
+		CreatedAt:     e.CreatedAt,
+		UpdatedAt:     e.UpdatedAt,
 	}
 }
