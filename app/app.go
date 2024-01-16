@@ -26,6 +26,7 @@ type Commands struct {
 type Queries struct {
 	ListingView             query.ListingViewHandler
 	ListingAdminView        query.ListingAdminViewHandler
+	ListingAdminFilter      query.ListingAdminFilterHandler
 	ListingBusinessView     query.ListingBusinessViewHandler
 	ListingFilterByBusiness query.ListingFilterByBusinessHandler
 	ListingFilter           query.ListingFilterHandler

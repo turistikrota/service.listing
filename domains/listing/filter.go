@@ -113,12 +113,33 @@ func (e *FilterEntity) GetPerfectDistance() float64 {
 	return 500
 }
 
+func (r *repo) adminFilterToBson(filter FilterEntity) bson.M {
+	filter.Parse()
+	list := make([]bson.M, 0)
+	list = r.filterByLocation(list, filter)
+	list = r.filterByCategory(list, filter)
+	list = r.filterByQuery(list, filter)
+	list = r.filterByPrice(list, filter)
+	list = r.filterByValidation(list, filter)
+	listLen := len(list)
+	if listLen == 0 {
+		return bson.M{}
+	}
+	if listLen == 1 {
+		return list[0]
+	}
+	return bson.M{
+		"$and": list,
+	}
+}
+
 func (r *repo) filterToBson(filter FilterEntity, nickName string) bson.M {
 	filter.Parse()
 	list := make([]bson.M, 0)
 	if nickName != "" {
 		list = r.filterByBusiness(list, nickName)
 	}
+	list = append(list, r.baseFilter())
 	list = r.filterByLocation(list, filter)
 	list = r.filterByCategory(list, filter)
 	list = r.filterByQuery(list, filter)

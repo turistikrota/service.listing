@@ -34,6 +34,7 @@ type Repository interface {
 	BusinessView(ctx context.Context, listingUUID string) (*Entity, *i18np.Error)
 	Filter(ctx context.Context, filter FilterEntity, listConfig list.Config) (*list.Result[*Entity], *i18np.Error)
 	FilterByBusiness(ctx context.Context, businessNickName string, filter FilterEntity, listConfig list.Config) (*list.Result[*Entity], *i18np.Error)
+	AdminFilter(ctx context.Context, filter FilterEntity, listConfig list.Config) (*list.Result[*Entity], *i18np.Error)
 	ListMy(ctx context.Context, businessUUID string, listConfig list.Config) (*list.Result[*Entity], *i18np.Error)
 }
 
@@ -348,6 +349,30 @@ func (r *repo) Filter(ctx context.Context, filter FilterEntity, listConfig list.
 		return nil, _err
 	}
 	total, _err := r.helper.GetFilterCount(ctx, r.baseFilter())
+	if _err != nil {
+		return nil, _err
+	}
+	return &list.Result[*Entity]{
+		IsNext:        filtered > listConfig.Offset+listConfig.Limit,
+		IsPrev:        listConfig.Offset > 0,
+		FilteredTotal: filtered,
+		Total:         total,
+		Page:          listConfig.Offset/listConfig.Limit + 1,
+		List:          l,
+	}, nil
+}
+
+func (r *repo) AdminFilter(ctx context.Context, filter FilterEntity, listConfig list.Config) (*list.Result[*Entity], *i18np.Error) {
+	filters := r.adminFilterToBson(filter)
+	l, err := r.helper.GetListFilter(ctx, filters, r.sort(r.filterOptions(listConfig), filter))
+	if err != nil {
+		return nil, err
+	}
+	filtered, _err := r.helper.GetFilterCount(ctx, filters)
+	if _err != nil {
+		return nil, _err
+	}
+	total, _err := r.helper.GetFilterCount(ctx, bson.M{})
 	if _err != nil {
 		return nil, _err
 	}

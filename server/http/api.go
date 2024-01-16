@@ -211,6 +211,23 @@ func (h srv) ListingFilter(ctx *fiber.Ctx) error {
 	return result.SuccessDetail(Messages.Success.Ok, res)
 }
 
+func (h srv) ListingAdminFilter(ctx *fiber.Ctx) error {
+	l, a := i18n.GetLanguagesInContext(*h.i18n, ctx)
+	pagination := utils.Pagination{}
+	h.parseQuery(ctx, &pagination)
+	filter := listing.FilterEntity{}
+	filter.Locale = l
+	h.parseBody(ctx, &filter)
+	query := query.ListingAdminFilterQuery{}
+	query.Pagination = &pagination
+	query.FilterEntity = filter
+	res, err := h.app.Queries.ListingAdminFilter(ctx.UserContext(), query)
+	if err != nil {
+		return result.Error(h.i18n.TranslateFromError(*err, l, a))
+	}
+	return result.SuccessDetail(Messages.Success.Ok, res)
+}
+
 func (h srv) ListingListMy(ctx *fiber.Ctx) error {
 	pagination := utils.Pagination{}
 	h.parseQuery(ctx, &pagination)
