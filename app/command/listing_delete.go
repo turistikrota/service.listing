@@ -18,7 +18,7 @@ type ListingDeleteHandler cqrs.HandlerFunc[ListingDeleteCmd, *ListingDeleteRes]
 
 func NewListingDeleteHandler(repo listing.Repository, events listing.Events) ListingDeleteHandler {
 	return func(ctx context.Context, cmd ListingDeleteCmd) (*ListingDeleteRes, *i18np.Error) {
-		res, _, err := repo.GetByUUID(ctx, cmd.ListingUUID)
+		res, err := repo.AdminView(ctx, cmd.ListingUUID)
 		if err != nil {
 			return nil, err
 		}

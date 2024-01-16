@@ -18,7 +18,7 @@ type ListingRestoreHandler cqrs.HandlerFunc[ListingRestoreCmd, *ListingRestoreRe
 
 func NewListingRestoreHandler(repo listing.Repository, events listing.Events) ListingRestoreHandler {
 	return func(ctx context.Context, cmd ListingRestoreCmd) (*ListingRestoreRes, *i18np.Error) {
-		res, _, err := repo.GetByUUID(ctx, cmd.ListingUUID)
+		res, err := repo.AdminView(ctx, cmd.ListingUUID)
 		if err != nil {
 			return nil, err
 		}

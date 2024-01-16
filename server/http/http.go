@@ -79,7 +79,7 @@ func (h srv) Listen() error {
 			business.Get("/:uuid", h.currentBusinessAccess(config.Roles.Listing.Super, config.Roles.Listing.View), h.wrapWithTimeout(h.ListingViewBusiness))
 
 			// Admin routes
-			admin := router.Group("/admin", h.currentUserAccess(), h.requiredAccess(), h.adminRoute())
+			admin := router.Group("/admin", h.currentUserAccess(), h.requiredAccess())
 			admin.Get("/:uuid", h.adminRoute(config.Roles.Listing.Super, config.Roles.Listing.View), h.wrapWithTimeout(h.ListingViewAdmin))
 			admin.Patch("/:uuid/restore", h.adminRoute(config.Roles.Listing.Super, config.Roles.Listing.Restore), h.wrapWithTimeout(h.ListingRestore))
 			admin.Delete("/:uuid", h.adminRoute(config.Roles.Listing.Super, config.Roles.Listing.Delete), h.wrapWithTimeout(h.ListingDelete))
