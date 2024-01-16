@@ -76,7 +76,7 @@ func (h srv) Listen() error {
 			business.Patch("/:uuid/disable", h.currentBusinessAccess(config.Roles.Listing.Super, config.Roles.Listing.Disable), h.wrapWithTimeout(h.ListingDisable))
 			business.Patch("/:uuid/re-order", h.currentBusinessAccess(config.Roles.Listing.Super, config.Roles.Listing.ReOrder), h.wrapWithTimeout(h.ListingReOrder))
 			business.Get("/", h.currentBusinessAccess(config.Roles.Listing.Super, config.Roles.Listing.List), h.wrapWithTimeout(h.ListingListMy))
-			business.Get("/:uuid", h.currentBusinessAccess(config.Roles.Listing.Super, config.Roles.Listing.View), h.wrapWithTimeout(h.ListingViewAdmin))
+			business.Get("/:uuid", h.currentBusinessAccess(config.Roles.Listing.Super, config.Roles.Listing.View), h.wrapWithTimeout(h.ListingViewBusiness))
 
 			// Admin routes
 			admin := router.Group("/admin", h.currentUserAccess(), h.requiredAccess(), h.adminRoute())

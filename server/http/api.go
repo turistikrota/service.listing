@@ -166,6 +166,17 @@ func (h srv) ListingViewAdmin(ctx *fiber.Ctx) error {
 	return result.SuccessDetail(Messages.Success.Ok, res)
 }
 
+func (h srv) ListingViewBusiness(ctx *fiber.Ctx) error {
+	query := query.ListingBusinessViewQuery{}
+	h.parseParams(ctx, &query)
+	res, err := h.app.Queries.ListingBusinessView(ctx.UserContext(), query)
+	if err != nil {
+		l, a := i18n.GetLanguagesInContext(*h.i18n, ctx)
+		return result.Error(h.i18n.TranslateFromError(*err, l, a))
+	}
+	return result.SuccessDetail(Messages.Success.Ok, res)
+}
+
 func (h srv) ListingFilterByBusiness(ctx *fiber.Ctx) error {
 	pagination := utils.Pagination{}
 	h.parseQuery(ctx, &pagination)

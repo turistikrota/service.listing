@@ -31,6 +31,7 @@ type Repository interface {
 	View(ctx context.Context, detail I18nDetail) (*Entity, *i18np.Error)
 	GetByUUID(ctx context.Context, listingUUID string) (*Entity, bool, *i18np.Error)
 	AdminView(ctx context.Context, listingUUID string) (*Entity, *i18np.Error)
+	BusinessView(ctx context.Context, listingUUID string) (*Entity, *i18np.Error)
 	Filter(ctx context.Context, filter FilterEntity, listConfig list.Config) (*list.Result[*Entity], *i18np.Error)
 	FilterByBusiness(ctx context.Context, businessNickName string, filter FilterEntity, listConfig list.Config) (*list.Result[*Entity], *i18np.Error)
 	ListMy(ctx context.Context, businessUUID string, listConfig list.Config) (*list.Result[*Entity], *i18np.Error)
@@ -280,6 +281,27 @@ func (r *repo) AdminView(ctx context.Context, listingUUID string) (*Entity, *i18
 	}
 	filter := bson.M{
 		fields.UUID: id,
+	}
+	e, exist, err := r.helper.GetFilter(ctx, filter)
+	if err != nil {
+		return nil, r.factory.Errors.Failed("get")
+	}
+	if !exist {
+		return nil, r.factory.Errors.NotFound()
+	}
+	return *e, nil
+}
+
+func (r *repo) BusinessView(ctx context.Context, listingUUID string) (*Entity, *i18np.Error) {
+	id, _err := mongo2.TransformId(listingUUID)
+	if _err != nil {
+		return nil, r.factory.Errors.InvalidUUID()
+	}
+	filter := bson.M{
+		fields.UUID: id,
+		fields.IsDeleted: bson.M{
+			"$ne": true,
+		},
 	}
 	e, exist, err := r.helper.GetFilter(ctx, filter)
 	if err != nil {

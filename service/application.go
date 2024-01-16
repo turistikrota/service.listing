@@ -44,6 +44,7 @@ func NewApplication(cnf Config) app.Application {
 		Queries: app.Queries{
 			ListingView:             query.NewListingViewHandler(listingRepo, cnf.CacheSrv),
 			ListingAdminView:        query.NewListingAdminViewHandler(listingRepo),
+			ListingBusinessView:     query.NewListingBusinessViewHandler(listingRepo),
 			ListingFilterByBusiness: query.NewListingFilterByBusinessHandler(listingRepo),
 			ListingFilter:           query.NewListingFilterHandler(listingRepo),
 			ListingListMy:           query.NewListingListMyHandler(listingRepo),
