@@ -31,9 +31,8 @@ type (
 		BusinessNickName string       `json:"business_nick_name"`
 	}
 	DeletedEvent struct {
-		UUID             string       `json:"uuid"`
-		Account          AccountEvent `json:"account"`
-		BusinessNickName string       `json:"business_nick_name"`
+		UUID             string `json:"uuid"`
+		BusinessNickName string `json:"business_nick_name"`
 	}
 	DisabledEvent struct {
 		UUID             string       `json:"uuid"`
@@ -52,9 +51,8 @@ type (
 		BusinessNickName string       `json:"business_nick_name"`
 	}
 	RestoreEvent struct {
-		UUID             string       `json:"uuid"`
-		Account          AccountEvent `json:"account"`
-		BusinessNickName string       `json:"business_nick_name"`
+		UUID             string `json:"uuid"`
+		BusinessNickName string `json:"business_nick_name"`
 	}
 	AccountEvent struct {
 		UUID string `json:"uuid"`

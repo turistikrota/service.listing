@@ -99,15 +99,9 @@ func (h srv) ListingDisable(ctx *fiber.Ctx) error {
 
 func (h srv) ListingDelete(ctx *fiber.Ctx) error {
 	detail := command.ListingDetailCmd{}
-	a := current_account.Parse(ctx)
 	h.parseParams(ctx, &detail)
 	cmd := command.ListingDeleteCmd{}
 	cmd.ListingUUID = detail.ListingUUID
-	cmd.Account = account.Entity{
-		UUID: current_user.Parse(ctx).UUID,
-		Name: a.Name,
-	}
-	cmd.BusinessNickName = current_business.Parse(ctx).NickName
 	res, err := h.app.Commands.ListingDelete(ctx.UserContext(), cmd)
 	if err != nil {
 		l, a := i18n.GetLanguagesInContext(*h.i18n, ctx)
@@ -138,15 +132,9 @@ func (h srv) ListingReOrder(ctx *fiber.Ctx) error {
 
 func (h srv) ListingRestore(ctx *fiber.Ctx) error {
 	detail := command.ListingDetailCmd{}
-	a := current_account.Parse(ctx)
 	h.parseParams(ctx, &detail)
 	cmd := command.ListingRestoreCmd{}
 	cmd.ListingUUID = detail.ListingUUID
-	cmd.Account = account.Entity{
-		UUID: current_user.Parse(ctx).UUID,
-		Name: a.Name,
-	}
-	cmd.BusinessNickName = current_business.Parse(ctx).NickName
 	res, err := h.app.Commands.ListingRestore(ctx.UserContext(), cmd)
 	if err != nil {
 		l, a := i18n.GetLanguagesInContext(*h.i18n, ctx)
