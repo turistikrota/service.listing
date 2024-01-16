@@ -137,6 +137,9 @@ func (r *repo) Disable(ctx context.Context, listingUUID string) *i18np.Error {
 	filter := bson.M{
 		fields.UUID:     id,
 		fields.IsActive: true,
+		fields.IsDeleted: bson.M{
+			"$ne": true,
+		},
 	}
 	update := bson.M{
 		"$set": bson.M{
@@ -155,6 +158,9 @@ func (r *repo) Enable(ctx context.Context, listingUUID string) *i18np.Error {
 	filter := bson.M{
 		fields.UUID: id,
 		fields.IsActive: bson.M{
+			"$ne": true,
+		},
+		fields.IsDeleted: bson.M{
 			"$ne": true,
 		},
 	}
@@ -212,6 +218,9 @@ func (r *repo) ReOrder(ctx context.Context, listingUUID string, order int) *i18n
 	}
 	filter := bson.M{
 		fields.UUID: id,
+		fields.IsDeleted: bson.M{
+			"$ne": true,
+		},
 	}
 	update := bson.M{
 		"$set": bson.M{
@@ -333,6 +342,9 @@ func (r *repo) Filter(ctx context.Context, filter FilterEntity, listConfig list.
 func (r *repo) ListMy(ctx context.Context, businessUUID string, listConfig list.Config) (*list.Result[*Entity], *i18np.Error) {
 	filter := bson.M{
 		businessField(businessFields.UUID): businessUUID,
+		fields.IsDeleted: bson.M{
+			"$ne": true,
+		},
 	}
 	l, err := r.helper.GetListFilter(ctx, filter, r.businessListOptions(listConfig))
 	if err != nil {
