@@ -14,11 +14,12 @@ message Entity {
     string title = 2;
     string slug = 3;
     string description = 4;
-    string business_name = 5;
-    string city_name = 6;
-    string district_name = 7;
-    string country_name = 8;
-    repeated Image images = 9;
+    string business_uuid = 5;
+    string business_name = 6;
+    string city_name = 7;
+    string district_name = 8;
+    string country_name = 9;
+    repeated Image images = 10;
 }
 
 message GetEntityRequest {
