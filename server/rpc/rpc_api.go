@@ -28,6 +28,7 @@ func (s srv) GetEntity(ctx context.Context, req *protos.GetEntityRequest) (*prot
 	}
 	entity := &protos.Entity{
 		Uuid:         res.UUID,
+		BusinessUuid: res.Business.UUID,
 		Images:       images,
 		BusinessName: res.Business.NickName,
 		CityName:     res.Location.City,
