@@ -20,6 +20,7 @@ message Entity {
     string district_name = 8;
     string country_name = 9;
     repeated Image images = 10;
+    bool is_active = 11; 
 }
 
 message GetEntityRequest {
