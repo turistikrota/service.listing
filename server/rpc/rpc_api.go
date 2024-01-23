@@ -34,6 +34,7 @@ func (s srv) GetEntity(ctx context.Context, req *protos.GetEntityRequest) (*prot
 		CityName:     res.Location.City,
 		DistrictName: res.Location.Street,
 		CountryName:  res.Location.Country,
+		IsActive:     res.IsActive,
 	}
 	locale := listing.LocaleTR
 	if req.Locale == listing.LocaleEN.String() {
