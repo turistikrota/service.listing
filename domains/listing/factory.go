@@ -3,7 +3,9 @@ package listing
 import (
 	"time"
 
+	"github.com/9ssi7/nanoid"
 	"github.com/cilloparch/cillop/i18np"
+	"github.com/google/uuid"
 	"github.com/ssibrahimbas/slug"
 	"github.com/turistikrota/service.listing/domains/payment"
 )
@@ -135,9 +137,21 @@ func (f Factory) validateMeta(e Entity) *i18np.Error {
 	return nil
 }
 
-func (f Factory) CreateSlugs(trMeta *Meta, enMeta *Meta) map[Locale]Meta {
-	trMeta.Slug = slug.New(trMeta.Title, slug.TR)
-	enMeta.Slug = slug.New(enMeta.Title, slug.EN)
+func (f Factory) CreateSlugs(trMeta *Meta, enMeta *Meta, olds ...Meta) map[Locale]Meta {
+	if len(olds) > 0 {
+		if trMeta.Title == olds[0].Title && enMeta.Title == olds[1].Title {
+			return map[Locale]Meta{
+				LocaleTR: *trMeta,
+				LocaleEN: *enMeta,
+			}
+		}
+	}
+	uniqueSuffix, err := nanoid.New()
+	if err != nil {
+		uniqueSuffix = uuid.New().String()
+	}
+	trMeta.Slug = slug.New(trMeta.Title+"-"+uniqueSuffix, slug.TR)
+	enMeta.Slug = slug.New(enMeta.Title+"-"+uniqueSuffix, slug.EN)
 	return map[Locale]Meta{
 		LocaleTR: *trMeta,
 		LocaleEN: *enMeta,

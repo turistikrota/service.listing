@@ -33,10 +33,14 @@ type ListingUpdateHandler cqrs.HandlerFunc[ListingUpdateCmd, *ListingUpdateRes]
 
 func NewListingUpdateHandler(factory listing.Factory, repo listing.Repository, events listing.Events) ListingUpdateHandler {
 	return func(ctx context.Context, cmd ListingUpdateCmd) (*ListingUpdateRes, *i18np.Error) {
+		old, _err := repo.AdminView(ctx, cmd.ListingUUID)
+		if _err != nil {
+			return nil, _err
+		}
 		e := factory.New(listing.NewConfig{
 			Business:             cmd.Business,
 			Images:               cmd.Images,
-			Meta:                 factory.CreateSlugs(cmd.Meta.TR, cmd.Meta.EN),
+			Meta:                 factory.CreateSlugs(cmd.Meta.TR, cmd.Meta.EN, old.Meta[listing.LocaleTR], old.Meta[listing.LocaleEN]),
 			CategoryUUIDs:        cmd.CategoryUUIDs,
 			Features:             cmd.Features,
 			ExtraPaymentChannels: cmd.ExtraPaymentChannels,
@@ -50,10 +54,6 @@ func NewListingUpdateHandler(factory listing.Factory, repo listing.Repository, e
 		err := factory.Validate(*e)
 		if err != nil {
 			return nil, err
-		}
-		old, _err := repo.AdminView(ctx, cmd.ListingUUID)
-		if _err != nil {
-			return nil, _err
 		}
 		e.CreatedAt = old.CreatedAt
 		e.UUID = old.UUID

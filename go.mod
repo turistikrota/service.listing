@@ -3,6 +3,7 @@ module github.com/turistikrota/service.listing
 go 1.20
 
 require (
+	github.com/9ssi7/nanoid v0.0.1
 	github.com/cilloparch/cillop v0.0.9
 	github.com/gofiber/fiber/v2 v2.48.0
 	github.com/ssibrahimbas/slug v0.0.0-20230331230816-02d7d0a3cbee

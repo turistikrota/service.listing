@@ -1,3 +1,5 @@
+github.com/9ssi7/nanoid v0.0.1 h1:ejEUVrBN3bDgD/2GkTx5vMUxPl+MvtMVmIrRLBp83Xk=
+github.com/9ssi7/nanoid v0.0.1/go.mod h1:lj3AjDj+ds+8CjiRRL4kXfzIMLDFsn9QSv0F2aQuGu4=
 github.com/BurntSushi/toml v1.0.0/go.mod h1:CxXYINrC8qIiEnFrOxCa7Jy5BFHlXnUU2pbicEuybxQ=
 github.com/BurntSushi/toml v1.3.2 h1:o7IhLm0Msx3BaB+n3Ag7L8EVlByGnpq14C4YWiu/gL8=
 github.com/BurntSushi/toml v1.3.2/go.mod h1:CxXYINrC8qIiEnFrOxCa7Jy5BFHlXnUU2pbicEuybxQ=
