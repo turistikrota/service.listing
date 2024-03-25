@@ -5,6 +5,7 @@ import (
 
 	"github.com/cilloparch/cillop/i18np"
 	"github.com/ssibrahimbas/slug"
+	"github.com/turistikrota/service.listing/domains/payment"
 )
 
 type Factory struct {
@@ -22,17 +23,18 @@ func (f Factory) IsZero() bool {
 }
 
 type NewConfig struct {
-	Business      Business
-	Images        []Image
-	Meta          map[Locale]Meta
-	CategoryUUIDs []string
-	Features      []Feature
-	Prices        []ListingPriceValidationDto
-	Location      Location
-	Boosts        []Boost
-	Validation    *Validation
-	ForCreate     bool
-	Currency      Currency
+	Business             Business
+	Images               []Image
+	Meta                 map[Locale]Meta
+	CategoryUUIDs        []string
+	Features             []Feature
+	Prices               []ListingPriceValidationDto
+	ExtraPaymentChannels []payment.Channel
+	Location             Location
+	Boosts               []Boost
+	Validation           *Validation
+	ForCreate            bool
+	Currency             Currency
 }
 
 func (f Factory) New(cnf NewConfig) *Entity {
@@ -42,20 +44,21 @@ func (f Factory) New(cnf NewConfig) *Entity {
 		prices[i] = p.ToEntity()
 	}
 	e := &Entity{
-		Business:      cnf.Business,
-		Images:        cnf.Images,
-		Meta:          cnf.Meta,
-		CategoryUUIDs: cnf.CategoryUUIDs,
-		Features:      cnf.Features,
-		Prices:        prices,
-		Validation:    cnf.Validation,
-		Location:      cnf.Location,
-		Boosts:        cnf.Boosts,
-		Currency:      cnf.Currency,
-		IsActive:      false,
-		IsDeleted:     false,
-		IsValid:       false,
-		UpdatedAt:     t,
+		Business:             cnf.Business,
+		Images:               cnf.Images,
+		Meta:                 cnf.Meta,
+		CategoryUUIDs:        cnf.CategoryUUIDs,
+		Features:             cnf.Features,
+		Prices:               prices,
+		Validation:           cnf.Validation,
+		Location:             cnf.Location,
+		ExtraPaymentChannels: cnf.ExtraPaymentChannels,
+		Boosts:               cnf.Boosts,
+		Currency:             cnf.Currency,
+		IsActive:             false,
+		IsDeleted:            false,
+		IsValid:              false,
+		UpdatedAt:            t,
 	}
 	if cnf.ForCreate {
 		order := 0

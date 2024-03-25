@@ -75,18 +75,19 @@ func (r *repo) Update(ctx context.Context, e *Entity) *i18np.Error {
 	}
 	update := bson.M{
 		"$set": bson.M{
-			fields.CategoryUUIDs: e.CategoryUUIDs,
-			fields.Images:        e.Images,
-			fields.Meta:          e.Meta,
-			fields.Features:      e.Features,
-			fields.Prices:        e.Prices,
-			fields.Location:      e.Location,
-			fields.Boosts:        e.Boosts,
-			fields.Validation:    e.Validation,
-			fields.Order:         e.Order,
-			fields.IsValid:       e.IsValid,
-			fields.Currency:      e.Currency,
-			fields.UpdatedAt:     time.Now(),
+			fields.CategoryUUIDs:        e.CategoryUUIDs,
+			fields.Images:               e.Images,
+			fields.Meta:                 e.Meta,
+			fields.Features:             e.Features,
+			fields.Prices:               e.Prices,
+			fields.Location:             e.Location,
+			fields.ExtraPaymentChannels: e.ExtraPaymentChannels,
+			fields.Boosts:               e.Boosts,
+			fields.Validation:           e.Validation,
+			fields.Order:                e.Order,
+			fields.IsValid:              e.IsValid,
+			fields.Currency:             e.Currency,
+			fields.UpdatedAt:            time.Now(),
 		},
 	}
 	return r.helper.UpdateOne(ctx, filter, update)
@@ -418,17 +419,18 @@ func (r *repo) ListMy(ctx context.Context, businessUUID string, listConfig list.
 func (r *repo) businessListOptions(listConfig list.Config) *options.FindOptions {
 	opts := &options.FindOptions{}
 	opts.SetProjection(bson.M{
-		fields.UUID:      1,
-		fields.Images:    1,
-		fields.Meta:      1,
-		fields.Location:  1,
-		fields.Boosts:    1,
-		fields.Order:     1,
-		fields.IsDeleted: 1,
-		fields.IsActive:  1,
-		fields.Currency:  1,
-		fields.IsValid:   1,
-		fields.CreatedAt: 1,
+		fields.UUID:                 1,
+		fields.Images:               1,
+		fields.Meta:                 1,
+		fields.Location:             1,
+		fields.Boosts:               1,
+		fields.Order:                1,
+		fields.ExtraPaymentChannels: 1,
+		fields.IsDeleted:            1,
+		fields.IsActive:             1,
+		fields.Currency:             1,
+		fields.IsValid:              1,
+		fields.CreatedAt:            1,
 	}).SetSort(bson.D{{Key: fields.Order, Value: 1}}).SetSkip(listConfig.Offset).SetLimit(listConfig.Limit)
 	return opts
 }
@@ -436,22 +438,23 @@ func (r *repo) businessListOptions(listConfig list.Config) *options.FindOptions 
 func (r *repo) adminListOptions(listConfig list.Config) *options.FindOptions {
 	opts := &options.FindOptions{}
 	opts.SetProjection(bson.M{
-		fields.UUID:          1,
-		fields.Business:      1,
-		fields.Images:        1,
-		fields.Meta:          1,
-		fields.CategoryUUIDs: 1,
-		fields.Features:      1,
-		fields.Prices:        1,
-		fields.Location:      1,
-		fields.Boosts:        1,
-		fields.Validation:    1,
-		fields.Order:         1,
-		fields.IsDeleted:     1,
-		fields.Currency:      1,
-		fields.IsActive:      1,
-		fields.IsValid:       1,
-		fields.CreatedAt:     1,
+		fields.UUID:                 1,
+		fields.Business:             1,
+		fields.Images:               1,
+		fields.Meta:                 1,
+		fields.CategoryUUIDs:        1,
+		fields.Features:             1,
+		fields.Prices:               1,
+		fields.ExtraPaymentChannels: 1,
+		fields.Location:             1,
+		fields.Boosts:               1,
+		fields.Validation:           1,
+		fields.Order:                1,
+		fields.IsDeleted:            1,
+		fields.Currency:             1,
+		fields.IsActive:             1,
+		fields.IsValid:              1,
+		fields.CreatedAt:            1,
 	}).SetSort(bson.D{{Key: fields.Order, Value: 1}}).SetSkip(listConfig.Offset).SetLimit(listConfig.Limit)
 	return opts
 }
@@ -459,17 +462,18 @@ func (r *repo) adminListOptions(listConfig list.Config) *options.FindOptions {
 func (r *repo) filterOptions(listConfig list.Config) *options.FindOptions {
 	opts := &options.FindOptions{}
 	opts.SetProjection(bson.M{
-		fields.UUID:          1,
-		fields.Business:      1,
-		fields.Images:        1,
-		fields.Meta:          1,
-		fields.CategoryUUIDs: 1,
-		fields.Validation:    1,
-		fields.Features:      1,
-		fields.Prices:        1,
-		fields.Location:      1,
-		fields.Currency:      1,
-		fields.Boosts:        1,
+		fields.UUID:                 1,
+		fields.Business:             1,
+		fields.Images:               1,
+		fields.Meta:                 1,
+		fields.CategoryUUIDs:        1,
+		fields.ExtraPaymentChannels: 1,
+		fields.Validation:           1,
+		fields.Features:             1,
+		fields.Prices:               1,
+		fields.Location:             1,
+		fields.Currency:             1,
+		fields.Boosts:               1,
 	}).SetSkip(listConfig.Offset).SetLimit(listConfig.Limit)
 	return opts
 }
@@ -477,19 +481,20 @@ func (r *repo) filterOptions(listConfig list.Config) *options.FindOptions {
 func (r *repo) viewOptions() *options.FindOneOptions {
 	opts := &options.FindOneOptions{}
 	opts.SetProjection(bson.M{
-		fields.UUID:          1,
-		fields.Business:      1,
-		fields.Images:        1,
-		fields.Meta:          1,
-		fields.CategoryUUIDs: 1,
-		fields.Validation:    1,
-		fields.Features:      1,
-		fields.Prices:        1,
-		fields.Location:      1,
-		fields.Currency:      1,
-		fields.Boosts:        1,
-		fields.UpdatedAt:     1,
-		fields.CreatedAt:     1,
+		fields.UUID:                 1,
+		fields.Business:             1,
+		fields.Images:               1,
+		fields.Meta:                 1,
+		fields.CategoryUUIDs:        1,
+		fields.Validation:           1,
+		fields.Features:             1,
+		fields.ExtraPaymentChannels: 1,
+		fields.Prices:               1,
+		fields.Location:             1,
+		fields.Currency:             1,
+		fields.Boosts:               1,
+		fields.UpdatedAt:            1,
+		fields.CreatedAt:            1,
 	})
 	return opts
 }

@@ -1,25 +1,30 @@
 package listing
 
-import "time"
+import (
+	"time"
+
+	"github.com/turistikrota/service.listing/domains/payment"
+)
 
 type Entity struct {
-	UUID          string          `json:"uuid" bson:"_id,omitempty"`
-	Business      Business        `json:"business" bson:"business" validate:"required,dive,required"`
-	Images        []Image         `json:"images" bson:"images" validate:"required,min=1,max=30,dive,required"`
-	Meta          map[Locale]Meta `json:"meta" bson:"meta" validate:"required,dive,required"`
-	CategoryUUIDs []string        `json:"categoryUUIDs" bson:"categoryUUIDs" validate:"required,min=1,max=30,dive,required"`
-	Features      []Feature       `json:"features" bson:"features" validate:"required,min=1,max=30,dive,required"`
-	Prices        []Price         `json:"prices" bson:"prices" validate:"required,min=1,max=100,dive,required"`
-	Location      Location        `json:"location" bson:"location" validate:"required,dive,required"`
-	Boosts        []Boost         `json:"boosts" bson:"boosts" validate:"required,min=0,max=30,dive,required"`
-	Validation    *Validation     `json:"validation" bson:"validation" validate:"required,dive,required"`
-	Currency      Currency        `json:"currency" bson:"currency" validate:"required,oneof=TRY USD EUR"`
-	Order         *int            `json:"order" bson:"order" validate:"required,min=0,max=1000"`
-	IsActive      bool            `json:"isActive" bson:"is_active"`
-	IsDeleted     bool            `json:"isDeleted" bson:"is_deleted"`
-	IsValid       bool            `json:"isValid" bson:"is_valid"`
-	CreatedAt     time.Time       `json:"createdAt" bson:"created_at"`
-	UpdatedAt     time.Time       `json:"updatedAt" bson:"updated_at"`
+	UUID                 string            `json:"uuid" bson:"_id,omitempty"`
+	Business             Business          `json:"business" bson:"business" validate:"required,dive,required"`
+	Images               []Image           `json:"images" bson:"images" validate:"required,min=1,max=30,dive,required"`
+	Meta                 map[Locale]Meta   `json:"meta" bson:"meta" validate:"required,dive,required"`
+	CategoryUUIDs        []string          `json:"categoryUUIDs" bson:"categoryUUIDs" validate:"required,min=1,max=30,dive,required"`
+	Features             []Feature         `json:"features" bson:"features" validate:"required,min=1,max=30,dive,required"`
+	Prices               []Price           `json:"prices" bson:"prices" validate:"required,min=1,max=100,dive,required"`
+	Location             Location          `json:"location" bson:"location" validate:"required,dive,required"`
+	Boosts               []Boost           `json:"boosts" bson:"boosts" validate:"required,min=0,max=30,dive,required"`
+	Validation           *Validation       `json:"validation" bson:"validation" validate:"required,dive,required"`
+	Currency             Currency          `json:"currency" bson:"currency" validate:"required,oneof=TRY USD EUR"`
+	ExtraPaymentChannels []payment.Channel `json:"extraPaymentChannels" bson:"extra_payment_channels" validate:"required,min=1,max=30,dive,required,oneof=at_the_door"`
+	Order                *int              `json:"order" bson:"order" validate:"required,min=0,max=1000"`
+	IsActive             bool              `json:"isActive" bson:"is_active"`
+	IsDeleted            bool              `json:"isDeleted" bson:"is_deleted"`
+	IsValid              bool              `json:"isValid" bson:"is_valid"`
+	CreatedAt            time.Time         `json:"createdAt" bson:"created_at"`
+	UpdatedAt            time.Time         `json:"updatedAt" bson:"updated_at"`
 }
 
 type Business struct {

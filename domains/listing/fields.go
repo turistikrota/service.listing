@@ -1,23 +1,24 @@
 package listing
 
 type fieldsType struct {
-	UUID          string
-	Business      string
-	Images        string
-	Meta          string
-	CategoryUUIDs string
-	Features      string
-	Prices        string
-	Location      string
-	Boosts        string
-	Validation    string
-	Order         string
-	Currency      string
-	IsActive      string
-	IsDeleted     string
-	IsValid       string
-	CreatedAt     string
-	UpdatedAt     string
+	UUID                 string
+	Business             string
+	Images               string
+	Meta                 string
+	CategoryUUIDs        string
+	Features             string
+	Prices               string
+	Location             string
+	Boosts               string
+	Validation           string
+	Order                string
+	Currency             string
+	ExtraPaymentChannels string
+	IsActive             string
+	IsDeleted            string
+	IsValid              string
+	CreatedAt            string
+	UpdatedAt            string
 }
 
 type businessFieldsType struct {
@@ -97,23 +98,24 @@ type boostFieldsType struct {
 }
 
 var fields = fieldsType{
-	UUID:          "_id",
-	Business:      "business",
-	Images:        "images",
-	Meta:          "meta",
-	CategoryUUIDs: "categoryUUIDs",
-	Features:      "features",
-	Prices:        "prices",
-	Location:      "location",
-	Boosts:        "boosts",
-	Order:         "order",
-	Currency:      "currency",
-	Validation:    "validation",
-	IsActive:      "is_active",
-	IsDeleted:     "is_deleted",
-	IsValid:       "is_valid",
-	CreatedAt:     "created_at",
-	UpdatedAt:     "updated_at",
+	UUID:                 "_id",
+	Business:             "business",
+	Images:               "images",
+	Meta:                 "meta",
+	CategoryUUIDs:        "categoryUUIDs",
+	Features:             "features",
+	Prices:               "prices",
+	Location:             "location",
+	Boosts:               "boosts",
+	Order:                "order",
+	Currency:             "currency",
+	ExtraPaymentChannels: "extra_payment_channels",
+	Validation:           "validation",
+	IsActive:             "is_active",
+	IsDeleted:            "is_deleted",
+	IsValid:              "is_valid",
+	CreatedAt:            "created_at",
+	UpdatedAt:            "updated_at",
 }
 
 var businessFields = businessFieldsType{
