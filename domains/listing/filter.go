@@ -8,21 +8,22 @@ import (
 )
 
 type FilterEntity struct {
-	Locale       string            `json:"-"`
-	Query        string            `json:"query,omitempty" validate:"omitempty,max=100"`
-	Price        *FilterPrice      `json:"price,omitempty" validate:"omitempty"`
-	Currency     Currency          `json:"currency,omitempty" validate:"omitempty,oneof=TRY USD EUR"`
-	Validation   *FilterValidation `json:"validation,omitempty" validate:"omitempty"`
-	Coordinates  []float64         `json:"coordinates,omitempty" validate:"omitempty,min=2,max=2"`
-	Distance     *float64          `json:"distance,omitempty" validate:"omitempty,gt=6,lt=19"`
-	Features     []*FilterFeature  `json:"features,omitempty" validate:"omitempty,dive"`
-	Categories   []string          `json:"categories,omitempty" validate:"omitempty,dive,object_id"`
-	Sort         Sort              `json:"sort,omitempty" validate:"omitempty,oneof=most_recent nearest price"`
-	Order        Order             `json:"order,omitempty" validate:"omitempty,oneof=asc desc"`
-	StartDate    *time.Time        `json:"-"`
-	EndDate      *time.Time        `json:"-"`
-	StartDateStr string            `json:"start_date" validate:"omitempty,datetime=2006-01-02"`
-	EndDateStr   string            `json:"end_date" validate:"omitempty,datetime=2006-01-02"`
+	Locale               string            `json:"-"`
+	Query                string            `json:"query,omitempty" validate:"omitempty,max=100"`
+	Price                *FilterPrice      `json:"price,omitempty" validate:"omitempty"`
+	Currency             Currency          `json:"currency,omitempty" validate:"omitempty,oneof=TRY USD EUR"`
+	Validation           *FilterValidation `json:"validation,omitempty" validate:"omitempty"`
+	Coordinates          []float64         `json:"coordinates,omitempty" validate:"omitempty,min=2,max=2"`
+	Distance             *float64          `json:"distance,omitempty" validate:"omitempty,gt=6,lt=19"`
+	Features             []*FilterFeature  `json:"features,omitempty" validate:"omitempty,dive"`
+	Categories           []string          `json:"categories,omitempty" validate:"omitempty,dive,object_id"`
+	ExtraPaymentChannels []string          `json:"pays,omitempty" validate:"omitempty,dive,oneof=at_the_door"`
+	Sort                 Sort              `json:"sort,omitempty" validate:"omitempty,oneof=most_recent nearest price"`
+	Order                Order             `json:"order,omitempty" validate:"omitempty,oneof=asc desc"`
+	StartDate            *time.Time        `json:"-"`
+	EndDate              *time.Time        `json:"-"`
+	StartDateStr         string            `json:"start_date" validate:"omitempty,datetime=2006-01-02"`
+	EndDateStr           string            `json:"end_date" validate:"omitempty,datetime=2006-01-02"`
 }
 
 func (e *FilterEntity) Parse() {
@@ -145,6 +146,7 @@ func (r *repo) filterToBson(filter FilterEntity, nickName string) bson.M {
 	list = r.filterByQuery(list, filter)
 	list = r.filterByPrice(list, filter)
 	list = r.filterByValidation(list, filter)
+	list = r.filterByExtraPaymentChannels(list, filter)
 	listLen := len(list)
 	if listLen == 0 {
 		return bson.M{}
@@ -169,6 +171,17 @@ func (r *repo) filterByLocation(list []bson.M, filter FilterEntity) []bson.M {
 						radius,
 					},
 				},
+			},
+		})
+	}
+	return list
+}
+
+func (r *repo) filterByExtraPaymentChannels(list []bson.M, filter FilterEntity) []bson.M {
+	if filter.ExtraPaymentChannels != nil && len(filter.ExtraPaymentChannels) > 0 {
+		list = append(list, bson.M{
+			fields.ExtraPaymentChannels: bson.M{
+				"$in": filter.ExtraPaymentChannels,
 			},
 		})
 	}
